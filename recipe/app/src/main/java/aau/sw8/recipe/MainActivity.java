@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +26,11 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     private CharSequence drawerTitle;
     private CharSequence title;
     private String[] planetTitles;
+
+    public FrameLayout testhest()
+    {
+        return (FrameLayout) this.findViewById(R.id.content_frame);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
