@@ -27,11 +27,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     private CharSequence title;
     private String[] planetTitles;
 
-    public FrameLayout testhest()
-    {
-        return (FrameLayout) this.findViewById(R.id.content_frame);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

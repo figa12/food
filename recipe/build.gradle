@@ -9,11 +9,6 @@ buildscript {
     }
 }
 
-configurations {
-    unitTestCompile.extendsFrom runtime
-    unitTestRuntime.extendsFrom unitTestCompile
-}
-
 allprojects {
     repositories {
         mavenCentral()
