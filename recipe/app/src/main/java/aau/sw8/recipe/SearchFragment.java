@@ -46,12 +46,15 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
-        int i = super.getArguments().getInt(SearchFragment.ARG_POSITION);
+        int pageIndex = super.getArguments().getInt(SearchFragment.ARG_POSITION);
 
-        this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[i];
+        this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
-        // TODO handle other views here
+        RecipeList recipeList = (RecipeList) rootView.findViewById(R.id.recipeList);
+        // temporary display.test code
+        for(int j = 0; j < 5; j++)
+            recipeList.addView(new Recipe(null, "Title", "Description description description"));
 
         return rootView;
     }

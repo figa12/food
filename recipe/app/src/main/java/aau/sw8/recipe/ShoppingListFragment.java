@@ -37,9 +37,9 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
-        int i = super.getArguments().getInt(SearchFragment.ARG_POSITION);
+        int pageIndex = super.getArguments().getInt(SearchFragment.ARG_POSITION);
 
-        this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[i];
+        this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
         //TODO handle other views here

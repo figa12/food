@@ -1,6 +1,7 @@
-package aau.sw8.recipe.test;
+package test;
 
 import android.test.ActivityInstrumentationTestCase2;
+
 import aau.sw8.recipe.MainActivity;
 
 
