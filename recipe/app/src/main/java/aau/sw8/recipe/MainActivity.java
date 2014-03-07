@@ -141,7 +141,7 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = this.drawerLayout.isDrawerOpen(this.drawerListView);
-        menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_button).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -154,7 +154,7 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         }
         // Handle action buttons
         switch(item.getItemId()) {
-            case R.id.action_websearch:
+            case R.id.action_button:
                 Toast.makeText(this, "Not implemented", Toast.LENGTH_LONG).show();
                 return true;
             default:
