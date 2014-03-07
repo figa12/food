@@ -3,7 +3,7 @@
 
     <string name="app_name">Recipe App</string>
 
-    <string-array name="planets_array">
+    <string-array name="pages_array">
         <item>Search</item>
         <item>Favourite</item>
         <item>Shopping list</item>

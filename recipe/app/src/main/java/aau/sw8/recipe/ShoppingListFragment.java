@@ -8,17 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 /**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
+ * Created by jeria_000 on 07-03-14.
  */
-public class SearchFragment extends Fragment {
+public class ShoppingListFragment extends Fragment {
 
     public static final String ARG_POSITION = "position";
 
@@ -26,14 +19,12 @@ public class SearchFragment extends Fragment {
 
     private OnFragmentInteractionListener interactionListener;
 
-    /**
-     * Use this factory method to create a new instance of this fragment
-     */
+    /** Use this factory method to create a new instance of this fragment */
     // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         return new SearchFragment();
     }
-    public SearchFragment() {
+    public ShoppingListFragment() {
         // Required empty public constructor (?)
     }
 
@@ -45,13 +36,13 @@ public class SearchFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
         int i = super.getArguments().getInt(SearchFragment.ARG_POSITION);
 
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[i];
         super.getActivity().setTitle(this.pageTitle);
 
-        // TODO handle other views here
+        //TODO handle other views here
 
         return rootView;
     }

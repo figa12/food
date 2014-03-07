@@ -5,19 +5,18 @@ import android.app.Fragment;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener {
+public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
@@ -25,22 +24,24 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
     private CharSequence drawerTitle;
     private CharSequence title;
-    private String[] planetTitles;
+    private String[] pageTitles;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         this.title = this.drawerTitle = super.getTitle();
-        this.planetTitles = super.getResources().getStringArray(R.array.planets_array);
+        this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
         this.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
         this.drawerListView = (ListView) super.findViewById(R.id.left_drawer);
 
         // set a custom shadow that overlays the main content when the drawer opens
         this.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
         // set up the drawer's list view with items and click listener
-        this.drawerListView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, this.planetTitles));
+        this.drawerListView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, this.pageTitles));
         this.drawerListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,12 +63,12 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
-                MainActivity.super.getActionBar().setTitle(title);
+                MainActivity.super.getActionBar().setTitle(MainActivity.this.title);
                 MainActivity.super.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                MainActivity.super.getActionBar().setTitle(drawerTitle);
+                MainActivity.super.getActionBar().setTitle(MainActivity.this.drawerTitle);
                 MainActivity.super.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -78,35 +79,43 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void selectItem(int position) {
 
-        Fragment fragment; // update the main content by replacing fragments
+        Fragment fragment = null; // update the main content by replacing fragments
         Bundle args = new Bundle();
 
         // Insert cases for other fragments here
+        // the indexes corresponds to the order their page names are defined in strings.xml
         switch (position)
         {
             case 0:
                 fragment = new SearchFragment();
-                args.putInt(SearchFragment.ARG_POSITION, position);
-                fragment.setArguments(args);
+                break;
+
+            case 2:
+                fragment = new ShoppingListFragment();
                 break;
 
             default:
-                fragment = new SearchFragment();
-                args.putInt(SearchFragment.ARG_POSITION, position);
-                fragment.setArguments(args);
-                break;
+                Toast.makeText(this, "Fragment not implemented", Toast.LENGTH_LONG).show();
+                return;
         }
 
+        // give the fragment its position as argument
+        args.putInt(SearchFragment.ARG_POSITION, position);
+        fragment.setArguments(args);
+
+        // replace the current view with the fragment
         super.getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
         // update selected item and title, then close the drawer
         this.drawerListView.setItemChecked(position, true);
-        this.setTitle(this.planetTitles[position]);
+        this.setTitle(this.pageTitles[position]);
         this.drawerLayout.closeDrawer(drawerListView);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void setTitle(CharSequence title) {
         this.title = title;
@@ -121,10 +130,11 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerListView);
+        boolean drawerOpen = this.drawerLayout.isDrawerOpen(this.drawerListView);
         menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -167,5 +177,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     @Override
     public void onFragmentInteraction(Uri uri) {
         //TODO What does this do?!?!
+        // mayhaps: A method that handles interactions from the current underlying Fragment
     }
 }
