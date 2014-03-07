@@ -7,10 +7,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 /**
  * Created by Jesper on 07-03-14.
  */
 public class RecipeList extends ListLinearLayout<Recipe>{
+
+    private ImageLoader imageLoader = ImageLoader.getInstance();
+
+    private DisplayImageOptions imageLoaderOptions = new DisplayImageOptions.Builder()
+            .cacheInMemory(true)
+            .cacheOnDisc(true)
+            .build();
 
     public RecipeList(Context context) {
         super(context);
@@ -29,7 +39,7 @@ public class RecipeList extends ListLinearLayout<Recipe>{
 
         // Set recipe image
         ImageView recipeImage = (ImageView) recipeView.findViewById(R.id.recipeImageView);
-        // TODO: use imageloader to set image
+        this.imageLoader.displayImage(recipe.getImagePath(), recipeImage, this.imageLoaderOptions);
 
         // Set recipe title
         TextView recipeTitle = (TextView) recipeView.findViewById(R.id.titleTextView);

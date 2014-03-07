@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
         RecipeList recipeList = (RecipeList) rootView.findViewById(R.id.recipeList);
         // temporary display.test code
         for(int j = 0; j < 5; j++)
-            recipeList.addView(new Recipe(null, "Title", "Description description description"));
+            recipeList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Title", "Description description description"));
 
         return rootView;
     }
