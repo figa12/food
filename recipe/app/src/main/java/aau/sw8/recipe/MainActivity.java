@@ -108,6 +108,9 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
                 return;
         }
 
+        // Enable fragments to handle the action bar
+        fragment.setHasOptionsMenu(true);
+
         // give the fragment its position as argument
         args.putInt(SearchFragment.ARG_POSITION, position);
         fragment.setArguments(args);
@@ -118,7 +121,7 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         // update selected item and title, then close the drawer
         this.drawerListView.setItemChecked(position, true);
         this.setTitle(this.pageTitles[position]);
-        this.drawerLayout.closeDrawer(drawerListView);
+        this.drawerLayout.closeDrawer(this.drawerListView);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -140,9 +143,19 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = this.drawerLayout.isDrawerOpen(this.drawerListView);
+        boolean drawerOpen = this.isDrawerOpen();
+
+        // Always show button
         menu.findItem(R.id.action_button).setVisible(!drawerOpen);
+
+        // Hide all fragment specific menu item
+        menu.findItem(R.id.action_search).setVisible(false);
+
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    public boolean isDrawerOpen() {
+        return this.drawerLayout.isDrawerOpen(this.drawerListView);
     }
 
     @Override
@@ -184,5 +197,24 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     public void onFragmentInteraction(Uri uri) {
         //TODO What does this do?!?!
         // mayhaps: A method that handles interactions from the current underlying Fragment
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public void openRecipeFragment(Recipe recipe) {
+        Toast.makeText(this, "Fragment not implemented", Toast.LENGTH_LONG).show();
+        return; // TODO add fragment file that display the recipe, USE CODE BELOW
+
+        /*Fragment recipeFragment = null;
+        Bundle args = new Bundle();
+        args.putParcelable("dummy string", recipe); // TODO create final string in recipe fragment
+        recipeFragment.setArguments(args);
+
+        // replace the current view with the fragment
+
+        super.getFragmentManager().beginTransaction().replace(R.id.content_frame, recipeFragment).commit();
+
+        // update selected item and title, then close the drawer
+        this.drawerListView.setItemChecked(this.drawerListView.getSelectedItemPosition(), false);
+        this.setTitle("Add fragment name to string.xml");*/
     }
 }

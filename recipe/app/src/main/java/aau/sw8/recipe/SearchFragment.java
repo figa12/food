@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -57,6 +58,14 @@ public class SearchFragment extends Fragment {
             recipeList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Title", "Description description description"));
 
         return rootView;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MainActivity mainActivity = (MainActivity) this.getActivity();
+        menu.findItem(R.id.action_search).setVisible(!mainActivity.isDrawerOpen());
+        super.onPrepareOptionsMenu(menu);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

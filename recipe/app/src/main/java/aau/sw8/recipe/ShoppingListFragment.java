@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -45,6 +46,14 @@ public class ShoppingListFragment extends Fragment {
         //TODO handle other views here
 
         return rootView;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MainActivity mainActivity = (MainActivity) this.getActivity();
+        // use mainActivity.isDrawerOpen() to handle fragment specific menu
+        super.onPrepareOptionsMenu(menu);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

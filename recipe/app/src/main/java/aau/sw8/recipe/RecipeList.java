@@ -49,6 +49,35 @@ public class RecipeList extends ListLinearLayout<Recipe>{
         TextView recipeDescription = (TextView) recipeView.findViewById(R.id.descriptionTextView);
         recipeDescription.setText(recipe.getRecipeDescription());
 
+        // Find the clickable part of the item layout and add the recipe as a tag
+        View clickableLayout = recipeView.findViewById(R.id.mainLayout);
+        clickableLayout.setTag(recipe);
+        // .. and add the click listener to it
+        clickableLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // The tag is the recipe which was clicked
+                Recipe recipe = (Recipe) view.getTag();
+
+                // Open recipe fragment
+                ((MainActivity) RecipeList.this.getContext()).openRecipeFragment(recipe);
+            }
+        });
+
         return recipeView;
+    }
+
+    private class RecipeClickListener implements OnClickListener {
+        private Recipe recipe;
+
+        public RecipeClickListener(Recipe recipe) {
+            this.recipe = recipe;
+        }
+
+        @SuppressWarnings("ConstantConditions")
+        @Override
+        public void onClick(View v) {
+            // TOAST
+        }
     }
 }
