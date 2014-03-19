@@ -10,32 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class SearchFragment extends Fragment {
-
-    public static final String ARG_POSITION = "position";
 
     private String pageTitle; // Not really needed, but saved just in case
 
     private OnFragmentInteractionListener interactionListener;
 
-    /**
-     * Use this factory method to create a new instance of this fragment
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchFragment newInstance(String param1, String param2) {
-        return new SearchFragment();
-    }
     public SearchFragment() {
-        // Required empty public constructor (?)
+        // Required empty public constructor
     }
 
     @Override
@@ -47,7 +29,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
-        int pageIndex = super.getArguments().getInt(SearchFragment.ARG_POSITION);
+        int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);

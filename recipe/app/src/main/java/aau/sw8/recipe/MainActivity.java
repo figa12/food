@@ -2,6 +2,7 @@ package aau.sw8.recipe;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener {
+
+    public static final String ARG_POSITION = "position";
 
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
@@ -59,7 +62,7 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         super.getActionBar().setDisplayHomeAsUpEnabled(true);
         super.getActionBar().setHomeButtonEnabled(true);
 
-        // ActionBarDrawerToggle ties together the the proper interactions
+        // ActionBarDrawerToggle ties together the proper interactions
         // between the sliding drawer and the action bar app icon
         this.drawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -70,19 +73,33 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         ) {
             public void onDrawerClosed(View view) {
                 MainActivity.super.getActionBar().setTitle(MainActivity.this.title);
+                MainActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
                 MainActivity.super.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
                 MainActivity.super.getActionBar().setTitle(MainActivity.this.drawerTitle);
+                MainActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
                 MainActivity.super.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         this.drawerLayout.setDrawerListener(this.drawerToggle);
+        super.getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                MainActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
+            }
+        });
 
         if (savedInstanceState == null) {
             this.selectItem(0);
         }
+    }
+
+    private void setActionBarArrowDependingOnFragmentsBackStack() {
+        int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
+        boolean shouldEnableDrawerIndicator = backStackEntryCount == 0;
+        this.drawerToggle.setDrawerIndicatorEnabled(shouldEnableDrawerIndicator);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -111,8 +128,10 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         // Enable fragments to handle the action bar
         fragment.setHasOptionsMenu(true);
 
+        while (super.getFragmentManager().popBackStackImmediate());
+
         // give the fragment its position as argument
-        args.putInt(SearchFragment.ARG_POSITION, position);
+        args.putInt(MainActivity.ARG_POSITION, position);
         fragment.setArguments(args);
 
         // replace the current view with the fragment
@@ -161,10 +180,13 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
         if (this.drawerToggle.onOptionsItemSelected(item)) {
             return true;
+        } else if (item.getItemId() == android.R.id.home && super.getFragmentManager().popBackStackImmediate()) {
+            int htest = 2;
+            return true;
         }
+
         // Handle action buttons
         switch(item.getItemId()) {
             case R.id.action_button:
@@ -201,20 +223,17 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
     @SuppressWarnings("ConstantConditions")
     public void openRecipeFragment(Recipe recipe) {
-        Toast.makeText(this, "Fragment not implemented", Toast.LENGTH_LONG).show();
-        return; // TODO add fragment file that display the recipe, USE CODE BELOW
+        Fragment recipeFragment = new RecipeFragment();
+        recipeFragment.setHasOptionsMenu(true);
 
-        /*Fragment recipeFragment = null;
         Bundle args = new Bundle();
-        args.putParcelable("dummy string", recipe); // TODO create final string in recipe fragment
+        args.putParcelable(RecipeFragment.ARG_RECIPE, recipe);
         recipeFragment.setArguments(args);
 
         // replace the current view with the fragment
-
-        super.getFragmentManager().beginTransaction().replace(R.id.content_frame, recipeFragment).commit();
+        super.getFragmentManager().beginTransaction().replace(R.id.content_frame, recipeFragment).addToBackStack(this.title.toString()).commit();
 
         // update selected item and title, then close the drawer
         this.drawerListView.setItemChecked(this.drawerListView.getSelectedItemPosition(), false);
-        this.setTitle("Add fragment name to string.xml");*/
     }
 }

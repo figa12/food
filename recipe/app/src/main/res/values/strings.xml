@@ -3,12 +3,15 @@
 
     <string name="app_name">Recipe App</string>
 
+    <!-- Array of pages which are present in the navigation drawer -->
     <string-array name="pages_array">
         <item>Search</item>
         <item>Favourite</item>
         <item>Shopping list</item>
         <item>Settings</item>
     </string-array>
+
+    <string name="fragment_recipe">Recipe</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

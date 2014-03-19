@@ -14,17 +14,10 @@ import android.view.ViewGroup;
  */
 public class ShoppingListFragment extends Fragment {
 
-    public static final String ARG_POSITION = "position";
-
     private String pageTitle; // Not really needed, but saved just in case
 
     private OnFragmentInteractionListener interactionListener;
 
-    /** Use this factory method to create a new instance of this fragment */
-    // TODO: Rename and change types and number of parameters
-    public static SearchFragment newInstance(String param1, String param2) {
-        return new SearchFragment();
-    }
     public ShoppingListFragment() {
         // Required empty public constructor (?)
     }
@@ -37,8 +30,8 @@ public class ShoppingListFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
-        int pageIndex = super.getArguments().getInt(SearchFragment.ARG_POSITION);
+        View rootView = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);

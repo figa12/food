@@ -13,7 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 /**
  * Created by Jesper on 07-03-14.
  */
-public class RecipeList extends ListLinearLayout<Recipe>{
+public class RecipeList extends ListLinearLayout<Recipe> {
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -65,19 +65,5 @@ public class RecipeList extends ListLinearLayout<Recipe>{
         });
 
         return recipeView;
-    }
-
-    private class RecipeClickListener implements OnClickListener {
-        private Recipe recipe;
-
-        public RecipeClickListener(Recipe recipe) {
-            this.recipe = recipe;
-        }
-
-        @SuppressWarnings("ConstantConditions")
-        @Override
-        public void onClick(View v) {
-            // TOAST
-        }
     }
 }
