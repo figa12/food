@@ -34,6 +34,7 @@ public class RecipeFragment extends Fragment {
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
         this.recipe = super.getArguments().getParcelable(RecipeFragment.ARG_RECIPE);
 
+        // TODO: make it possible to change the pagetitle accordingly to language.
         this.pageTitle = super.getResources().getString(R.string.fragment_recipe);
         super.getActivity().setTitle(this.pageTitle);
 

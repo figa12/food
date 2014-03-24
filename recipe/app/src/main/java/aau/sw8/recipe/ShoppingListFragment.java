@@ -33,6 +33,7 @@ public class ShoppingListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
+        // TODO: make it possible to change the pagetitle accordingly to language.
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
