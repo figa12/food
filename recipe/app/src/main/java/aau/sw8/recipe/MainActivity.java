@@ -182,8 +182,10 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         // The action bar home/up action should open or close the drawer.
         if (this.drawerToggle.onOptionsItemSelected(item)) {
             return true;
+        } else if (this.isDrawerOpen()) {
+            this.drawerLayout.closeDrawers();
+            return true;
         } else if (item.getItemId() == android.R.id.home && super.getFragmentManager().popBackStackImmediate()) {
-            int htest = 2;
             return true;
         }
 
