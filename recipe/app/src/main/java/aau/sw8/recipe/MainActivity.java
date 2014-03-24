@@ -93,7 +93,10 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
         if (savedInstanceState == null) {
             this.selectItem(0);
+        } else {
+            MainActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
         }
+
     }
 
     private void setActionBarArrowDependingOnFragmentsBackStack() {
