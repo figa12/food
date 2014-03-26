@@ -63,7 +63,7 @@ public class SearchFragment extends Fragment {
         searchBar.setIconifiedByDefault(false);
 
         // Set hint text
-        searchBar.setQueryHint(getString(R.string.action_search));
+        searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
 
         super.onPrepareOptionsMenu(menu);
     }
