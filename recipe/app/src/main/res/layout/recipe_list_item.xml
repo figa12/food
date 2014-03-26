@@ -5,44 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:focusable="false"
         android:clickable="true"
         android:background="@drawable/clickable_list_item">
 
         <ImageView
             android:id="@+id/recipeImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
-
-        <LinearLayout
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginLeft="2dp">
+            android:layout_height="120dp"/>
 
-            <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textSize="12pt"/>
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingBottom="3dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="12pt"
+            android:textColor="#ffffff"
+            android:shadowColor="#222222"
+            android:shadowDx="3.0"
+            android:shadowDy="3.0"
+            android:shadowRadius="10"/>
 
-            <TextView
-                android:id="@+id/descriptionTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#80000000" />
+    </RelativeLayout>
 
-            </LinearLayout>
-    </LinearLayout>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="#80000000" />
 
 </LinearLayout>

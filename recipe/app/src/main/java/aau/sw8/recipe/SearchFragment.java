@@ -37,8 +37,15 @@ public class SearchFragment extends Fragment {
 
         RecipeList recipeList = (RecipeList) rootView.findViewById(R.id.recipeList);
         // temporary display.test code
-        for(int j = 0; j < 20; j++)
-            recipeList.addView(new Recipe("http://figz.dk/images/sw7exhibitionintel.jpeg", "Title", "Description description description"));
+        for(int j = 0; j < 3; j++) {
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/17b8d0860fc30be68222cc5cfb53f399.jpg", "Russian Salad"));
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/178cd176ce2294f620beb3d943f354e1.jpg", "Avocado Mango Salad"));
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/7a0a46455c4ec56a5a02c097374fc513.jpg", "Chocolate Earl Grey"));
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/b39f2dfcc3325121c204028cca430743.jpg", "Steamed tofu"));
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/8e38d6eb334fb71b75bf9941afde58e0.jpg", "Thai beef curry"));
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/b614b1b2d1e412459a6390b950d16f14.jpg", "English Biscuits"));
+                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/4c3211edef29df58e40944e09374e691.jpg", "Cream Salad Dressing og noget meget langt"));
+        }
 
         return rootView;
     }

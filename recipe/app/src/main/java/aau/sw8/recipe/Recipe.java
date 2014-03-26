@@ -12,10 +12,9 @@ public class Recipe implements Parcelable {
     private String recipeTitle;
     private String recipeDescription;
 
-    public Recipe(String imagePath, String recipeTitle, String recipeDescription) {
+    public Recipe(String imagePath, String recipeTitle) {
         this.imagePath = imagePath;
         this.recipeTitle = recipeTitle;
-        this.recipeDescription = recipeDescription;
     }
 
     public String getImagePath() {
