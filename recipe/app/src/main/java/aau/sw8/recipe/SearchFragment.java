@@ -36,7 +36,7 @@ public class SearchFragment extends Fragment {
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
-        RecipeList recipeList = (RecipeList) rootView.findViewById(R.id.recipeList);
+        SearchList recipeList = (SearchList) rootView.findViewById(R.id.searchList);
         // temporary display.test code
         for(int j = 0; j < 3; j++) {
                 recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/17b8d0860fc30be68222cc5cfb53f399.jpg", "Russian Salad"));

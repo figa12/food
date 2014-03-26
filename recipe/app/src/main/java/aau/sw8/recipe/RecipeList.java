@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +25,7 @@ public class RecipeList extends ListLinearLayout<Recipe> {
             .cacheOnDisc(true)
             .build();
 
-    private ImageView focusedImage = null;
+    private View focusedView = null;
 
     public RecipeList(Context context) {
         super(context);
@@ -61,35 +62,37 @@ public class RecipeList extends ListLinearLayout<Recipe> {
                 ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
 
                 // Check whether the action is down and there are no focused view
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && focusedImage == null) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && focusedView == null) {
                     // Set this image as the current focused
-                    focusedImage = image;
+                    focusedView = view;
 
                     // Schedule a task to highlight the image if it hasn't been canceled before it is run
-                    focusedImage.postDelayed(new Runnable() {
+                    focusedView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (focusedImage != null)
-                                focusedImage.setColorFilter(0xFF222222, PorterDuff.Mode.ADD);
+                            if (focusedView != null) {
+                                highlightView(focusedView);
+                            }
                         }
-                    }, 200);
+                    }, ViewConfiguration.getTapTimeout());
+
+                    focusedView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (focusedView != null)
+                                onLongClick(focusedView);
+                        }
+                    }, ViewConfiguration.getLongPressTimeout());
                 }
                 // Check whether the action involves the current focused view
-                else if (focusedImage == image) {
+                else if (focusedView == view) {
                     // If the action is UP, it is a click
                     if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        // Flash the image
-                        image.setColorFilter(0xFFaaaaaa, PorterDuff.Mode.ADD);
-
-                         // The tag is the recipe which was clicked
-                        Recipe recipe = (Recipe) view.getTag();
-
-                        // Open recipe fragment
-                        ((MainActivity) RecipeList.this.getContext()).openRecipeFragment(recipe);
+                        onClick(focusedView);
                     }
                     // If the action is CANCEL, the focus and highlight should be removed
                     else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
-                        focusedImage = null;
+                        focusedView = null;
                         image.setColorFilter(null);
                     }
                 }
@@ -99,5 +102,19 @@ public class RecipeList extends ListLinearLayout<Recipe> {
         });
 
         return recipeView;
+    }
+
+    protected void onClick(View view) { }
+
+    protected void onLongClick(View view) { }
+
+    protected void highlightView(View view) {
+        ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
+        image.setColorFilter(0xFF222222, PorterDuff.Mode.ADD);
+    }
+
+    protected void flashView(View view) {
+        ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
+        image.setColorFilter(0xFFAAAAAA, PorterDuff.Mode.ADD);
     }
 }

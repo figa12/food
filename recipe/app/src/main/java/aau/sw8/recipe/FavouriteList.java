@@ -18,4 +18,8 @@ public class FavouriteList extends RecipeList {
         super(context, attrs);
     }
 
+    @Override
+    protected void onLongClick(View view) {
+        // TODO long click
+    }
 }
