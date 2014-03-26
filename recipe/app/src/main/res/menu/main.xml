@@ -6,8 +6,4 @@
         android:showAsAction="always"
         android:title="@string/action_search"/>
 
-    <item android:id="@+id/action_button"
-        android:title="@string/action_button"
-        android:showAsAction="ifRoom|withText"/>
-
     </menu>

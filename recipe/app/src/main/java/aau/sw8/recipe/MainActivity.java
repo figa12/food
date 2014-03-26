@@ -167,9 +167,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = this.isDrawerOpen();
 
-        // Always show button
-        menu.findItem(R.id.action_button).setVisible(!drawerOpen);
-
         // Hide all fragment specific menu item
         menu.findItem(R.id.action_search).setVisible(false);
 
@@ -194,9 +191,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
         // Handle action buttons
         switch(item.getItemId()) {
-            case R.id.action_button:
-                Toast.makeText(this, "Not implemented", Toast.LENGTH_LONG).show();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
