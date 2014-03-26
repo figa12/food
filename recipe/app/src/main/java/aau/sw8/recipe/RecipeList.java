@@ -115,6 +115,6 @@ public class RecipeList extends ListLinearLayout<Recipe> {
 
     protected void flashView(View view) {
         ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
-        image.setColorFilter(0xFFAAAAAA, PorterDuff.Mode.ADD);
+        image.setColorFilter(0xFF666666, PorterDuff.Mode.ADD);
     }
 }
