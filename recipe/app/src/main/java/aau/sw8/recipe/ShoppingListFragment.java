@@ -18,10 +18,12 @@ public class ShoppingListFragment extends Fragment {
 
     private OnFragmentInteractionListener interactionListener;
 
+    /* Constructors */
     public ShoppingListFragment() {
         // Required empty public constructor (?)
     }
 
+    /* Override methods */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,7 @@ public class ShoppingListFragment extends Fragment {
         this.interactionListener = null;
     }
 
+    /* Interface */
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

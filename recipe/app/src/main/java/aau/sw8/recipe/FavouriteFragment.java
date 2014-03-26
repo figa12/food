@@ -1,6 +1,8 @@
 package aau.sw8.recipe;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,40 +10,46 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by Jesper on 12-03-14.
+ * Created by jacob on 3/25/14.
  */
-public class RecipeFragment extends Fragment {
+public class FavouriteFragment extends Fragment {
 
-    public static final String ARG_RECIPE = "recipe";
+    public static final String ARG_FAVOURITE = "favourite";
 
-    private Recipe recipe;
+
 
     private String pageTitle;
 
-    public RecipeFragment() {
-        // Required empty public constructor
+    /* Contstructors */
+    public FavouriteFragment() {
+
     }
 
+    /* Override methods */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_favourite, container, false);
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
-        this.recipe = super.getArguments().getParcelable(RecipeFragment.ARG_RECIPE);
 
         // TODO: make it possible to change the pagetitle accordingly to language.
-        this.pageTitle = super.getResources().getString(R.string.fragment_recipe);
+        this.pageTitle = "Favourites";
         super.getActivity().setTitle(this.pageTitle);
+
+        RecipeList favouriteList = (RecipeList) rootView.findViewById(R.id.favouriteList);
+        //TODO handle other views here
+        /*testdata*/
+        for (int i = 0; i <= 20; i++) {
+            favouriteList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Favorite Title"));
+        }
 
         return rootView;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MainActivity mainActivity = (MainActivity) this.getActivity();

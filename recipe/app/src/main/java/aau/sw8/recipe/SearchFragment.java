@@ -71,8 +71,7 @@ public class SearchFragment extends Fragment {
         try {
             this.interactionListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-        }
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener"); }
     }
 
     @Override

@@ -119,6 +119,10 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
                 fragment = new SearchFragment();
                 break;
 
+            case 1:
+                fragment = new FavouriteFragment();
+                break;
+
             case 2:
                 fragment = new ShoppingListFragment();
                 break;
