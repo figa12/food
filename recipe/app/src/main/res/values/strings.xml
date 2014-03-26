@@ -17,5 +17,11 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_button">Button</string>
     <string name="ingredient_search_hint">Enter an ingredient</string>
+    <string name="remove_favourite">Do you want remove this recipe from favorites</string>
+    <string name="button_OK">OK</string>
+    <string name="button_cancel">Cancel</string>
+
+
+
 
 </resources>

@@ -1,8 +1,6 @@
 package aau.sw8.recipe;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,13 +14,11 @@ public class FavouriteFragment extends Fragment {
 
     public static final String ARG_FAVOURITE = "favourite";
 
-
-
     private String pageTitle;
 
     /* Contstructors */
     public FavouriteFragment() {
-
+        /*Empty constructor*/
     }
 
     /* Override methods */
@@ -40,8 +36,9 @@ public class FavouriteFragment extends Fragment {
         this.pageTitle = "Favourites";
         super.getActivity().setTitle(this.pageTitle);
 
-        RecipeList favouriteList = (RecipeList) rootView.findViewById(R.id.favouriteList);
+        FavouriteList favouriteList = (FavouriteList) rootView.findViewById(R.id.favouriteList);
         //TODO handle other views here
+
         /*testdata*/
         for (int i = 0; i <= 20; i++) {
             favouriteList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Favorite Title"));

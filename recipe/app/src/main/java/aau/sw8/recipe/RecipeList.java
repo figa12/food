@@ -89,11 +89,12 @@ public class RecipeList extends ListLinearLayout<Recipe> {
                     // If the action is UP, it is a click
                     if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                         onClick(focusedView);
+                        focusedView = null;
                     }
                     // If the action is CANCEL, the focus and highlight should be removed
                     else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                        clearHighlight(focusedView);
                         focusedView = null;
-                        image.setColorFilter(null);
                     }
                 }
 
@@ -107,6 +108,11 @@ public class RecipeList extends ListLinearLayout<Recipe> {
     protected void onClick(View view) { }
 
     protected void onLongClick(View view) { }
+
+    protected void clearHighlight(View view){
+        ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
+        image.setColorFilter(null);
+    }
 
     protected void highlightView(View view) {
         ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
