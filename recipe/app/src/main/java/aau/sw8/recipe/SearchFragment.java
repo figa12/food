@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 
 public class SearchFragment extends Fragment {
@@ -55,6 +56,15 @@ public class SearchFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         MainActivity mainActivity = (MainActivity) this.getActivity();
         menu.findItem(R.id.action_search).setVisible(!mainActivity.isDrawerOpen());
+
+        SearchView searchBar = ((SearchView)menu.findItem(R.id.action_search).getActionView());
+
+        // Default to search field
+        searchBar.setIconifiedByDefault(false);
+
+        // Set hint text
+        searchBar.setQueryHint(getString(R.string.action_search));
+
         super.onPrepareOptionsMenu(menu);
     }
 
