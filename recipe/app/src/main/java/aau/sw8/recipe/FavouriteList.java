@@ -26,10 +26,10 @@ public class FavouriteList extends RecipeList {
 
     @Override
     protected void onClick(View view) {
-        // Flash the image
-        flashView(view);
-
         if (isLongClick != true) {
+            // Flash the image
+            flashView(view);
+
             // The tag is the recipe which was clicked
             Recipe recipe = (Recipe) view.getTag();
 
@@ -45,10 +45,10 @@ public class FavouriteList extends RecipeList {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setMessage(R.string.remove_favourite)
-                .setPositiveButton(R.string.button_OK, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext(), "OK", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.button_remove, Toast.LENGTH_SHORT).show();
                         isLongClick = false;
                         clearHighlight(view);
 
