@@ -78,6 +78,9 @@ public class SearchFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        setHasOptionsMenu(true);
+
         try {
             this.interactionListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
