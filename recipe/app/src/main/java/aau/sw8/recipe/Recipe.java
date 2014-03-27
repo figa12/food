@@ -8,15 +8,19 @@ import android.os.Parcelable;
  */
 public class Recipe implements Parcelable {
 
+    private int recipeId;
     private String imagePath;
     private String recipeTitle;
     private String recipeDescription;
 
+    /*Constructors*/
     public Recipe(String imagePath, String recipeTitle) {
         this.imagePath = imagePath;
         this.recipeTitle = recipeTitle;
     }
 
+
+    /*Methods*/
     public String getImagePath() {
         return imagePath;
     }

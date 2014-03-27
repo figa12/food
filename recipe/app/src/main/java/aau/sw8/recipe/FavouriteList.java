@@ -12,7 +12,7 @@ import android.widget.Toast;
 
  */
 public class FavouriteList extends RecipeList {
-    private boolean isLongClick = false;
+    private boolean isLongClick = false; /*Enable OnCLick*/
 
     /*Constructors*/
     public FavouriteList(Context context) {
@@ -25,7 +25,7 @@ public class FavouriteList extends RecipeList {
 
     @Override
     protected void onClick(View view) {
-        if (isLongClick != true) {
+        if (isLongClick != true) { /*if OnClick is enabled*/
             // Flash the image
             flashView(view);
 
@@ -49,18 +49,17 @@ public class FavouriteList extends RecipeList {
                 .setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {      /*Remove button*/
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO Rrmove Toast when not debugging anymore
+                        //TODO Remove Toast when not debugging anymore
                         Toast.makeText(getContext(), R.string.button_remove, Toast.LENGTH_SHORT).show(); /*Debug*/
                         isLongClick = false;    /*Enable the use of OnClick again*/
                         clearHighlight(view);   /*Clear the highlighting*/
-                        /*Remove favourite from the list
-                          And remove it from favouites*/
+                        //TODO Remove favourite from the list And remove it from favourites.
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO Rrmove Toast when not debugging anymore
+                        //TODO Remove Toast when not debugging anymore
                         Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show();
                         isLongClick = false;    /*Enable the use of OnClick again*/
                         clearHighlight(view);   /*Clear the highlighting*/
