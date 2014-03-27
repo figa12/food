@@ -14,15 +14,16 @@
             android:layout_height="217dp">
 
             <ImageView
+                android:id="@+id/recipeHeaderImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_launcher"/>
+                android:scaleType="centerCrop"/>
 
             <TextView
+                android:id="@+id/recipeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="18pt"
+                android:textSize="15pt"
                 android:textColor="#ffffff"
                 android:shadowColor="#444444"
                 android:shadowDx="5.0"
@@ -38,31 +39,44 @@
             android:background="#80000000" />
 
         <TextView
+            android:id="@+id/recipeDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="Description description description description description description"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:background="#80000000" />
+            android:background="#80000000"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/color_gradient">
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ingredients"
-                android:textSize="12pt"/>
+                android:text="@string/ingredients"
+                android:textSize="12pt"
+                android:textStyle="italic"
+                android:layout_gravity="center_vertical"/>
+            <!--
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Prep time X, serves 4"
                 android:gravity="right"/>
+                -->
         </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#80000000" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -79,26 +93,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/color_gradient">
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Instructions"
+                android:text="@string/instructions"
                 android:textSize="12pt"
+                android:textStyle="italic"
                 android:layout_gravity="center_vertical"/>
-            <LinearLayout
-                android:layout_width="match_parent"
+            <View
+                android:layout_width="0px"
                 android:layout_height="wrap_content"
-                android:gravity="right">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+A"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-A"/>
-            </LinearLayout>
+                android:layout_weight="1"/>
+            <Spinner
+                android:id="@+id/fontSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/font_sizes"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
         <View
@@ -106,11 +119,40 @@
             android:layout_height="1px"
             android:background="#80000000" />
 
-        <FrameLayout
+        <aau.sw8.recipe.InstructionList
+            android:id="@+id/instructionList"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <!-- Change this layout to instruction list -->
-            </FrameLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#80000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comments"
+                android:textSize="12pt"
+                android:textStyle="italic"
+                android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#80000000" />
 
     </LinearLayout>
 

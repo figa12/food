@@ -25,4 +25,16 @@
 
 
 
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
+    <string name="comments">Comments</string>
+    <string-array name="font_sizes">
+        <item>14</item> <!-- 14 sp is default text size -->
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+    </string-array>
+
 </resources>
