@@ -64,8 +64,8 @@ public class RecipeFragment extends Fragment {
         description.setText(this.recipe.getRecipeDescription());
 
         this.instructionList = (InstructionList) rootView.findViewById(R.id.instructionList);
-        for (int i = 1; i <= 10; i++) {
-            this.instructionList.addView(new InstructionStep("Yummy in my tummy", i));
+        for (InstructionStep instructionStep : this.recipe.getInstructionSteps()) {
+            this.instructionList.addView(instructionStep);
         }
 
         Spinner fontSpinner = (Spinner) rootView.findViewById(R.id.fontSpinner);

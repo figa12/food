@@ -3,7 +3,7 @@ package aau.sw8.recipe;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by jeria_000 on 07-03-14.
@@ -14,7 +14,8 @@ public class Recipe implements Parcelable {
     private String imagePath;
     private String recipeTitle;
     private String recipeDescription;
-    private List<Ingredient> ingredient;
+    private ArrayList<Ingredient> ingredient;
+    private ArrayList<InstructionStep> instructionSteps = new ArrayList<InstructionStep>();
 
     /*Constructors*/
     public Recipe(String imagePath, String recipeTitle) {
@@ -48,11 +49,19 @@ public class Recipe implements Parcelable {
         this.recipeDescription = recipeDescription;
     }
 
-    public List<Ingredient> getIngredient() {
+    public ArrayList<InstructionStep> getInstructionSteps() {
+        return instructionSteps;
+    }
+
+    public void setInstructionSteps(ArrayList<InstructionStep> instructionSteps) {
+        this.instructionSteps = instructionSteps;
+    }
+
+    public ArrayList<Ingredient> getIngredient() {
         return ingredient;
     }
 
-    public void setIngredient(List<Ingredient> ingredient) {
+    public void setIngredient(ArrayList<Ingredient> ingredient) {
         this.ingredient = ingredient;
     }
 

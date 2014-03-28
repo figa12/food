@@ -21,15 +21,18 @@
 
             <TextView
                 android:id="@+id/recipeName"
+                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15pt"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="12pt"
                 android:textColor="#ffffff"
-                android:shadowColor="#444444"
-                android:shadowDx="5.0"
-                android:shadowDy="5.0"
-                android:shadowRadius="10"
-                android:layout_alignParentBottom="true"/>
+                android:shadowColor="#222222"
+                android:shadowDx="3.0"
+                android:shadowDy="3.0"
+                android:shadowRadius="10"/>
 
         </RelativeLayout>
 
@@ -44,7 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:text="Description description description description description description"/>
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"/>
 
         <View
             android:layout_width="fill_parent"
@@ -102,16 +106,16 @@
                 android:textSize="12pt"
                 android:textStyle="italic"
                 android:layout_gravity="center_vertical"/>
-            <View
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <Spinner
-                android:id="@+id/fontSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/font_sizes"
-                android:layout_gravity="center_vertical"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/fontSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/font_sizes"
+                    android:layout_gravity="center_vertical|right"/>
+            </FrameLayout>
         </LinearLayout>
 
         <View
@@ -146,6 +150,16 @@
                 android:textSize="12pt"
                 android:textStyle="italic"
                 android:layout_gravity="center_vertical"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add comment"
+                    android:layout_gravity="right|center_vertical"/>
+            </FrameLayout>
 
             </LinearLayout>
 
