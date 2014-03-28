@@ -1,23 +1,22 @@
 package aau.sw8.recipe;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jacob on 3/27/14.
  */
-public class ExchangeableIngredients {
+public class ExchangeableIngredient {
     private int exchangeableIngredientId;
     private String name;
     private Recipe recipe;
-    private List<Quantity> ingredientList;
+    private ArrayList<Quantity> ingredientList = new ArrayList<>();
     private IngredientGroup ingredientGroup;
     private int order;
     private boolean mandatory;
 
 
-    public ExchangeableIngredients(int exchangeableIngredientId, String name, Recipe recipe,
-                                   IngredientGroup ingredientGroup, int order, boolean mandatory) {
+    public ExchangeableIngredient(int exchangeableIngredientId, String name, Recipe recipe,
+                                  IngredientGroup ingredientGroup, int order, boolean mandatory) {
         this.exchangeableIngredientId = exchangeableIngredientId;
         this.name = name;
         this.recipe = recipe;
@@ -27,8 +26,8 @@ public class ExchangeableIngredients {
         this.mandatory = mandatory;
     }
 
-    public ExchangeableIngredients(int exchangeableIngredientId, String name, Recipe recipe, List<Quantity> ingredientList,
-                                   IngredientGroup ingredientGroup, int order, boolean mandatory) {
+    public ExchangeableIngredient(int exchangeableIngredientId, String name, Recipe recipe, ArrayList<Quantity> ingredientList,
+                                  IngredientGroup ingredientGroup, int order, boolean mandatory) {
         this.exchangeableIngredientId = exchangeableIngredientId;
         this.name = name;
         this.recipe = recipe;
@@ -64,5 +63,9 @@ public class ExchangeableIngredients {
 
     public void addIngredient(Quantity quantity){
         this.ingredientList.add(quantity);
+    }
+
+    public ArrayList<Quantity> getIngredientList() {
+        return ingredientList;
     }
 }

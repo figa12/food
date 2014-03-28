@@ -14,13 +14,16 @@ public class Recipe implements Parcelable {
     private String imagePath;
     private String recipeTitle;
     private String recipeDescription;
-    private ArrayList<Ingredient> ingredient;
-    private ArrayList<InstructionStep> instructionSteps = new ArrayList<InstructionStep>();
+    private ArrayList<IngredientGroup> ingredient = new ArrayList<>();
+    private ArrayList<InstructionStep> instructionSteps = new ArrayList<>();
+    private ArrayList<Comment> comments = new ArrayList<>();
 
     /*Constructors*/
     public Recipe(String imagePath, String recipeTitle) {
         this.imagePath = imagePath;
         this.recipeTitle = recipeTitle;
+
+        this.comments.add(new Comment(0, new User(0,0,"Ramin Sadre"),this, "mmmm, so yummy in my tummy"));
     }
 
 
@@ -57,14 +60,21 @@ public class Recipe implements Parcelable {
         this.instructionSteps = instructionSteps;
     }
 
-    public ArrayList<Ingredient> getIngredient() {
+    public ArrayList<IngredientGroup> getIngredient() {
         return ingredient;
     }
 
-    public void setIngredient(ArrayList<Ingredient> ingredient) {
+    public void setIngredient(ArrayList<IngredientGroup> ingredient) {
         this.ingredient = ingredient;
     }
 
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
 
     @Override
     public int describeContents() {

@@ -82,11 +82,13 @@
             android:layout_height="1px"
             android:background="#80000000" />
 
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/ingredientGroupsLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <!-- Change this layout to ingredient list -->
-            </FrameLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Add ingredient groups programmatically -->
+            </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
@@ -157,7 +159,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add comment"
+                    android:text="@string/add_comment"
                     android:layout_gravity="right|center_vertical"/>
             </FrameLayout>
 
@@ -167,6 +169,14 @@
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:background="#80000000" />
+
+        <aau.sw8.recipe.RecipeCommentList
+            android:id="@+id/recipeCommentList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
     </LinearLayout>
 

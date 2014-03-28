@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -63,6 +64,18 @@ public class RecipeFragment extends Fragment {
         TextView description = (TextView) rootView.findViewById(R.id.recipeDescription);
         description.setText(this.recipe.getRecipeDescription());
 
+        LinearLayout ingredientGroupsLayout = (LinearLayout) rootView.findViewById(R.id.ingredientGroupsLinearLayout);
+        for (IngredientGroup ingredientGroup : this.recipe.getIngredient()) {
+            TextView ingredientGroupHeader = new TextView(this.getActivity());
+            ingredientGroupHeader.setText(ingredientGroup.getName());
+            ingredientGroupsLayout.addView(ingredientGroupHeader);
+
+            RecipeIngredientGroupList ingredientGroupList = new RecipeIngredientGroupList(this.getActivity());
+            for (ExchangeableIngredient exchangeableIngredient : ingredientGroup.getExchangeableIngredients()) {
+                ingredientGroupList.addView(exchangeableIngredient);
+            }
+        }
+
         this.instructionList = (InstructionList) rootView.findViewById(R.id.instructionList);
         for (InstructionStep instructionStep : this.recipe.getInstructionSteps()) {
             this.instructionList.addView(instructionStep);
@@ -80,9 +93,14 @@ public class RecipeFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                // CAN THIS HAPPEN?!
+                // CAN THIS HAPPEN?!?!
             }
         });
+
+        RecipeCommentList commentList = (RecipeCommentList) rootView.findViewById(R.id.recipeCommentList);
+        for (Comment comment : this.recipe.getComments()) {
+            commentList.addView(comment);
+        }
 
         return rootView;
     }
