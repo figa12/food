@@ -33,7 +33,7 @@ public class FavouriteFragment extends Fragment {
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         // TODO: make it possible to change the pagetitle accordingly to language.
-        this.pageTitle = "Favourites";
+        this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
         FavouriteList favouriteList = (FavouriteList) rootView.findViewById(R.id.favouriteList);
