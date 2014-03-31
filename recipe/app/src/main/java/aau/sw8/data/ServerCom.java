@@ -40,14 +40,15 @@ public class ServerCom {
         return instance;
     }
 
-    /*Override methods*/
-
-
     /*Class methods*/
     public void init(Context context){
         if(context instanceof MainActivity){
             this.context = context;
         }
+    }
+
+    public void startNewTask(BasicNameValuePair... pairs){
+        new ServerComTask(this.context).execute(pairs);
     }
 
     public void startNewTask(Context context, BasicNameValuePair... pairs){
@@ -88,9 +89,11 @@ public class ServerCom {
                 HttpEntity entity = response.getEntity();
                 result = EntityUtils.toString(entity);
 
-            }catch (IOException e){
+            }
+            catch (IOException e){
                 e.printStackTrace();
-            }catch (Exception e){
+            }
+            catch (Exception e){
                 e.printStackTrace();
             }
 
@@ -99,6 +102,7 @@ public class ServerCom {
 
         @Override
         protected void onPostExecute(String result) {
+            //TODO Should not always call onServerTest
             MainActivity mainActivity = null;
             if(this.context instanceof MainActivity){
                 mainActivity = (MainActivity) this.context;

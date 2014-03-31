@@ -55,6 +55,11 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         serverCom = ServerCom.getInstance();
         serverCom.init(this);
 
+        /* ServerCom testing //TODO should be removed at some point
+        serverCom.startNewTask(new BasicNameValuePair("Request", "1"), new BasicNameValuePair("Data", "test1"));
+        serverCom.startNewTask(new BasicNameValuePair("Request", "2"), new BasicNameValuePair("Data", "test2"));
+        */
+
         this.title = this.drawerTitle = super.getTitle();
         this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
         this.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
