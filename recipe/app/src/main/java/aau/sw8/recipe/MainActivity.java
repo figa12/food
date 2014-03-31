@@ -20,10 +20,14 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import org.apache.http.message.BasicNameValuePair;
+
+import aau.sw8.data.ServerCom;
 import aau.sw8.model.Recipe;
 
 public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener {
 
+    /*Variables*/
     public static final String ARG_POSITION = "position";
 
     private DrawerLayout drawerLayout;
@@ -34,14 +38,22 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     private CharSequence title;
     private String[] pageTitles;
 
+    public ServerCom serverCom;
+
+    /*Override methods*/
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*Image loader*/
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
         ImageLoader.getInstance().init(config);
+
+        /*Server communication*/
+        serverCom = ServerCom.getInstance();
+        serverCom.init(this);
 
         this.title = this.drawerTitle = super.getTitle();
         this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
@@ -99,12 +111,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
             MainActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
         }
 
-    }
-
-    private void setActionBarArrowDependingOnFragmentsBackStack() {
-        int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
-        boolean shouldEnableDrawerIndicator = backStackEntryCount == 0;
-        this.drawerToggle.setDrawerIndicatorEnabled(shouldEnableDrawerIndicator);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -179,10 +185,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public boolean isDrawerOpen() {
-        return this.drawerLayout.isDrawerOpen(this.drawerListView);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
@@ -224,6 +226,21 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     public void onFragmentInteraction(Uri uri) {
         //TODO What does this do?!?!
         // mayhaps: A method that handles interactions from the current underlying Fragment
+    }
+
+    /*Class methods*/
+    private void setActionBarArrowDependingOnFragmentsBackStack() {
+        int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
+        boolean shouldEnableDrawerIndicator = backStackEntryCount == 0;
+        this.drawerToggle.setDrawerIndicatorEnabled(shouldEnableDrawerIndicator);
+    }
+
+    public boolean isDrawerOpen() {
+        return this.drawerLayout.isDrawerOpen(this.drawerListView);
+    }
+
+    public void onServerTest(String result){
+        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
     }
 
     @SuppressWarnings("ConstantConditions")
