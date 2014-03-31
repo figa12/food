@@ -5,11 +5,11 @@ package aau.sw8.model;
  */
 public class Unit {
     private int unitId;
-    private int metric;
-    private int imperial;
+    private String metric;
+    private String imperial;
     private float conversion;
 
-    public Unit(int unitId, int metric, int imperial, float conversion) {
+    public Unit(int unitId, String metric, String imperial, float conversion) {
         this.unitId = unitId;
         this.metric = metric;
         this.imperial = imperial;
@@ -20,11 +20,11 @@ public class Unit {
         return unitId;
     }
 
-    public int getMetric() {
+    public String getMetric() {
         return metric;
     }
 
-    public int getImperial() {
+    public String getImperial() {
         return imperial;
     }
 

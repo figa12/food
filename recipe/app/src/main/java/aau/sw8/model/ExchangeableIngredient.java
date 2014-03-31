@@ -6,34 +6,17 @@ import java.util.ArrayList;
  * Created by jacob on 3/27/14.
  */
 public class ExchangeableIngredient {
+
     private int exchangeableIngredientId;
     private String name;
-    private Recipe recipe;
-    private ArrayList<Quantity> ingredientList = new ArrayList<>();
-    private IngredientGroup ingredientGroup;
-    private int order;
+    private ArrayList<IngredientQuantity> ingredientQuantities = new ArrayList<>();
     private boolean mandatory;
 
-
-    public ExchangeableIngredient(int exchangeableIngredientId, String name, Recipe recipe,
-                                  IngredientGroup ingredientGroup, int order, boolean mandatory) {
+    public ExchangeableIngredient(int exchangeableIngredientId, String name,
+                                  ArrayList<IngredientQuantity> ingredientQuantities, boolean mandatory) {
         this.exchangeableIngredientId = exchangeableIngredientId;
         this.name = name;
-        this.recipe = recipe;
-        this.ingredientList = new ArrayList<Quantity>();
-        this.ingredientGroup = ingredientGroup;
-        this.order = order;
-        this.mandatory = mandatory;
-    }
-
-    public ExchangeableIngredient(int exchangeableIngredientId, String name, Recipe recipe, ArrayList<Quantity> ingredientList,
-                                  IngredientGroup ingredientGroup, int order, boolean mandatory) {
-        this.exchangeableIngredientId = exchangeableIngredientId;
-        this.name = name;
-        this.recipe = recipe;
-        this.ingredientList = ingredientList;
-        this.ingredientGroup = ingredientGroup;
-        this.order = order;
+        this.ingredientQuantities = ingredientQuantities;
         this.mandatory = mandatory;
     }
 
@@ -45,27 +28,21 @@ public class ExchangeableIngredient {
         return name;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public IngredientGroup getIngredientGroup() {
-        return ingredientGroup;
-    }
-
-    public int getOrder() {
-        return order;
-    }
-
     public boolean isMandatory() {
         return mandatory;
     }
 
-    public void addIngredient(Quantity quantity){
-        this.ingredientList.add(quantity);
+    public ArrayList<IngredientQuantity> getIngredientQuantities() {
+        return ingredientQuantities;
     }
 
-    public ArrayList<Quantity> getIngredientList() {
-        return ingredientList;
+    public ArrayList<String> getExchangeableIngredientStrings() {
+        ArrayList<String> strings = new ArrayList<>();
+
+        for (IngredientQuantity ingredientQuantity : this.ingredientQuantities) {
+            strings.add(ingredientQuantity.getString());
+        }
+
+        return strings;
     }
 }

@@ -8,15 +8,12 @@ import java.util.ArrayList;
 public class IngredientGroup {
     private int ingredientGroupId;
     private String name;
-    private int order;
-    private Recipe recipe;
-    private ArrayList<ExchangeableIngredient> exchangeableIngredients = new ArrayList<>();
+    private ArrayList<ExchangeableIngredient> exchangeableIngredients;
 
-    public IngredientGroup(int ingredientGroupId, String name, int order, Recipe recipe) {
+    public IngredientGroup(int ingredientGroupId, String name, ArrayList<ExchangeableIngredient> exchangeableIngredients) {
         this.ingredientGroupId = ingredientGroupId;
         this.name = name;
-        this.order = order;
-        this.recipe = recipe;
+        this.exchangeableIngredients = exchangeableIngredients;
     }
 
     public int getId() {
@@ -27,19 +24,7 @@ public class IngredientGroup {
         return name;
     }
 
-    public int getOrder() {
-        return order;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
     public ArrayList<ExchangeableIngredient> getExchangeableIngredients() {
         return exchangeableIngredients;
-    }
-
-    public void setExchangeableIngredients(ArrayList<ExchangeableIngredient> exchangeableIngredients) {
-        this.exchangeableIngredients = exchangeableIngredients;
     }
 }

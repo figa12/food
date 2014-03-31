@@ -8,9 +8,9 @@ import java.util.List;
 public class ShoppingList {
     private int shoppingId;
     private User user;
-    private List<Quantity> ingredientList;
+    private List<IngredientQuantity> ingredientList;
 
-    public ShoppingList(int shoppingId, User user, List<Quantity> ingredientList) {
+    public ShoppingList(int shoppingId, User user, List<IngredientQuantity> ingredientList) {
         this.shoppingId = shoppingId;
         this.user = user;
         this.ingredientList = ingredientList;
@@ -24,7 +24,7 @@ public class ShoppingList {
         return user;
     }
 
-    public List<Quantity> getIngredientList() {
+    public List<IngredientQuantity> getIngredientList() {
         return ingredientList;
     }
 }
