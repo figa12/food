@@ -12,6 +12,9 @@ import android.widget.SearchView;
 
 import java.util.ArrayList;
 
+import aau.sw8.model.InstructionStep;
+import aau.sw8.model.Recipe;
+
 
 public class SearchFragment extends Fragment {
 

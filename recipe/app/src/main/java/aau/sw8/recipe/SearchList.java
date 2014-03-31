@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+import aau.sw8.model.Recipe;
+
 /**
  * Created by Sam on 26/03/2014.
  */

@@ -1,4 +1,4 @@
-package aau.sw8.recipe;
+package aau.sw8.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,7 @@ public class Recipe implements Parcelable {
     private String imagePath;
     private String recipeTitle;
     private String recipeDescription;
-    private ArrayList<IngredientGroup> ingredient = new ArrayList<>();
+    private ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
     private ArrayList<InstructionStep> instructionSteps = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
 
@@ -60,12 +60,12 @@ public class Recipe implements Parcelable {
         this.instructionSteps = instructionSteps;
     }
 
-    public ArrayList<IngredientGroup> getIngredient() {
-        return ingredient;
+    public ArrayList<IngredientGroup> getIngredientGroups() {
+        return ingredientGroups;
     }
 
-    public void setIngredient(ArrayList<IngredientGroup> ingredient) {
-        this.ingredient = ingredient;
+    public void setIngredientGroups(ArrayList<IngredientGroup> ingredientGroups) {
+        this.ingredientGroups = ingredientGroups;
     }
 
     public ArrayList<Comment> getComments() {

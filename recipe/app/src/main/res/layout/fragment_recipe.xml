@@ -86,7 +86,8 @@
             android:id="@+id/ingredientGroupsLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:minHeight="@dimen/activity_vertical_margin">
             <!-- Add ingredient groups programmatically -->
             </LinearLayout>
 
@@ -131,7 +132,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:minHeight="@dimen/activity_vertical_margin"/>
 
         <View
             android:layout_width="fill_parent"
@@ -176,7 +178,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:minHeight="@dimen/activity_vertical_margin"/>
 
     </LinearLayout>
 

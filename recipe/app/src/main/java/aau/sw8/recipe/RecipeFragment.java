@@ -15,6 +15,12 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import aau.sw8.model.Comment;
+import aau.sw8.model.ExchangeableIngredient;
+import aau.sw8.model.IngredientGroup;
+import aau.sw8.model.InstructionStep;
+import aau.sw8.model.Recipe;
+
 /**
  * Created by Jesper on 12-03-14.
  */
@@ -65,7 +71,7 @@ public class RecipeFragment extends Fragment {
         description.setText(this.recipe.getRecipeDescription());
 
         LinearLayout ingredientGroupsLayout = (LinearLayout) rootView.findViewById(R.id.ingredientGroupsLinearLayout);
-        for (IngredientGroup ingredientGroup : this.recipe.getIngredient()) {
+        for (IngredientGroup ingredientGroup : this.recipe.getIngredientGroups()) {
             TextView ingredientGroupHeader = new TextView(this.getActivity());
             ingredientGroupHeader.setText(ingredientGroup.getName());
             ingredientGroupsLayout.addView(ingredientGroupHeader);

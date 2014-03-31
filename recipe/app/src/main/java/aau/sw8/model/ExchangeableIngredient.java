@@ -1,4 +1,4 @@
-package aau.sw8.recipe;
+package aau.sw8.model;
 
 import java.util.ArrayList;
 

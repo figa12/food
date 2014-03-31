@@ -13,6 +13,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
+import aau.sw8.model.InstructionStep;
+
 /**
  * Created by Jesper on 07-03-14.
  */

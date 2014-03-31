@@ -1,4 +1,4 @@
-package aau.sw8.recipe;
+package aau.sw8.model;
 
 /**
  * Created by jacob on 3/27/14.

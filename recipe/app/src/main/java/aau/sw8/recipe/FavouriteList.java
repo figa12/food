@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
 
+import aau.sw8.model.Recipe;
+
 /**
  * Created by jacob on 3/26/14.
 
