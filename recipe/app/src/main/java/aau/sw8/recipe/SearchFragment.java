@@ -11,9 +11,15 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import aau.sw8.model.ExchangeableIngredient;
+import aau.sw8.model.Ingredient;
+import aau.sw8.model.IngredientGroup;
+import aau.sw8.model.IngredientQuantity;
 import aau.sw8.model.InstructionStep;
 import aau.sw8.model.Recipe;
+import aau.sw8.model.Unit;
 
 
 public class SearchFragment extends Fragment {
@@ -53,6 +59,24 @@ public class SearchFragment extends Fragment {
         instructionSteps.add(new InstructionStep("Bake for about 25 minutes, or until the top and edges set.", 4));
         instructionSteps.add(new InstructionStep("Let cool and refrigerate for at least 2 hours before adding the whipped cream, any desired garnish and serving.", 5, "http://www.opensourcefood.com/public/images/cached/567x/recipe_images/7a0a46455c4ec56a5a02c097374fc513.jpg"));
         chocoYumYum.setInstructionSteps(instructionSteps);
+
+        ArrayList<ExchangeableIngredient> exchangeableIngredients1 = new ArrayList<>();
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "cream", "cream", null), new Unit(0, "ml", "ml", 1f), 480d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "dark chocolate, chopped", "dark chocolate, chopped", null), new Unit(0, "g", "g", 1f), 120d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "earl grey tea", "earl grey tea", null), new Unit(0, "bags", "bags", 1f), 2d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "egg yolk", "egg yolk", null), null, 6d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "sugar", "sugar", null), new Unit(0, "tablespoons", "tablespoons", 1f), 3))), true));
+
+        ArrayList<ExchangeableIngredient> exchangeableIngredients2 = new ArrayList<>();
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "whipping cream", "whipping cream", null), new Unit(0, "ml", "ml", 1f), 120d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "powdered sugar", "powdered sugar", null), new Unit(0, "tablespoon", "tablespoon", 1f), 2d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "cointreau", "cointreau", null), new Unit(0, "teaspoon", "teaspoon", 1f), 3d))), true));
+
+        ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
+        ingredientGroups.add(new IngredientGroup(0, "The puddings", exchangeableIngredients1));
+        ingredientGroups.add(new IngredientGroup(0, "Cointreau cream", exchangeableIngredients2));
+
+        chocoYumYum.setIngredientGroups(ingredientGroups);
 
         for(int j = 0; j < 3; j++) {
                 recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/17b8d0860fc30be68222cc5cfb53f399.jpg", "Russian Salad"));

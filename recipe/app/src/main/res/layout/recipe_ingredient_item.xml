@@ -9,12 +9,22 @@
         android:id="@+id/recipeShoppingListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+/-"/>
+        android:text="+/-"
+        android:layout_gravity="center_vertical"/>
 
+    <!-- TODO make spinner stretch to width!?!? -->
     <Spinner
         android:id="@+id/exchangeableIngredientSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/exchangeableIngredientTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center_vertical"/>
 
 </LinearLayout>

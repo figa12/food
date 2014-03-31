@@ -87,7 +87,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:minHeight="@dimen/activity_vertical_margin">
+            android:minHeight="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+            <!-- The margin on the bottom is specified on each RecipeIngredientGroupList -->
             <!-- Add ingredient groups programmatically -->
             </LinearLayout>
 
@@ -133,7 +137,8 @@
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:minHeight="@dimen/activity_vertical_margin"/>
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <View
             android:layout_width="fill_parent"
@@ -179,6 +184,8 @@
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:minHeight="@dimen/activity_vertical_margin"/>
 
     </LinearLayout>

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -13,7 +15,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 
 import aau.sw8.model.ExchangeableIngredient;
-import aau.sw8.model.Quantity;
 
 /**
  * Created by Jesper on 07-03-14.
@@ -29,10 +30,12 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
 
     public RecipeIngredientGroupList(Context context) {
         super(context);
+        this.setOrientation(VERTICAL);
     }
 
     public RecipeIngredientGroupList(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setOrientation(VERTICAL);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -50,10 +53,22 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
             }
         });
 
-        Spinner spinner = (Spinner) ingredientView.findViewById(R.id.exchangeableIngredientSpinner);
-        ArrayList<Quantity> ingredientQuantity = exchangeableIngredient.getIngredientList();
-        //ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, /* List of strings I think */);
-        //spinner.setAdapter(ingredientAdapter);
+
+        ArrayList<String> str = exchangeableIngredient.getExchangeableIngredientStrings();
+
+        if (str.size() > 1) {
+            //TODO make actual exchangeable ingredient adapter
+            Spinner spinner = (Spinner) ingredientView.findViewById(R.id.exchangeableIngredientSpinner);
+            spinner.setVisibility(VISIBLE);
+
+            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, str);
+            ingredientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(ingredientAdapter);
+        } else if (str.size() == 1) {
+            TextView textView = (TextView) ingredientView.findViewById(R.id.exchangeableIngredientTextView);
+            textView.setVisibility(VISIBLE);
+            textView.setText(str.get(0));
+        }
 
         return ingredientView;
     }

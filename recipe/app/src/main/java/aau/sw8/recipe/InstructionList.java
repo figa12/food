@@ -48,9 +48,12 @@ public class InstructionList extends ListLinearLayout<InstructionStep> {
         TextView step = (TextView) instructionView.findViewById(R.id.stepNumberTextView);
         step.setText(String.valueOf(instruction.getStep()) + ". ");
 
-        // set step image
-        ImageView recipeImage = (ImageView) instructionView.findViewById(R.id.stepDescriptionImageView);
-        this.imageLoader.displayImage(instruction.getImagePath(), recipeImage, this.imageLoaderOptions);
+        if (instruction.getImagePath() != null) {
+            // set step image
+            ImageView recipeImage = (ImageView) instructionView.findViewById(R.id.stepDescriptionImageView);
+            recipeImage.setVisibility(VISIBLE);
+            this.imageLoader.displayImage(instruction.getImagePath(), recipeImage, this.imageLoaderOptions);
+        }
 
         // set step description
         TextView description = (TextView) instructionView.findViewById(R.id.stepDescriptionTextView);

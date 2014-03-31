@@ -1,7 +1,10 @@
 package aau.sw8.recipe;
 
 import android.app.Fragment;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -70,16 +73,42 @@ public class RecipeFragment extends Fragment {
         TextView description = (TextView) rootView.findViewById(R.id.recipeDescription);
         description.setText(this.recipe.getRecipeDescription());
 
+        // create and add the ingredient groups
         LinearLayout ingredientGroupsLayout = (LinearLayout) rootView.findViewById(R.id.ingredientGroupsLinearLayout);
         for (IngredientGroup ingredientGroup : this.recipe.getIngredientGroups()) {
+            // create a header for each group
             TextView ingredientGroupHeader = new TextView(this.getActivity());
             ingredientGroupHeader.setText(ingredientGroup.getName());
+            ingredientGroupHeader.setTypeface(null, Typeface.BOLD_ITALIC);
+            ingredientGroupHeader.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
             ingredientGroupsLayout.addView(ingredientGroupHeader);
 
+            // create the ingredient list
             RecipeIngredientGroupList ingredientGroupList = new RecipeIngredientGroupList(this.getActivity());
+
+            // Set vertical margin on each ingredient group list
+            // get the dp vertical dimen and convert it to pixels
+            Resources resources = this.getActivity().getResources();
+            int pxMargin = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    16f, //resources.getDimension(R.dimen.activity_vertical_margin),
+                    resources.getDisplayMetrics()
+            );
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 0, 0, pxMargin);
+            ingredientGroupList.setLayoutParams(params);
+
+            // add the exchangeable ingredients to the group
             for (ExchangeableIngredient exchangeableIngredient : ingredientGroup.getExchangeableIngredients()) {
                 ingredientGroupList.addView(exchangeableIngredient);
             }
+
+            // add the ingredient group list
+            ingredientGroupsLayout.addView(ingredientGroupList);
         }
 
         this.instructionList = (InstructionList) rootView.findViewById(R.id.instructionList);
