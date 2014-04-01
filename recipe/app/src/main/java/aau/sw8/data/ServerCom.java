@@ -26,17 +26,19 @@ import aau.sw8.recipe.MainActivity;
  * Created by jacob on 3/31/14.
  */
 
-
 public class ServerCom {
 
     /*Variables*/
     private Context context;
-    private static ServerCom instance = new ServerCom();
+    private static ServerCom instance = null;
 
     /*Constructors*/
     private ServerCom() {}
 
     public static ServerCom getInstance(){
+        if(instance == null){
+            instance = new ServerCom();
+        }
         return instance;
     }
 
