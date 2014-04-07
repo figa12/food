@@ -1,12 +1,16 @@
 package aau.sw8.recipe;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,6 +28,7 @@ import aau.sw8.model.ExchangeableIngredient;
 import aau.sw8.model.IngredientGroup;
 import aau.sw8.model.InstructionStep;
 import aau.sw8.model.Recipe;
+import aau.sw8.model.User;
 
 /**
  * Created by Jesper on 12-03-14.
@@ -131,6 +137,7 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 // CAN THIS HAPPEN?!?!
+                // I DON'T FUCKING KNOW?!?!
             }
         });
 
@@ -142,11 +149,54 @@ public class RecipeFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Handles presses on the action bar items
+        switch (item.getItemId()){
+            case R.id.favourite_button:
+                addToFavourite(this.recipe, ((MainActivity)this.getActivity()).getUser());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void addToFavourite(Recipe recipe, User user){
+        if(user != null){
+            //add the recipe to the user's favourites
+        }else {
+            /* Alert dialog */
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+
+            /* Build Alert dialog*/
+            builder.setMessage(R.string.sign_in) /*Set text description*/
+                    .setPositiveButton(R.string.sign_in_OK, new DialogInterface.OnClickListener() {         /*Sign in button*/
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //TODO add recipe to favourites
+                        }
+                    })
+                    .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            /*Do nothing*/
+                        }
+                    });
+
+            builder.create();
+            builder.show(); /*Show the Alert dialog*/
+        }
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MainActivity mainActivity = (MainActivity) this.getActivity();
         // use mainActivity.isDrawerOpen() to handle fragment specific menu
+
+        //Show the favourite button, is depandant on "isDrawerOpen()"
+        menu.findItem(R.id.favourite_button).setVisible(!mainActivity.isDrawerOpen());
+
         super.onPrepareOptionsMenu(menu);
     }
 }

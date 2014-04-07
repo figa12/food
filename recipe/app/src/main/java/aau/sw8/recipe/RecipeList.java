@@ -57,59 +57,14 @@ public class RecipeList extends ListLinearLayout<Recipe> {
         clickableLayout.setTag(recipe);
 
         // .. and add the touch listener to it
-        clickableLayout.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                // Get the image of the view being touched
-                ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
-
-                // Check whether the action is down and there are no focused view
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && focusedView == null) {
-                    // Set this image as the current focused
-                    focusedView = view;
-
-                    // Schedule a task to highlight the image if it hasn't been canceled before it is run
-                    focusedView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (focusedView != null) {
-                                highlightView(focusedView);
-                            }
-                        }
-                    }, ViewConfiguration.getTapTimeout());
-
-                    focusedView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (focusedView != null)
-                                onLongClick(focusedView);
-                        }
-                    }, ViewConfiguration.getLongPressTimeout());
-                }
-                // Check whether the action involves the current focused view
-                else if (focusedView == view) {
-                    // If the action is UP, it is a click
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        onClick(focusedView);
-                        focusedView = null;
-                    }
-                    // If the action is CANCEL, the focus and highlight should be removed
-                    else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
-                        clearHighlight(focusedView);
-                        focusedView = null;
-                    }
-                }
-
-                return false;
-            }
-        });
+        clickableLayout.setOnTouchListener(new RecipeOnTouchListener(recipe));
 
         return recipeView;
     }
 
     protected void onClick(View view) { }
 
-    protected void onLongClick(View view) { }
+    protected void onLongClick(Recipe recipe, View view) { }
 
     protected void clearHighlight(View view){
         ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
@@ -124,5 +79,57 @@ public class RecipeList extends ListLinearLayout<Recipe> {
     protected void flashView(View view) {
         ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
         image.setColorFilter(0xFF666666, PorterDuff.Mode.ADD);
+    }
+
+    private class RecipeOnTouchListener implements OnTouchListener{
+        private Recipe recipe;
+        public RecipeOnTouchListener(Recipe recipe) {
+            this.recipe = recipe;
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            // Get the image of the view being touched
+            ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
+
+            // Check whether the action is down and there are no focused view
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && focusedView == null) {
+                // Set this image as the current focused
+                focusedView = view;
+
+                // Schedule a task to highlight the image if it hasn't been canceled before it is run
+                focusedView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (focusedView != null) {
+                            highlightView(focusedView);
+                        }
+                    }
+                }, ViewConfiguration.getTapTimeout());
+
+                focusedView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (focusedView != null)
+                            onLongClick(recipe, focusedView);
+                    }
+                }, ViewConfiguration.getLongPressTimeout());
+            }
+            // Check whether the action involves the current focused view
+            else if (focusedView == view) {
+                // If the action is UP, it is a click
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    onClick(focusedView);
+                    focusedView = null;
+                }
+                // If the action is CANCEL, the focus and highlight should be removed
+                else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                    clearHighlight(focusedView);
+                    focusedView = null;
+                }
+            }
+
+            return false;
+        }
     }
 }

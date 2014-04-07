@@ -2,6 +2,7 @@ package aau.sw8.data;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -50,10 +51,12 @@ public class ServerCom {
     }
 
     public void startNewTask(BasicNameValuePair... pairs){
+        Log.w("ServerCom", "Starting new ServerCom task");
         new ServerComTask(this.context).execute(pairs);
     }
 
     public void startNewTask(Context context, BasicNameValuePair... pairs){
+        Log.w("ServerCom", "Starting new ServerCom task");
         new ServerComTask(context).execute(pairs);
     }
 
@@ -115,6 +118,8 @@ public class ServerCom {
             }else{
                 mainActivity.onServerTest(result);
             }
+
+            Log.w("ServerCom", "Finished ServerCom task");
         }
 
         /*Class methods*/

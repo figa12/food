@@ -40,7 +40,7 @@ public class FavouriteList extends RecipeList {
     }
 
     @Override
-    protected void onLongClick(final View view) {
+    protected void onLongClick(final Recipe recipe, final View view) {
         isLongClick = true; /*Disable OnClick functionality*/
 
         /* Alert dialog */
@@ -51,18 +51,15 @@ public class FavouriteList extends RecipeList {
                 .setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {      /*Remove button*/
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO Remove Toast when not debugging anymore
-                        Toast.makeText(getContext(), R.string.button_remove, Toast.LENGTH_SHORT).show(); /*Debug*/
                         isLongClick = false;    /*Enable the use of OnClick again*/
                         clearHighlight(view);   /*Clear the highlighting*/
-                        //TODO Remove favourite from the list And remove it from favourites.
+                        removeView(recipe);     /*remove the recipe from the phone's favourite list*/
+                        //TODO Remove the favourite from the database
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO Remove Toast when not debugging anymore
-                        Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show();
                         isLongClick = false;    /*Enable the use of OnClick again*/
                         clearHighlight(view);   /*Clear the highlighting*/
                         /*Do nothing*/
@@ -72,4 +69,6 @@ public class FavouriteList extends RecipeList {
         builder.create();
         builder.show(); /*Show the Alert dialog*/
     }
+
+
 }

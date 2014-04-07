@@ -24,6 +24,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import aau.sw8.data.ServerCom;
 import aau.sw8.model.Recipe;
+import aau.sw8.model.User;
 
 public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener {
 
@@ -33,6 +34,8 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
     private ActionBarDrawerToggle drawerToggle;
+
+    private User user;
 
     private CharSequence drawerTitle;
     private CharSequence title;
@@ -59,6 +62,10 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         serverCom.startNewTask(new BasicNameValuePair("Request", "1"), new BasicNameValuePair("Data", "test1"));
         serverCom.startNewTask(new BasicNameValuePair("Request", "2"), new BasicNameValuePair("Data", "test2"));
         */
+
+        /*Check the phone for sign-in tokens!*/
+        //user = new User(1,1234,"KoenBjarne");
+        user = null;
 
         this.title = this.drawerTitle = super.getTitle();
         this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
@@ -184,9 +191,9 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = this.isDrawerOpen();
 
-        // Hide all fragment specific menu item
+        /*Hide all the menu items, and show when entering the correct fragment*/
+        menu.findItem(R.id.favourite_button).setVisible(false);
         menu.findItem(R.id.action_search).setVisible(false);
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -230,10 +237,14 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     @Override
     public void onFragmentInteraction(Uri uri) {
         //TODO What does this do?!?!
-        // mayhaps: A method that handles interactions from the current underlying Fragment
+        //mayhaps: A method that handles interactions from the current underlying Fragment
     }
 
     /*Class methods*/
+    public User getUser() {
+        return user;
+    }
+
     private void setActionBarArrowDependingOnFragmentsBackStack() {
         int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
         boolean shouldEnableDrawerIndicator = backStackEntryCount == 0;
