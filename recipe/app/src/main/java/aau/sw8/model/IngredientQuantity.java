@@ -50,7 +50,7 @@ public class IngredientQuantity {
         if (this.amount != 1.0) {
             string += this.ingredient.getPlural();
         } else {
-            string += this.ingredient.getSinglular();
+            string += this.ingredient.getSingular();
         }
 
         return string;

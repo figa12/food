@@ -29,6 +29,8 @@ import aau.sw8.model.Recipe;
  */
 public class RecipeFragment extends Fragment {
 
+    private static final float FONT_SIZES[] = { 12f, 14f, 19f, 24f };
+
     public static final String ARG_RECIPE = "recipe";
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
@@ -117,12 +119,12 @@ public class RecipeFragment extends Fragment {
         }
 
         Spinner fontSpinner = (Spinner) rootView.findViewById(R.id.fontSpinner);
-        fontSpinner.setSelection(0); // first element is default size
+        fontSpinner.setSelection(1); // second element is default size
         fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = RecipeFragment.this.getResources().getStringArray(R.array.font_sizes)[position];
-                float size = Float.valueOf(selected.substring(0,2));
+                //String selected = RecipeFragment.this.getResources().getStringArray(R.array.font_sizes)[position];
+                float size = RecipeFragment.FONT_SIZES[position];
                 RecipeFragment.this.instructionList.setFontSize(size);
             }
 

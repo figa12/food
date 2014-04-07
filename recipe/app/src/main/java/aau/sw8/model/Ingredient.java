@@ -5,13 +5,13 @@ package aau.sw8.model;
  */
 public class Ingredient {
     private int ingredientId;
-    private String singlular;
+    private String singular;
     private String plural;
     private Category category;
 
-    public Ingredient(int ingredientId, String singlular, String plural, Category category) {
+    public Ingredient(int ingredientId, String singular, String plural, Category category) {
         this.ingredientId = ingredientId;
-        this.singlular = singlular;
+        this.singular = singular;
         this.plural = plural;
         this.category = category;
     }
@@ -20,8 +20,8 @@ public class Ingredient {
         return ingredientId;
     }
 
-    public String getSinglular() {
-        return singlular;
+    public String getSingular() {
+        return singular;
     }
 
     public String getPlural() {

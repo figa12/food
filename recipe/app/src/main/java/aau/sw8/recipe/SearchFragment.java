@@ -70,7 +70,9 @@ public class SearchFragment extends Fragment {
         ArrayList<ExchangeableIngredient> exchangeableIngredients2 = new ArrayList<>();
         exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "whipping cream", "whipping cream", null), new Unit(0, "ml", "ml", 1f), 120d))), true));
         exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "powdered sugar", "powdered sugar", null), new Unit(0, "tablespoon", "tablespoon", 1f), 2d))), true));
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "cointreau", "cointreau", null), new Unit(0, "teaspoon", "teaspoon", 1f), 3d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(
+                new IngredientQuantity(0, new Ingredient(0, "cointreau", "cointreau", null), new Unit(0, "teaspoon", "teaspoon", 1f), 3d),
+                new IngredientQuantity(0, new Ingredient(0, "hest", "heste", null), new Unit(0, "kg", "kg", 1f), 5d))), true));
 
         ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
         ingredientGroups.add(new IngredientGroup(0, "The puddings", exchangeableIngredients1));
@@ -79,13 +81,13 @@ public class SearchFragment extends Fragment {
         chocoYumYum.setIngredientGroups(ingredientGroups);
 
         for(int j = 0; j < 3; j++) {
-                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/17b8d0860fc30be68222cc5cfb53f399.jpg", "Russian Salad"));
-                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/178cd176ce2294f620beb3d943f354e1.jpg", "Avocado Mango Salad"));
-                recipeList.addView(chocoYumYum);
-                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/b39f2dfcc3325121c204028cca430743.jpg", "Steamed tofu"));
-                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/8e38d6eb334fb71b75bf9941afde58e0.jpg", "Thai beef curry"));
-                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/b614b1b2d1e412459a6390b950d16f14.jpg", "English Biscuits"));
-                recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/4c3211edef29df58e40944e09374e691.jpg", "Cream Salad Dressing og noget meget langt"));
+            recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/17b8d0860fc30be68222cc5cfb53f399.jpg", "Russian Salad"));
+            recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/178cd176ce2294f620beb3d943f354e1.jpg", "Avocado Mango Salad"));
+            recipeList.addView(chocoYumYum);
+            recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/b39f2dfcc3325121c204028cca430743.jpg", "Steamed tofu"));
+            recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/8e38d6eb334fb71b75bf9941afde58e0.jpg", "Thai beef curry"));
+            recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/b614b1b2d1e412459a6390b950d16f14.jpg", "English Biscuits"));
+            recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/4c3211edef29df58e40944e09374e691.jpg", "Cream Salad Dressing og noget meget langt"));
         }
 
         return rootView;
