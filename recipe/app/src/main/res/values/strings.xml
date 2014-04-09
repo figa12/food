@@ -5,7 +5,8 @@
 
     <!-- Array of pages which are present in the navigation drawer -->
     <string-array name="pages_array">
-        <item>Search</item>
+        <item>Ingredient search</item>
+        <item>Recipe search</item>
         <item>Favourites</item>
         <item>Shopping list</item>
         <item>Settings</item>
@@ -17,6 +18,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_button">Button</string>
     <string name="ingredient_search_hint">Enter an ingredient</string>
+    <string name="recipe_search_hint">Search for a recipe</string>
     <string name="remove_favourite">Do you want remove this recipe from favorites</string>
     <string name="button_OK">OK</string>
     <string name="button_remove">Remove</string>

@@ -10,4 +10,10 @@
         android:title="Favourite"
         android:showAsAction="always"
         />
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"/>
 </menu>

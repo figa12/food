@@ -26,7 +26,7 @@ import aau.sw8.data.ServerCom;
 import aau.sw8.model.Recipe;
 import aau.sw8.model.User;
 
-public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener {
+public class MainActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener, RecipeSearchFragment.OnFragmentInteractionListener {
 
     /*Variables*/
     public static final String ARG_POSITION = "position";
@@ -140,10 +140,14 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
                 break;
 
             case 1:
-                fragment = new FavouriteFragment();
+                fragment = new RecipeSearchFragment();
                 break;
 
             case 2:
+                fragment = new FavouriteFragment();
+                break;
+
+            case 3:
                 fragment = new ShoppingListFragment();
                 break;
 
