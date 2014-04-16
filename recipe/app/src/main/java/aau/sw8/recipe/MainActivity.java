@@ -3,18 +3,25 @@ package aau.sw8.recipe;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,6 +56,7 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         /*Image loader*/
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
@@ -123,6 +131,35 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
             MainActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
         }
 
+        handleIntent(getIntent());
+
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // Because this activity has set launchMode="singleTop", the system calls this method
+        // to deliver the intent if this activity is currently the foreground activity when
+        // invoked again (when the user executes a search from this activity, we don't create
+        // a new instance of this activity, so the system delivers the search intent here)
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        //TODO Implement what happens when the user clicks a suggestion
+        /* Also need to find out how to give different suggestions for ingredients and recipes */
+        
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            // handles a click on a search suggestion; launches activity to show word
+         //   Intent wordIntent = new Intent(this, WordActivity.class);
+           // wordIntent.setData(intent.getData());
+           // startActivity(wordIntent);
+        } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            // handles a search query
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //showResults(query);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -185,8 +222,17 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.getMenuInflater().inflate(R.menu.main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchBar = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchBar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchBar.setIconifiedByDefault(false);
+        searchBar.setQueryHint("Enter a recipe name");
+
         return true;
     }
+
+
 
     /* Called whenever we call invalidateOptionsMenu() */
     @SuppressWarnings("ConstantConditions")
@@ -215,6 +261,9 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
         // Handle action buttons
         switch(item.getItemId()) {
+            case R.id.action_search:
+                onSearchRequested();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
