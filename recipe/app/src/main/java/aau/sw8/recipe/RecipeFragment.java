@@ -169,8 +169,8 @@ public class RecipeFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 
             /* Build Alert dialog*/
-            builder.setMessage(R.string.sign_in) /*Set text description*/
-                    .setPositiveButton(R.string.sign_in_OK, new DialogInterface.OnClickListener() {         /*Sign in button*/
+            builder.setMessage(R.string.sign_in_text) /*Set text description*/
+                    .setPositiveButton(R.string.common_signin_button_text, new DialogInterface.OnClickListener() {         /*Sign in button*/
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //TODO add recipe to favourites

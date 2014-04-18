@@ -12,7 +12,7 @@ import aau.sw8.model.Recipe;
 /**
  * Created by jacob on 3/25/14.
  */
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_FAVOURITE = "favourite";
 
@@ -48,6 +48,7 @@ public class FavouriteFragment extends Fragment {
         }else{
             /*else tell that the user needs to sign in.*/
             rootView = inflater.inflate(R.layout.fragment_favourite_signin, container, false);
+            rootView.findViewById(R.id.btn_sign_in).setOnClickListener(this);
         }
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
@@ -56,7 +57,29 @@ public class FavouriteFragment extends Fragment {
         super.getActivity().setTitle(this.pageTitle);
 
 
+
+
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        MainActivity main = (MainActivity)getActivity();
+        switch (v.getId()) {
+            case R.id.btn_sign_in:
+                // Signin button clicked
+                main.signInGplus(v);
+                break;
+            case R.id.btn_sign_out:
+                // Signout button clicked
+                main.signOutGplus(v);
+                break;
+            case R.id.btn_revoke_access:
+                // Revoke access button clicked
+                main.revokeGplusAccess(v);
+                break;
+        }
+
     }
 
     @Override
@@ -65,4 +88,6 @@ public class FavouriteFragment extends Fragment {
         // use mainActivity.isDrawerOpen() to handle fragment specific menu
         super.onPrepareOptionsMenu(menu);
     }
+
+
 }

@@ -18,13 +18,37 @@
          The drawer is given a fixed width in dp and extends the full height of
          the container. A solid background is used for contrast
          with the content view. -->
-    <ListView
+    <LinearLayout
         android:id="@+id/left_drawer"
+        android:orientation="vertical"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#111"/>
+        android:background="#111">
+
+        <ListView
+            android:id="@+id/left_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice"
+            android:dividerHeight="0dp"
+            android:divider="@android:color/transparent"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/btn_sign_in_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="#fff"
+                android:background="?android:attr/activatedBackgroundIndicator"
+                android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
+        </FrameLayout>
+    </LinearLayout>
+
 </android.support.v4.widget.DrawerLayout>

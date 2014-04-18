@@ -11,6 +11,10 @@
         <item>Settings</item>
     </string-array>
 
+    <string-array name="sign_in_array">
+        <item>Sign in</item>
+    </string-array>
+
     <string name="fragment_recipe">Recipe</string>
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -21,11 +25,11 @@
     <string name="button_OK">OK</string>
     <string name="button_remove">Remove</string>
     <string name="button_cancel">Cancel</string>
-    <string name="sign_in_OK">Sign in</string>
-    <string name="sign_in">Please sign in, to use this feature.</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in_text">Please sign in, to use this feature.</string>
 
-
-
+    <string name="sign_in">Sign in</string>
+    <string name="revoke_access">Revoke Access</string>
 
     <string name="ingredients">Ingredients</string>
     <string name="instructions">Instructions</string>
