@@ -94,9 +94,9 @@ public class RecipeActivity extends BaseActivity implements ObservableScrollView
         BaseActivity.drawerToggle.setDrawerIndicatorEnabled(false);
 
         this.drawerTitle = "";
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)BaseActivity.drawerListView.getLayoutParams();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)BaseActivity.drawerLinearLayout.getLayoutParams();
         params.topMargin = BaseActivity.actionBarHeight;
-        BaseActivity.drawerListView.setLayoutParams(params);
+        BaseActivity.drawerLinearLayout.setLayoutParams(params);
     }
 
 
