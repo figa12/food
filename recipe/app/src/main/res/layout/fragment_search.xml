@@ -1,17 +1,46 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- KeyboardEventsLayout must be placed around the main layout -->
+<aau.sw8.recipe.KeyboardEventsLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/keyboardEventsLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <aau.sw8.recipe.SearchList
-            android:id="@+id/searchList"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-    </ScrollView>
+            android:layout_height="wrap_content">
 
-</LinearLayout>
+            <aau.sw8.recipe.SearchList
+                android:id="@+id/searchList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/popupLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:visibility="gone"
+            android:background="#EEFFFFFF">
+
+            <!-- Source: https://github.com/ApmeM/android-flowlayout -->
+            <aau.sw8.recipe.FlowLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:f="http://schemas.android.com/apk/res/aau.sw8.recipe"
+                f:horizontalSpacing="3dp"
+                f:verticalSpacing="3dp"
+                android:id="@+id/ingredientsFlowLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</aau.sw8.recipe.KeyboardEventsLayout>

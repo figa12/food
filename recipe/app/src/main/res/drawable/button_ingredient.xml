@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/aau.sw8.recipe">
+
+    <item android:state_pressed="true" >
+        <shape>
+            <solid
+                android:color="#FF7CADF8" />
+            <stroke
+                android:width="1px"
+                android:color="#AAAAAA"/>
+            <corners
+                android:radius="6dp" />
+        </shape>
+    </item>
+
+    <!--
+        http://stackoverflow.com/questions/4336060/android-how-to-add-a-custom-button-state
+    -->
+
+    <item app:selected="true" app:highlighted="false" >
+        <shape>
+            <solid
+                android:color="#BBBBBB" />
+            <stroke
+                android:width="1px"
+                android:color="#000000"/>
+            <corners
+                android:radius="6dp" />
+        </shape>
+    </item>
+
+    <item app:selected="true" app:highlighted="true">
+        <shape>
+            <solid
+                android:color="#33b5e5"/>
+            <stroke
+                android:width="1px"
+                android:color="#000000"/>
+            <corners
+                android:radius="6dp"/>
+        </shape>
+    </item>
+
+    <item app:selected="false" app:highlighted="false" >
+        <shape>
+            <solid
+                android:color="#FFFFFF" />
+            <stroke
+                android:width="1px"
+                android:color="#000000"/>
+            <corners
+                android:radius="6dp" />
+        </shape>
+    </item>
+
+    <!-- Cannot be highlighted if not selected, so this is the same as the above: false-false -->
+    <item app:selected="false" app:highlighted="true" >
+        <shape>
+            <solid
+                android:color="#FFFFFF" />
+            <stroke
+                android:width="1px"
+                android:color="#000000"/>
+            <corners
+                android:radius="6dp" />
+        </shape>
+    </item>
+</selector>

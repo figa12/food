@@ -32,7 +32,7 @@ import aau.sw8.model.User;
 /**
  * Created by Sam on 14/04/2014.
  */
-public abstract class BaseActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener, RecipeSearchFragment.OnFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     protected CharSequence drawerTitle;
     protected CharSequence title;

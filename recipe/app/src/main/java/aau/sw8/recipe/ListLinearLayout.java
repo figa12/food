@@ -16,6 +16,8 @@ import java.util.ArrayList;
  */
 public abstract class ListLinearLayout<ListObject> extends LinearLayout {
 
+
+
     /** List of {@link ListObject} */
     protected ArrayList<ListObject> items = new ArrayList<ListObject>();
 
@@ -110,7 +112,7 @@ public abstract class ListLinearLayout<ListObject> extends LinearLayout {
             super.addView(view);
             this.allowedAddView = false;
         } else {
-            throw new RuntimeException("addView(View) is not allowed on a ListLinearLayout implementation");
+            throw new UnsupportedOperationException("addView(View) is not allowed on a ListLinearLayout implementation");
         }
     }
 
@@ -122,7 +124,7 @@ public abstract class ListLinearLayout<ListObject> extends LinearLayout {
             super.addView(view, index);
             this.allowedAddView = false;
         } else {
-            throw new RuntimeException("addView(View) is not allowed on a ListLinearLayout implementation");
+            throw new UnsupportedOperationException("addView(View) is not allowed on a ListLinearLayout implementation");
         }
     }
 

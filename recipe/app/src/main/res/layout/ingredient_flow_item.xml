@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ingredientLayoutRoot"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/ingredientName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hest"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:padding="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/ingredientRemoveLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="#FF000000"/>
+
+        <ImageButton
+            android:id="@+id/ingredientRemoveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:drawable/btn_dialog"/>
+
+        </LinearLayout>
+
+</LinearLayout>

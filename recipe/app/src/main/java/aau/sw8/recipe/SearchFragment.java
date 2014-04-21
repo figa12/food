@@ -1,15 +1,15 @@
 package aau.sw8.recipe;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +27,8 @@ public class SearchFragment extends Fragment {
 
     private String pageTitle; // Not really needed, but saved just in case
 
-    private OnFragmentInteractionListener interactionListener;
+    private FlowLayout ingredientFlowLayout;
+    private LinearLayout popupLayout;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -44,7 +45,7 @@ public class SearchFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
-        // TODO: make it possible to change the pagetitle accordingly to language.
+        // TODO: make it possible to change the pagetitle according to language.
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
@@ -91,6 +92,43 @@ public class SearchFragment extends Fragment {
             recipeList.addView(new Recipe("http://www.opensourcefood.com/public/images/cached/567x/recipe_images/4c3211edef29df58e40944e09374e691.jpg", "Cream Salad Dressing og noget meget langt"));
         }
 
+        this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
+
+        for (int i = 0; i < 10; i++) {
+            IngredientButton hest = new IngredientButton(this.getActivity());
+            hest.setText("Hestsdfff " + String.valueOf(i));
+            hest.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
+                @Override
+                public void OnSelectedChanged(boolean isSelected) {
+                    //TODO handle
+                }
+
+                @Override
+                public void OnHighlightedChanged(boolean isHighlighted) {
+                    //TODO handle
+                }
+            });
+            this.ingredientFlowLayout.addView(hest);
+        }
+
+        this.popupLayout = (LinearLayout) rootView.findViewById(R.id.popupLayout);
+
+        KeyboardEventsLayout keyboardEventsLayout = (KeyboardEventsLayout) rootView.findViewById(R.id.keyboardEventsLayout);
+        keyboardEventsLayout.setOnKeyboardVisibilityChangedListener(new KeyboardEventsLayout.OnKeyboardVisibilityChangedListener() {
+            @Override
+            public void OnVisibilityChanged(boolean isVisible) {
+                if (isVisible) {
+                    // keyboard shown
+                    SearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(SearchFragment.this.getActivity(), "Keyboard shown", Toast.LENGTH_SHORT).show();
+                } else {
+                    // keyobard hidden
+                    SearchFragment.this.popupLayout.setVisibility(View.GONE);
+                    Toast.makeText(SearchFragment.this.getActivity(), "Keyboard hidden", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -114,46 +152,6 @@ public class SearchFragment extends Fragment {
         searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
 
         super.onPrepareOptionsMenu(menu);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (this.interactionListener != null) {
-            this.interactionListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        setHasOptionsMenu(true);
-
-        try {
-            this.interactionListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener"); }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.interactionListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
 }
