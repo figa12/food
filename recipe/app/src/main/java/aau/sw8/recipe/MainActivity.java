@@ -47,7 +47,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
     private DrawerLayout drawerLayout;
     private ListView drawerPagesListView;
-    private ListView drawerSignInListView;
     private LinearLayout drawerLinearLayout;
     private ActionBarDrawerToggle drawerToggle;
     private TextView drawerSignInBtn;
@@ -124,11 +123,10 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
             @Override
             public void onClick(View view) {
                 if(((TextView)view).getText().equals("Sign in")){
-                    //Sign in
-                    MainActivity.this.signInGplus(view);
+                    //sign in
+                    MainActivity.this.selectItem(99);
                 }else{
                     //sign out
-                    MainActivity.this.signOutGplus(view);
                 }
             }
         });
@@ -188,16 +186,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
     }
 
-    /***
-     * Initialize the GooglePlusClient
-     */
-    private GoogleApiClient initGplusClient(){
-        return new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).addApi(Plus.API, null)
-                .build();
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         // Because this activity has set launchMode="singleTop", the system calls this method
@@ -224,6 +212,17 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
         }
     }
 
+    /***
+     * Initialize the GooglePlusClient
+     */
+    private GoogleApiClient initGplusClient(){
+        return new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API, null)
+                .build();
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -233,34 +232,12 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     @Override
     protected void onStop() {
         super.onStop();
+
         if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
     }
 
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        signInClicked = false;
-
-        // Get user's information
-        //getProfileInformation();
-        if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-            Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-            String personName = currentPerson.getDisplayName();
-            String personGooglePlusProfile = currentPerson.getUrl();
-            Toast.makeText(this, personName,Toast.LENGTH_SHORT).show();
-        }
-
-        // Update the UI after signin
-        updateUI(true);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        googleApiClient.connect();
-        updateUI(false);
-    }
 
     /***
      * Override method for handling connection errors during sign in with Gplus
@@ -268,76 +245,29 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
      */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        if (!result.hasResolution()) {
-            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, 0).show();
-            return;
-        }
-
         if (!intentInProgress) {
-            // Store the ConnectionResult for later usage
+            // Store the ConnectionResult so that we can use it later when the user clicks
+            // 'sign-in'.
             connectionResult = result;
 
             if (signInClicked) {
-                // The user has already clicked 'sign-in' so we attempt to
-                // resolve all
+                // The user has already clicked 'sign-in' so we attempt to                // The user has already clicked 'sign-in' so we attempt to resolve all
                 // errors until the user is signed in, or they cancel.
                 resolveSignInError();
             }
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private void selectItem(int position) {
-
-        Fragment fragment = null; // update the main content by replacing fragments
-        Bundle args = new Bundle();
-
-        // Insert cases for other fragments here
-        // the indexes corresponds to the order their page names are defined in strings.xml
-        switch (position)
-        {
-            case 0:
-                fragment = new SearchFragment();
-                break;
-
-            case 1:
-                fragment = new FavouriteFragment();
-                break;
-
-            case 2:
-                fragment = new ShoppingListFragment();
-                break;
-
-            default:
-                Toast.makeText(this, "Fragment not implemented", Toast.LENGTH_LONG).show();
-                return;
-        }
-
-        // Enable fragments to handle the action bar
-        fragment.setHasOptionsMenu(true);
-
-        while (super.getFragmentManager().popBackStackImmediate());
-
-        // give the fragment its position as argument
-        args.putInt(MainActivity.ARG_POSITION, position);
-        fragment.setArguments(args);
-
-        // replace the current view with the fragment
-        super.getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // update selected item and title, then close the drawer
-        this.drawerPagesListView.setItemChecked(position, true);
-        this.setTitle(this.pageTitles[position]);
-        this.drawerLayout.closeDrawer(this.drawerLinearLayout);
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        signInClicked = false;
+        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
     }
 
-    /***
-     * Callback method for Gplus signin
-     * @param requestCode
-     * @param responseCode
-     * @param intent
-     */
-    @Override
+    public void onConnectionSuspended(int cause) {
+        googleApiClient.connect();
+    }
+
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         if (requestCode == RC_SIGN_IN) {
             if (responseCode != RESULT_OK) {
@@ -347,6 +277,21 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
             intentInProgress = false;
 
             if (!googleApiClient.isConnecting()) {
+                googleApiClient.connect();
+            }
+        }
+    }
+
+    /* A helper method to resolve the current ConnectionResult error. */
+    private void resolveSignInError() {
+        if (connectionResult.hasResolution()) {
+            try {
+                intentInProgress = true;
+                connectionResult.startResolutionForResult(this, RC_SIGN_IN);
+            } catch (IntentSender.SendIntentException e) {
+                // The intent was canceled before it was sent.  Return to the default
+                // state and attempt to connect to get an updated ConnectionResult.
+                intentInProgress = false;
                 googleApiClient.connect();
             }
         }
@@ -436,48 +381,6 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
     }
 
     /*Class methods*/
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Updating the UI, showing/hiding buttons and profile layout
-     * */
-    private void updateUI(boolean isSignedIn) {
-        if (isSignedIn) {
-            Toast.makeText(this, "The user is signed in", Toast.LENGTH_SHORT).show();
-
-            drawerSignInBtn.setText(R.string.sign_out);
-            /*btnSignIn.setVisibility(View.GONE);
-            btnSignOut.setVisibility(View.VISIBLE);
-            btnRevokeAccess.setVisibility(View.VISIBLE);
-            llProfileLayout.setVisibility(View.VISIBLE);*/
-        } else {
-            Toast.makeText(this, "The user is signed out", Toast.LENGTH_SHORT).show();
-
-            drawerSignInBtn.setText(R.string.sign_in);
-            /*btnSignIn.setVisibility(View.VISIBLE);
-            btnSignOut.setVisibility(View.GONE);
-            btnRevokeAccess.setVisibility(View.GONE);
-            llProfileLayout.setVisibility(View.GONE);*/
-        }
-    }
-
-    /**
-     * Method to resolve any signin errors
-     * */
-    private void resolveSignInError() {
-        if (connectionResult.hasResolution()) {
-            try {
-                intentInProgress = true;
-                connectionResult.startResolutionForResult(this, RC_SIGN_IN);
-            } catch (IntentSender.SendIntentException e) {
-                intentInProgress = false;
-                googleApiClient.connect();
-            }
-        }
-    }
-
     /***
      * Method to sign in to Gplus
      * @param view
@@ -510,6 +413,67 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
 
     }
 
+    /***
+     * Method for determining what fragment to open, it depends on the selection in
+     * the navigation drawer.
+     * @param position
+     */
+    @SuppressWarnings("ConstantConditions")
+    private void selectItem(int position) {
+
+        Fragment fragment = null; // update the main content by replacing fragments
+        Bundle args = new Bundle();
+
+        // Insert cases for other fragments here
+        // the indexes corresponds to the order their page names are defined in strings.xml
+        switch (position)
+        {
+            case 0:
+                fragment = new SearchFragment();
+                break;
+
+            case 1:
+                fragment = new FavouriteFragment();
+                break;
+
+            case 2:
+                fragment = new ShoppingListFragment();
+                break;
+            
+            case 99:
+                fragment = new SignInFragment();
+                break;
+            default:
+                Toast.makeText(this, "Fragment not implemented", Toast.LENGTH_LONG).show();
+                return;
+        }
+
+        // Enable fragments to handle the action bar
+        fragment.setHasOptionsMenu(true);
+
+        while (super.getFragmentManager().popBackStackImmediate());
+
+        // give the fragment its position as argument
+        args.putInt(MainActivity.ARG_POSITION, position);
+        fragment.setArguments(args);
+
+        // replace the current view with the fragment
+        super.getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        // update selected item and title, then close the drawer
+        this.drawerPagesListView.setItemChecked(position, true);
+        this.setTitle(this.pageTitles[position]);
+        this.drawerLayout.closeDrawer(this.drawerLinearLayout);
+    }
+
+    /***
+     * Gets the currently signed in user
+     * @return
+     */
+    public User getUser() {
+        return user;
+    }
+
     private void setActionBarArrowDependingOnFragmentsBackStack() {
         int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
         boolean shouldEnableDrawerIndicator = backStackEntryCount == 0;
@@ -522,6 +486,13 @@ public class MainActivity extends Activity implements SearchFragment.OnFragmentI
      */
     public boolean isDrawerOpen() {
         return this.drawerLayout.isDrawerOpen(this.drawerLinearLayout);
+    }
+    
+    public void SignIn(){
+        if(!googleApiClient.isConnecting()) {
+            signInClicked = true;
+            resolveSignInError();
+        }
     }
 
     /***

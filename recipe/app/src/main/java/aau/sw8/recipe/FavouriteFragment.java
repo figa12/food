@@ -63,22 +63,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
-    public void onClick(View v) {
-        MainActivity main = (MainActivity)getActivity();
-        switch (v.getId()) {
-            case R.id.btn_sign_in:
-                // Signin button clicked
-                main.signInGplus(v);
-                break;
-            case R.id.btn_sign_out:
-                // Signout button clicked
-                main.signOutGplus(v);
-                break;
-            case R.id.btn_revoke_access:
-                // Revoke access button clicked
-                main.revokeGplusAccess(v);
-                break;
-        }
+    public void onClick(View view) {
 
     }
 
