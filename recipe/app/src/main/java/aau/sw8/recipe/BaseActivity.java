@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +17,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 
 import aau.sw8.model.User;
 
@@ -25,12 +32,13 @@ import aau.sw8.model.User;
 /**
  * Created by Sam on 14/04/2014.
  */
-public abstract class BaseActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener, RecipeSearchFragment.OnFragmentInteractionListener {
+public abstract class BaseActivity extends Activity implements SearchFragment.OnFragmentInteractionListener, ShoppingListFragment.OnFragmentInteractionListener, RecipeSearchFragment.OnFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     protected CharSequence drawerTitle;
     protected CharSequence title;
     private String[] pageTitles;
     protected static DrawerLayout drawerLayout;
+    protected static LinearLayout drawerLinearLayout;
     protected static ListView drawerListView;
     protected static ActionBarDrawerToggle drawerToggle;
     protected static int actionBarHeight = 0;
@@ -38,6 +46,14 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
     protected static User user;
     private int mActionBarHeight;
     private TypedValue mTypedValue = new TypedValue();
+    private static final int RC_SIGN_IN = 0;
+    // Logcat tag
+    private static final String TAG = "MainActivity";
+    private GoogleApiClient googleApiClient; // Google client to interact with Google API
+    private boolean intentInProgress;
+    private boolean signInClicked;
+    private ConnectionResult connectionResult;
+    protected static TextView drawerSignInBtn;
 
 
     @SuppressWarnings("ConstantConditions")
@@ -47,14 +63,32 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
         super.setContentView(R.layout.drawer_layout); // "super" is used because "this" is overridden
 
         setupDrawer();
+
+        googleApiClient = initGplusClient();
+
     }
 
     @SuppressWarnings("ConstantConditions")
     private void setupDrawer() {
         this.title = BaseActivity.this.drawerTitle = super.getTitle();
         this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
-        BaseActivity.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
-        BaseActivity.drawerListView = (ListView) super.findViewById(R.id.left_drawer);
+        BaseActivity.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        BaseActivity.drawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer);
+        BaseActivity.drawerListView = (ListView) findViewById(R.id.left_menu);
+
+
+        BaseActivity.drawerSignInBtn = (TextView) super.findViewById(R.id.btn_sign_in_drawer);
+        BaseActivity.drawerSignInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((TextView)view).getText().equals("Sign in")){
+                    //sign in
+                    BaseActivity.this.selectItem(99);
+                }else{
+                    //sign out
+                }
+            }
+        });
 
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -103,6 +137,84 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
         });
     }
 
+    /***
+     * Initialize the GooglePlusClient
+     */
+    private GoogleApiClient initGplusClient(){
+        return new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API, null)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    protected void SignIn(){
+        if(!googleApiClient.isConnecting()) {
+            signInClicked = true;
+            resolveSignInError();
+        }
+    }
+
+
+    /***
+     * Override method for handling connection errors during sign in with Gplus
+     * @param result
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (!intentInProgress) {
+            // Store the ConnectionResult so that we can use it later when the user clicks
+            // 'sign-in'.
+            connectionResult = result;
+
+            if (signInClicked) {
+                // The user has already clicked 'sign-in' so we attempt to                // The user has already clicked 'sign-in' so we attempt to resolve all
+                // errors until the user is signed in, or they cancel.
+                resolveSignInError();
+            }
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        signInClicked = false;
+        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+    }
+
+    public void onConnectionSuspended(int cause) {
+        googleApiClient.connect();
+    }
+
+
+    /* A helper method to resolve the current ConnectionResult error. */
+    private void resolveSignInError() {
+        if (connectionResult.hasResolution()) {
+            try {
+                intentInProgress = true;
+                connectionResult.startResolutionForResult(this, RC_SIGN_IN);
+            } catch (IntentSender.SendIntentException e) {
+                // The intent was canceled before it was sent.  Return to the default
+                // state and attempt to connect to get an updated ConnectionResult.
+                intentInProgress = false;
+                googleApiClient.connect();
+            }
+        }
+    }
+
 
     /**
      * Overridden to inflate the drawer layout instead of actually setting the content view
@@ -128,7 +240,7 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
         if (BaseActivity.drawerToggle.onOptionsItemSelected(item)) {
             return true;
         } else if (this.isDrawerOpen()) {
-            BaseActivity.drawerLayout.closeDrawers();
+            BaseActivity.drawerLayout.closeDrawer(BaseActivity.drawerLinearLayout);
             return true;
         } else if (item.getItemId() == android.R.id.home && super.getFragmentManager().popBackStackImmediate()) {
             return true;
@@ -159,8 +271,12 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
         BaseActivity.drawerToggle.onConfigurationChanged(newConfig);
     }
 
+    /***
+     * Return the state of the drawer.
+     * @return isDrawerOpen
+     */
     public boolean isDrawerOpen() {
-        return BaseActivity.drawerLayout.isDrawerOpen(BaseActivity.drawerListView);
+        return BaseActivity.drawerLayout.isDrawerOpen(BaseActivity.drawerLinearLayout);
     }
 
 
@@ -207,17 +323,10 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
             // update selected item and title, then close the drawer
             BaseActivity.drawerListView.setItemChecked(position, true);
             this.setTitle(this.pageTitles[position]);
-            BaseActivity.drawerLayout.closeDrawers();
+            BaseActivity.drawerLayout.closeDrawer(BaseActivity.drawerLinearLayout);
 
             // replace the current view with the fragment
             super.getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-            // update selected item and title, then close the drawer
-            /*
-            this.drawerPagesListView.setItemChecked(position, true);
-            this.setTitle(this.pageTitles[position]);
-            this.drawerLayout.closeDrawer(this.drawerLinearLayout);
-            */
         }
         else {
             // close this activity and send a request to the parent activity to replace the fragment
@@ -243,6 +352,17 @@ public abstract class BaseActivity extends Activity implements SearchFragment.On
 
                 // Change fragment
                 this.selectItem(position);
+            }
+        }
+        else if (requestCode == BaseActivity.RC_SIGN_IN) {
+            if (resultCode != RESULT_OK) {
+                signInClicked = false;
+            }
+
+            intentInProgress = false;
+
+            if (!googleApiClient.isConnecting()) {
+                googleApiClient.connect();
             }
         }
     }
