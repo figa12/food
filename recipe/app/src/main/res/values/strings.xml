@@ -15,9 +15,6 @@
     <string-array name="sign_in_array">
         <item>Sign in</item>
     </string-array>
-
-    <string name="fragment_recipe">Recipe</string>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_button">Button</string>

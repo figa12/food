@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
 
 import aau.sw8.model.Recipe;
 
@@ -35,7 +34,7 @@ public class FavouriteList extends RecipeList {
             Recipe recipe = (Recipe) view.getTag();
 
             // Open recipe fragment
-            ((MainActivity) this.getContext()).openRecipeFragment(recipe);
+            ((MainActivity) this.getContext()).openRecipeActivity(recipe);
         }
     }
 

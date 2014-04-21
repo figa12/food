@@ -77,6 +77,6 @@ public class SearchList extends RecipeList {
         Recipe recipe = (Recipe) view.getTag();
 
         // Open recipe fragment
-        ((MainActivity) this.getContext()).openRecipeFragment(recipe);
+        ((MainActivity) this.getContext()).openRecipeActivity(recipe);
     }
 }
