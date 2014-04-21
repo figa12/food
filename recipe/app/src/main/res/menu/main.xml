@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_search"
+        android:title="@string/menu_search"
         android:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_action_search"
         android:title="Search"
@@ -11,4 +12,10 @@
         android:title="Favourite"
         android:showAsAction="always"
         />
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"/>
 </menu>
