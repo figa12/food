@@ -45,7 +45,9 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
+                android:text="TEST"
                 android:textColor="#fff"
+                android:layout_gravity="bottom"
                 android:background="?android:attr/activatedBackgroundIndicator"
                 android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
         </FrameLayout>

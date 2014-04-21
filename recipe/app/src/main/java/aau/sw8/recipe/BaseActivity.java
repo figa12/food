@@ -47,13 +47,14 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     private int mActionBarHeight;
     private TypedValue mTypedValue = new TypedValue();
     private static final int RC_SIGN_IN = 0;
-    // Logcat tag
-    private static final String TAG = "MainActivity";
-    private GoogleApiClient googleApiClient; // Google client to interact with Google API
-    private boolean intentInProgress;
-    private boolean signInClicked;
-    private ConnectionResult connectionResult;
+    protected static GoogleApiClient googleApiClient; // Google client to interact with Google API
+    protected static boolean intentInProgress;
+    protected static boolean signInClicked;
+    protected static ConnectionResult connectionResult;
     protected static TextView drawerSignInBtn;
+
+    // Logcat tag
+    private static final String TAG = "BaseActivity";
 
 
     @SuppressWarnings("ConstantConditions")
@@ -72,9 +73,9 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     private void setupDrawer() {
         this.title = BaseActivity.this.drawerTitle = super.getTitle();
         this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
-        BaseActivity.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        BaseActivity.drawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer);
-        BaseActivity.drawerListView = (ListView) findViewById(R.id.left_menu);
+        BaseActivity.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
+        BaseActivity.drawerLinearLayout = (LinearLayout) super.findViewById(R.id.left_drawer);
+        BaseActivity.drawerListView = (ListView) super.findViewById(R.id.left_menu);
 
 
         BaseActivity.drawerSignInBtn = (TextView) super.findViewById(R.id.btn_sign_in_drawer);
@@ -240,7 +241,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         if (BaseActivity.drawerToggle.onOptionsItemSelected(item)) {
             return true;
         } else if (this.isDrawerOpen()) {
-            BaseActivity.drawerLayout.closeDrawer(BaseActivity.drawerLinearLayout);
+            BaseActivity.drawerLayout.closeDrawers();
             return true;
         } else if (item.getItemId() == android.R.id.home && super.getFragmentManager().popBackStackImmediate()) {
             return true;
@@ -311,7 +312,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             }
 
             // Enable fragments to handle the action bar
-            fragment.setHasOptionsMenu(true);
+            fragment.setHasOptionsMenu(false);
 
             // Clear the back stack
             while (super.getFragmentManager().popBackStackImmediate()) ;
@@ -323,7 +324,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             // update selected item and title, then close the drawer
             BaseActivity.drawerListView.setItemChecked(position, true);
             this.setTitle(this.pageTitles[position]);
-            BaseActivity.drawerLayout.closeDrawer(BaseActivity.drawerLinearLayout);
+            BaseActivity.drawerLayout.closeDrawers();
 
             // replace the current view with the fragment
             super.getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();

@@ -114,9 +114,9 @@ public class ServerCom {
             }
 
             if (result == null || result.equals("") && mainActivity != null) {
-                mainActivity.onServerTest("Failed");
+                //Do nothing
             }else{
-                mainActivity.onServerTest(result);
+                //Call method
             }
 
             Log.w("ServerCom", "Finished ServerCom task");

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -96,18 +95,11 @@ public class MainActivity extends BaseActivity  {
         searchBar.setIconifiedByDefault(false);
         searchBar.setQueryHint("Enter a recipe name");
 
+        super.onCreateOptionsMenu(menu);
         return true;
     }
 
     /*Class methods*/
-    /***
-     * Test method(callback method from a finished task)
-     * @param result
-     */
-    public void onServerTest(String result){
-        //TODO: Either delete this method of use it for something good.
-        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-    }
 
     @SuppressWarnings("ConstantConditions")
     public void openRecipeActivity(Recipe recipe) {
