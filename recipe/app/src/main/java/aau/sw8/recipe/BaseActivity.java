@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -44,7 +45,7 @@ import aau.sw8.model.User;
 /**
  * Created by Sam on 14/04/2014.
  */
-public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener, GooglePlayServicesClient.OnConnectionFailedListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener {
+public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener {
 
     protected CharSequence drawerTitle;
     protected CharSequence title;
@@ -63,22 +64,15 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected static boolean signInClicked;*/
     protected static ConnectionResult connectionResult;
     protected static TextView drawerSignInBtn;
-    // A progress dialog to display when the user is connecting in
-    // case there is a delay in any of the dialogs being ready.
-    protected ProgressDialog mConnectionProgressDialog;
 
-    // A magic number we will use to know that our sign-in error
-    // resolution activity has completed.
-    private static final int OUR_REQUEST_CODE = 49404;
+    protected static ProgressDialog mConnectionProgressDialog;          //Process dialog for sign in.
+    protected static final int OUR_REQUEST_CODE = 49404;                //A magic number we will use to know that our sign-in error, resolution activity has completed.
+    protected static PlusClient mPlusClient;                            //The core Google+ client.
+    protected static boolean mResolveOnFail;                            //A flag to stop multiple dialogues appearing for the user.
 
-    // The core Google+ client.
-    protected static PlusClient mPlusClient;
-
-    // A flag to stop multiple dialogues appearing for the user.
-    private boolean mResolveOnFail;
-
-    // Logcat tag
     private static final String TAG = "BaseActivity";
+
+
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -86,20 +80,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.drawer_layout); // "super" is used because "this" is overridden
 
+        if(user != null) {
+            Log.w(TAG, BaseActivity.user.getUsername());
+        }
         setupDrawer();
-
-        //googleApiClient = initGplusClient();
-
-        mPlusClient = new PlusClient.Builder(this, this, this).build();
-
-        // We use mResolveOnFail as a flag to say whether we should trigger
-        // the resolution of a connectionFailed ConnectionResult.
-        mResolveOnFail = false;
-
-        // Configure the ProgressDialog that will be shown if there is a
-        // delay in presenting the user with the next sign in step.
-        mConnectionProgressDialog = new ProgressDialog(this);
-        mConnectionProgressDialog.setMessage("Signing in...");
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -169,199 +153,32 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             }
         });
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-    /*
-     * GooglePlus methods
-     */
-
-    public void SignIn(View view){
-        switch (view.getId()) {
-            case R.id.sign_in_button:
-                Log.v(TAG, "Tapped sign in");
-                if (!mPlusClient.isConnected()) {
-                    // Show the dialog as we are now signing in.
-                    mConnectionProgressDialog.show();
-                    // Make sure that we will start the resolution (e.g. fire the
-                    // intent and pop up a dialog for the user) for any errors
-                    // that come in.
-                    mResolveOnFail = true;
-                    // We should always have a connection result ready to resolve,
-                    // so we can start that process.
-                    if (connectionResult != null) {
-                        startResolution();
-                    } else {
-                        // If we don't have one though, we can start connect in
-                        // order to retrieve one.
-                        mPlusClient.connect();
-                    }
-                }
-                break;
-            case R.id.sign_out_button:
-                Log.v(TAG, "Tapped sign out");
-                // We only want to sign out if we're connected.
-                if (mPlusClient.isConnected()) {
-                    // Clear the default account in order to allow the user
-                    // to potentially choose a different account from the
-                    // account chooser.
-                    mPlusClient.clearDefaultAccount();
-
-                    // Disconnect from Google Play Services, then reconnect in
-                    // order to restart the process from scratch.
-                    mPlusClient.disconnect();
-                    mPlusClient.connect();
-
-                    // Hide the sign out buttons, show the sign in button.
-
-                    /*findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-                    findViewById(R.id.sign_out_button).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.revoke_access_button).setVisibility(View.INVISIBLE);*/
-                }
-                break;
-            case R.id.revoke_access_button:
-                Log.v(TAG, "Tapped disconnect");
-                if (mPlusClient.isConnected()) {
-                    // Clear the default account as in the Sign Out.
-                    mPlusClient.clearDefaultAccount();
-
-                    // Go away and revoke access to this entire application.
-                    // This will call back to onAccessRevoked when it is
-                    // complete as it needs to go away to the Google
-                    // authentication servers to revoke all token.
-                    mPlusClient.revokeAccessAndDisconnect(this);
-                }
-                break;
-            default:
-                // Unknown id.
+        if(BaseActivity.mPlusClient != null) {
+            Log.v(TAG, "Start");
+            // Every time we start we want to try to connect. If it
+            // succeeds we'll get an onConnected() callback. If it
+            // fails we'll get onConnectionFailed(), with a result!
+            BaseActivity.mPlusClient.connect();
         }
     }
 
     @Override
-    public void onAccessRevoked(ConnectionResult status) {
-        // mPlusClient is now disconnected and access has been revoked.
-        // We should now delete any data we need to comply with the
-        // developer properties. To reset ourselves to the original state,
-        // we should now connect again. We don't have to disconnect as that
-        // happens as part of the call.
-        mPlusClient.connect();
-
-        // Hide the sign out buttons, show the sign in button.
-        /*findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-        findViewById(R.id.sign_out_button).setVisibility(View.INVISIBLE);
-        findViewById(R.id.revoke_access_button).setVisibility(View.INVISIBLE);*/
-    }
-
-    @Override
-    public void onDisconnected() {
-        // Bye!
-        Log.v(TAG, "Disconnected. Bye!");
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        // Yay! We can get the oAuth 2.0 access token we are using.
-        Log.v(TAG, "Connected. Yay!");
-
-        // Turn off the flag, so if the user signs out they'll have to
-        // tap to sign in again.
-        mResolveOnFail = false;
-
-        // Hide the progress dialog if its showing.
-        mConnectionProgressDialog.dismiss();
-
-        // Retrieve the oAuth 2.0 access token.
-        final Context context = this.getApplicationContext();
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String scope = "oauth2:" + Scopes.PLUS_LOGIN;
-                String token = "";
-                try {
-                    // We can retrieve the token to check via
-                    // tokeninfo or to pass to a service-side
-                    // application.
-                    token = GoogleAuthUtil.getToken(context,
-                            mPlusClient.getAccountName(), scope);
-                } catch (UserRecoverableAuthException e) {
-                    // This error is recoverable, so we could fix this
-                    // by displaying the intent to the user.
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (GoogleAuthException e) {
-                    e.printStackTrace();
-                }
-                return token;
-            }
-
-            @Override
-            protected void onPostExecute(String token) {
-                Log.i(TAG, "Access token retrieved:" + token);
-                setUser(mPlusClient.getAccountName(), token);
-            }
-        };
-        task.execute((Void) null);
-    }
-
-    public void setUser(String accountName, String token){
-        BaseActivity.user = new User(1, token, accountName);
-    }
-
-    protected void onStart() {
-        super.onStart();
-        Log.v(TAG, "Start");
-        // Every time we start we want to try to connect. If it
-        // succeeds we'll get an onConnected() callback. If it
-        // fails we'll get onConnectionFailed(), with a result!
-        mPlusClient.connect();
-    }
-
     protected void onStop() {
         super.onStop();
 
-        Log.v(TAG, "Stop");
-        // It can be a little costly to keep the connection open
-        // to Google Play Services, so each time our activity is
-        // stopped we should disconnect.
-        mPlusClient.disconnect();
+        if(BaseActivity.mPlusClient != null) {
+            Log.v(TAG, "Stop");
+            // It can be a little costly to keep the connection open
+            // to Google Play Services, so each time our activity is
+            // stopped we should disconnect.
+            BaseActivity.mPlusClient.disconnect();
+        }
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        Log.v(TAG, "ConnectionFailed");
-        // Most of the time, the connection will fail with a
-        // user resolvable result. We can store that in our
-        // mConnectionResult property ready for to be used
-        // when the user clicks the sign-in button.
-        if (result.hasResolution()) {
-            connectionResult = result;
-            if (mResolveOnFail) {
-                // This is a local helper function that starts
-                // the resolution of the problem, which may be
-                // showing the user an account chooser or similar.
-                startResolution();
-            }
-        }
-    }
-    /**
-     * A helper method to flip the mResolveOnFail flag and start the resolution
-     * of the ConnenctionResult from the failed connect() call.
-     */
-    private void startResolution() {
-        try {
-            // Don't start another resolution now until we have a
-            // result from the activity we're about to start.
-            mResolveOnFail = false;
-            // If we can resolve the error, then call start resolution
-            // and pass it an integer tag we can use to track. This means
-            // that when we get the onActivityResult callback we'll know
-            // its from being started here.
-            connectionResult.startResolutionForResult(this, OUR_REQUEST_CODE);
-        } catch (IntentSender.SendIntentException e) {
-            // Any problems, just try to connect() again so we get a new
-            // ConnectionResult.
-            mPlusClient.connect();
-        }
-    }
 
     /**
      * Called when an activity that has been started using "startActivityForResult" returns.
@@ -381,26 +198,8 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     this.selectItem(position);
                 }
                 break;
-
-            case OUR_REQUEST_CODE:
-                if (resultCode == RESULT_OK){
-                    // If we have a successful result, we will want to be able to
-                    // resolve any further errors, so turn on resolution with our
-                    // flag.
-                    mResolveOnFail = true;
-                    // If we have a successful result, lets call connect() again. If
-                    // there are any more errors to resolve we'll get our
-                    // onConnectionFailed, but if not, we'll get onConnected.
-                    mPlusClient.connect();
-                }else {
-                    // If we've got an error we can't resolve, we're no
-                    // longer in the midst of signing in, so we can stop
-                    // the progress spinner.
-                    mConnectionProgressDialog.dismiss();
-                }
         }
     }
-
 
     /**
      * Overridden to inflate the drawer layout instead of actually setting the content view
@@ -411,7 +210,6 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         getLayoutInflater().inflate(layoutResID, content, true);
         // here you can get your drawer buttons and define how they should behave and what must they do, so you won't be needing to repeat it in every activity class
     }
-
 
     @SuppressWarnings("ConstantConditions")
     @Override
