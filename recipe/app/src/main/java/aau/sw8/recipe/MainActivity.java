@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.widget.SearchView;
 
@@ -26,13 +25,6 @@ public class MainActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Set height of actionbar
-        if (actionBarHeight == 0) {
-            TypedValue mTypedValue = new TypedValue();
-            getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
-            actionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources().getDisplayMetrics());
-        }
 
         /*Image loader*/
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
