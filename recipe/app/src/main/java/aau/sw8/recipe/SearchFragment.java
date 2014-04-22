@@ -95,12 +95,17 @@ public class SearchFragment extends Fragment {
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
         for (int i = 0; i < 10; i++) {
-            IngredientButton hest = new IngredientButton(this.getActivity());
-            hest.setText("Hestsdfff " + String.valueOf(i));
+            final IngredientButton hest = new IngredientButton(this.getActivity());
+            hest.setText("Hest " + String.valueOf(i));
             hest.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
                 @Override
                 public void OnSelectedChanged(boolean isSelected) {
-                    //TODO handle
+                    SearchFragment.this.ingredientFlowLayout.removeView(hest);
+                    if (isSelected) {
+                        SearchFragment.this.ingredientFlowLayout.addView(hest, 0);
+                    } else {
+                        SearchFragment.this.ingredientFlowLayout.addView(hest);
+                    }
                 }
 
                 @Override
