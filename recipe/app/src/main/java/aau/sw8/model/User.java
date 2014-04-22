@@ -5,10 +5,10 @@ package aau.sw8.model;
  */
 public class User {
     private int userId;
-    private int token;
+    private String token;
     private String username;
 
-    public User(int userId, int token, String username) {
+    public User(int userId, String token, String username) {
         this.userId = userId;
         this.token = token;
         this.username = username;
@@ -18,7 +18,7 @@ public class User {
         return userId;
     }
 
-    public int getToken() {
+    public String getToken() {
         return token;
     }
 

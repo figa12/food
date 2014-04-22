@@ -35,18 +35,18 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         // TODO: make it possible to change the pagetitle accordingly to language.
-        this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
+        this.pageTitle = super.getResources().getString(R.string.sign_in);
         super.getActivity().setTitle(this.pageTitle);
 
         //TODO handle other views here
-        rootView.findViewById(R.id.btn_sign_in).setOnClickListener(this);
-
+        rootView.findViewById(R.id.sign_in_button).setOnClickListener(this);
+        rootView.findViewById(R.id.sign_out_button).setOnClickListener(this);
+        rootView.findViewById(R.id.revoke_access_button).setOnClickListener(this);
         return rootView;
     }
 
     public void onClick(View view) {
-        if (view.getId() == R.id.sign_in_button)
-            ((MainActivity)getActivity()).SignIn();
+        ((MainActivity)getActivity()).SignIn(view);
     }
 
 
