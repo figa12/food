@@ -339,6 +339,8 @@ public class MainActivity extends BaseActivity implements GooglePlayServicesClie
 
     @SuppressWarnings("ConstantConditions")
     public void openRecipeActivity(Recipe recipe) {
+        super.dismissKeyboard();
+
         // Create an intent for a recipe activity
         Intent myIntent = new Intent(this, RecipeActivity.class);
 
