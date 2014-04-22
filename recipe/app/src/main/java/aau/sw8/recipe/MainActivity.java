@@ -95,6 +95,8 @@ public class MainActivity extends BaseActivity  {
 
     @SuppressWarnings("ConstantConditions")
     public void openRecipeActivity(Recipe recipe) {
+        super.dismissKeyboard();
+
         // Create an intent for a recipe activity
         Intent myIntent = new Intent(this, RecipeActivity.class);
 

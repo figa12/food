@@ -3,6 +3,7 @@ package aau.sw8.recipe;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -123,6 +125,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             }
 
             public void onDrawerOpened(View drawerView) {
+                BaseActivity.this.dismissKeyboard();
                 BaseActivity.super.getActionBar().setTitle(BaseActivity.this.drawerTitle);
                 BaseActivity.this.setActionBarArrowDependingOnFragmentsBackStack();
                 BaseActivity.super.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
@@ -367,8 +370,6 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         }
     }
 
-
-
     protected void setActionBarArrowDependingOnFragmentsBackStack() {
         int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
         boolean shouldEnableDrawerIndicator = (this.isTaskRoot() && backStackEntryCount == 0);
@@ -391,5 +392,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true);
         actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
         return actionBarHeight;
+    }
+
+    protected void dismissKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(super.findViewById(R.id.content_frame).getWindowToken(), 0);
     }
 }
