@@ -53,12 +53,11 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected static LinearLayout drawerLinearLayout;
     protected static ListView drawerListView;
     protected static ActionBarDrawerToggle drawerToggle;
-    protected static int actionBarHeight = 0;
     protected static final int FRAGMENT_CHANGE_REQUEST = 11; // can be any number
     protected static User user;
-    private int mActionBarHeight;
-    private TypedValue mTypedValue = new TypedValue();
-   /* private static final int RC_SIGN_IN = 0;
+    private int actionBarHeight;
+    private TypedValue typedValue = new TypedValue();
+    /*private static final int RC_SIGN_IN = 0;
     protected static GoogleApiClient googleApiClient; // Google client to interact with Google API
     protected static boolean intentInProgress;
     protected static boolean signInClicked;*/
@@ -545,11 +544,11 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
 
     @SuppressWarnings("ConstantConditions")
     public int getActionBarHeight() {
-        if (mActionBarHeight != 0) {
-            return mActionBarHeight;
+        if (actionBarHeight != 0) {
+            return actionBarHeight;
         }
-        getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
-        mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources().getDisplayMetrics());
-        return mActionBarHeight;
+        getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true);
+        actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
+        return actionBarHeight;
     }
 }
