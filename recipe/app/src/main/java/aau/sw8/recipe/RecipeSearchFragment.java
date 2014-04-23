@@ -1,22 +1,16 @@
 package aau.sw8.recipe;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -30,20 +24,11 @@ public class RecipeSearchFragment extends Fragment {
 
         private String pageTitle; // Not really needed, but saved just in case
 
-        private static final String[] COUNTRIES = new String[] { "Belgium",
-            "France", "France_", "Italy", "Germany", "Spain" };
-
         private OnFragmentInteractionListener interactionListener;
 
         public RecipeSearchFragment() {
             // Required empty public constructor
         }
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
 
     @SuppressWarnings("ConstantConditions")
         @Override
@@ -84,8 +69,19 @@ public class RecipeSearchFragment extends Fragment {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void onPrepareOptionsMenu(Menu menu) {
+
+            // Inflate the menu; this adds items to the action bar if it is present.
+            super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
             MainActivity mainActivity = (MainActivity) this.getActivity();
             menu.findItem(R.id.action_search).setVisible(!mainActivity.isDrawerOpen());
+
+            SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchBar = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            searchBar.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchBar.setIconifiedByDefault(false);
+
+            // Set hint text
+            searchBar.setQueryHint(getString(R.string.recipe_search_hint));
 
             super.onPrepareOptionsMenu(menu);
         }

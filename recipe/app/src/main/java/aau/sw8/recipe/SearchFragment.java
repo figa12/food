@@ -1,6 +1,10 @@
 package aau.sw8.recipe;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.SearchManager;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,15 +33,12 @@ public class SearchFragment extends Fragment {
 
     private FlowLayout ingredientFlowLayout;
     private LinearLayout popupLayout;
+    private RecipeSearchFragment.OnFragmentInteractionListener interactionListener;
 
     public SearchFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -137,26 +138,36 @@ public class SearchFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
         menu.findItem(R.id.action_search).setVisible(!mainActivity.isDrawerOpen());
 
-        SearchView searchBar = ((SearchView)menu.findItem(R.id.action_search).getActionView());
-
-        // Default to search field
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchBar = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchBar.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchBar.setIconifiedByDefault(false);
 
         // Set hint text
         searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
 }

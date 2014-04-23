@@ -78,14 +78,6 @@ public class MainActivity extends BaseActivity  {
     @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        super.getMenuInflater().inflate(R.menu.main, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchBar = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchBar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchBar.setIconifiedByDefault(false);
-        searchBar.setQueryHint("Enter a recipe name");
 
         super.onCreateOptionsMenu(menu);
         return true;
