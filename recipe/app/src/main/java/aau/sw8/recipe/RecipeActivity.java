@@ -99,7 +99,6 @@ public class RecipeActivity extends BaseActivity implements ObservableScrollView
         BaseActivity.drawerLinearLayout.setLayoutParams(params);
     }
 
-
     @SuppressWarnings("ConstantConditions")
     private void insertRecipeData() {
         this.recipe = getIntent().getExtras().getParcelable(RecipeActivity.ARG_RECIPE);

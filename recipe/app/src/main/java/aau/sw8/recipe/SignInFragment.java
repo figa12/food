@@ -52,7 +52,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MainActivity mainActivity = (MainActivity) this.getActivity();
+        //MainActivity mainActivity = (MainActivity) this.getActivity();
         // use mainActivity.isDrawerOpen() to handle fragment specific menu
         super.onPrepareOptionsMenu(menu);
     }

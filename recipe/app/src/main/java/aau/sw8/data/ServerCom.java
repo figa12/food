@@ -1,6 +1,7 @@
 package aau.sw8.data;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -32,6 +33,7 @@ public class ServerCom {
     /*Variables*/
     private Context context;
     private static ServerCom instance = null;
+    private static final String TAG = "ServerCom";
 
     /*Constructors*/
     private ServerCom() {}
@@ -51,12 +53,12 @@ public class ServerCom {
     }
 
     public void startNewTask(BasicNameValuePair... pairs){
-        Log.w("ServerCom", "Starting new ServerCom task");
+        Log.w(TAG, "Starting new ServerCom task");
         new ServerComTask(this.context).execute(pairs);
     }
 
     public void startNewTask(Context context, BasicNameValuePair... pairs){
-        Log.w("ServerCom", "Starting new ServerCom task");
+        Log.w(TAG, "Starting new ServerCom task");
         new ServerComTask(context).execute(pairs);
     }
 
@@ -65,6 +67,7 @@ public class ServerCom {
         /*Variables*/
         private Context context;
         private final String serverUrl = "http://figz.dk/food/test.php";
+        private static final String TAG = "ServerComTask";
 
         /*Constructors*/
         public ServerComTask(Context context) {
@@ -79,8 +82,8 @@ public class ServerCom {
             HttpParams httpParams = new BasicHttpParams();
 
             //Setup timeouts
-            HttpConnectionParams.setConnectionTimeout(httpParams, 15000);
-            HttpConnectionParams.setSoTimeout(httpParams, 15000);
+            HttpConnectionParams.setConnectionTimeout(httpParams, 6000);
+            HttpConnectionParams.setSoTimeout(httpParams, 6000);
 
             HttpClient httpClient = new DefaultHttpClient(httpParams);
             HttpPost httpPost = new HttpPost(this.serverUrl);
@@ -113,13 +116,13 @@ public class ServerCom {
                 mainActivity = (MainActivity) this.context;
             }
 
-            if (result == null || result.equals("") && mainActivity != null) {
+            if (result == null && mainActivity != null || result.equals("") && mainActivity != null) {
                 //Do nothing
             }else{
                 //Call method
             }
 
-            Log.w("ServerCom", "Finished ServerCom task");
+            Log.w(TAG, "Finished ServerCom task");
         }
 
         /*Class methods*/
