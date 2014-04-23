@@ -33,31 +33,20 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView;
 
-        if(((MainActivity)getActivity()).user != null){
-            /*If user is signed in.*/
-            rootView = inflater.inflate(R.layout.fragment_favourite_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_favourite_list, container, false);
 
-            FavouriteList favouriteList = (FavouriteList) rootView.findViewById(R.id.favouriteList);
+        FavouriteList favouriteList = (FavouriteList) rootView.findViewById(R.id.favouriteList);
 
-            /*testdata*/
-            for (int i = 1; i <= 10; i++) {
-                favouriteList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Favorite Title" + String.valueOf(i)));
-            }
-            //TODO: Load the favourite list from the database
-
-        }else{
-            /*else tell that the user needs to sign in.*/
-            rootView = inflater.inflate(R.layout.fragment_favourite_signin, container, false);
-            rootView.findViewById(R.id.btn_sign_in).setOnClickListener(this);
+        /*testdata*/
+        for (int i = 1; i <= 10; i++) {
+            favouriteList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Favorite Title" + String.valueOf(i)));
         }
+        //TODO: Load the favourite list from the database
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         //TODO: make it possible to change the pagetitle accordingly to language.
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
-
-
-
 
         return rootView;
     }

@@ -21,10 +21,9 @@
     <string name="button_OK">OK</string>
     <string name="button_remove">Remove</string>
     <string name="button_cancel">Cancel</string>
-    <string name="sign_out">Sign out</string>
-    <string name="sign_in_text">Please sign in, to use this feature.</string>
-
     <string name="sign_in">Sign in</string>
+    <string name="sign_in_text">Please sign in</string>
+    <string name="sign_out">Sign out</string>
     <string name="revoke_access">Revoke Access</string>
 
     <string name="ingredients">Ingredients</string>

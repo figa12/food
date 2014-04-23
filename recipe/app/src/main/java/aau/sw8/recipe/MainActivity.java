@@ -99,7 +99,6 @@ public class MainActivity extends BaseActivity {
     @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         super.onCreateOptionsMenu(menu);
         return true;
     }

@@ -59,13 +59,18 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected static User user;
     private int actionBarHeight;
     private TypedValue typedValue = new TypedValue();
-    protected static ConnectionResult connectionResult;
     protected static TextView drawerSignInBtn;
 
+
     protected ProgressDialog mConnectionProgressDialog;          //Process dialog for sign in.
+    protected ConnectionResult connectionResult;
     protected static final int OUR_REQUEST_CODE = 49404;                //A magic number we will use to know that our sign-in error, resolution activity has completed.
     protected PlusClient mPlusClient;                            //The core Google+ client.
-    protected boolean mResolveOnFail;                            //A flag to stop multiple dialogues appearing for the user.
+    protected boolean mResolveOnFail; //A flag to stop multiple dialogues appearing for the user.
+
+    protected static final int SIGN_IN = 1;
+    protected static final int SIGN_OUT = 2;
+    protected static final int REWOKE_ACCESS = 3;
 
     private static final String TAG = "BaseActivity";
 
@@ -115,6 +120,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     //sign in
                     BaseActivity.this.selectItem(99);
                 } else {
+                    googlePlusActions(BaseActivity.SIGN_OUT);
                     //sign out
                 }
             }
@@ -167,12 +173,22 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         });
     }
 
+    public void updateUserUI(boolean IsSignIn){
+        if(IsSignIn){
+            BaseActivity.drawerSignInBtn.setText(R.string.sign_out);
+
+
+        }else{
+            BaseActivity.drawerSignInBtn.setText(R.string.sign_in);
+        }
+    }
+
     /*
      * GooglePlus methods
      */
-    public void SignIn(View view){
-        switch (view.getId()) {
-            case R.id.sign_in_button:
+    public void googlePlusActions(int action){
+        switch (action) {
+            case BaseActivity.SIGN_IN:
                 Log.v(TAG, "Tapped sign in");
                 if (!this.mPlusClient.isConnected()) {
                     // Show the dialog as we are now signing in.
@@ -192,7 +208,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     }
                 }
                 break;
-            case R.id.sign_out_button:
+            case BaseActivity.SIGN_OUT:
                 Log.v(TAG, "Tapped sign out");
                 // We only want to sign out if we're connected.
                 if (this.mPlusClient.isConnected()) {
@@ -206,14 +222,17 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     this.mPlusClient.disconnect();
                     this.mPlusClient.connect();
 
+                    BaseActivity.user = null;
+
                     // Hide the sign out buttons, show the sign in button.
+                    updateUserUI(false);
 
                     /*findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
                     findViewById(R.id.sign_out_button).setVisibility(View.INVISIBLE);
                     findViewById(R.id.revoke_access_button).setVisibility(View.INVISIBLE);*/
                 }
                 break;
-            case R.id.revoke_access_button:
+            case BaseActivity.REWOKE_ACCESS:
                 Log.v(TAG, "Tapped disconnect");
                 if (this.mPlusClient.isConnected()) {
                     // Clear the default account as in the Sign Out.
@@ -224,6 +243,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     // complete as it needs to go away to the Google
                     // authentication servers to revoke all token.
                     this.mPlusClient.revokeAccessAndDisconnect(this);
+
+                    BaseActivity.user = null;
+
+                    updateUserUI(false);
                 }
                 break;
             default:
@@ -264,6 +287,9 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         // Hide the progress dialog if its showing.
         this.mConnectionProgressDialog.dismiss();
 
+        //Update UI
+        this.updateUserUI(true);
+
         // Retrieve the oAuth 2.0 access token.
         final Context context = this.getApplicationContext();
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
@@ -299,7 +325,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     }
 
     public void setUser(String accountName, String token){
-        BaseActivity.user = new User(1, token, accountName);
+        /*Query the database for the user id*/
+        int userid = 1;
+
+        BaseActivity.user = new User(userid, token, accountName);
     }
 
     @Override
@@ -310,7 +339,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         // mConnectionResult property ready for to be used
         // when the user clicks the sign-in button.
         if (result.hasResolution()) {
-            BaseActivity.connectionResult = result;
+            this.connectionResult = result;
             if (this.mResolveOnFail) {
                 // This is a local helper function that starts
                 // the resolution of the problem, which may be
@@ -332,7 +361,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             // and pass it an integer tag we can use to track. This means
             // that when we get the onActivityResult callback we'll know
             // its from being started here.
-            BaseActivity.connectionResult.startResolutionForResult(this, BaseActivity.OUR_REQUEST_CODE);
+            this.connectionResult.startResolutionForResult(this, BaseActivity.OUR_REQUEST_CODE);
         } catch (IntentSender.SendIntentException e) {
             // Any problems, just try to connect() again so we get a new
             // ConnectionResult.
@@ -488,11 +517,19 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     break;
 
                 case 2:
-                    fragment = new FavouriteFragment();
+                    if (BaseActivity.user != null){
+                        fragment = new FavouriteFragment();
+                    }else{
+                        fragment = new SignInFragment();
+                    }
                     break;
 
                 case 3:
-                    fragment = new ShoppingListFragment();
+                    if(BaseActivity.user != null){
+                        fragment = new ShoppingListFragment();
+                    }else{
+                        fragment = new SignInFragment();
+                    }
                     break;
 
                 case 99:
@@ -516,10 +553,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
 
             // update selected item and title, then close the drawer
             BaseActivity.drawerListView.setItemChecked(position, true);
-            if(position != 99){
-                this.setTitle(this.pageTitles[position]);
-            }else{
+            if(fragment instanceof SignInFragment){
                 this.setTitle("Sign In");
+            }else{
+                this.setTitle(this.pageTitles[position]);
             }
             BaseActivity.drawerLayout.closeDrawers();
 
