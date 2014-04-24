@@ -33,22 +33,20 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
-
-import aau.sw8.data.ServerComTask;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
 
-
 import java.io.IOException;
 
+import aau.sw8.data.ServerComTask;
 import aau.sw8.model.User;
 
 
 /**
  * Created by Sam on 14/04/2014.
  */
-public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener, ServerComTask.ServerAlertDialog {
+public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener, ServerComTask.ServerAlertDialog, GooglePlayServicesClient.OnConnectionFailedListener {
 
     protected CharSequence drawerTitle;
     protected CharSequence title;
