@@ -31,7 +31,7 @@ import aau.sw8.model.User;
 /**
  * Created by Sam on 14/04/2014.
  */
-public class RecipeActivity extends BaseActivity implements ObservableScrollView.ScrollListener {
+public class RecipeActivity extends DrawerActivity implements ObservableScrollView.ScrollListener {
 
     private static final float FONT_SIZES[] = { 12f, 14f, 19f, 24f };
 
@@ -91,12 +91,12 @@ public class RecipeActivity extends BaseActivity implements ObservableScrollView
         actionBar.setIcon(R.drawable.ic_transparent);
         this.setTitle("");
 
-        BaseActivity.drawerToggle.setDrawerIndicatorEnabled(false);
+        DrawerActivity.drawerToggle.setDrawerIndicatorEnabled(false);
 
         this.drawerTitle = "";
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)BaseActivity.drawerLinearLayout.getLayoutParams();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) DrawerActivity.drawerLinearLayout.getLayoutParams();
         params.topMargin = this.getActionBarHeight();
-        BaseActivity.drawerLinearLayout.setLayoutParams(params);
+        DrawerActivity.drawerLinearLayout.setLayoutParams(params);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -185,7 +185,7 @@ public class RecipeActivity extends BaseActivity implements ObservableScrollView
                 this.finish();
                 return true;
             case R.id.favourite_button:
-                addToFavourite(this.recipe, BaseActivity.user);
+                addToFavourite(this.recipe, DrawerActivity.user);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

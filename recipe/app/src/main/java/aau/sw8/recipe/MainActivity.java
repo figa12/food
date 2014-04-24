@@ -1,34 +1,17 @@
 package aau.sw8.recipe;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.widget.SearchView;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.plus.PlusClient;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import java.io.IOException;
-
 import aau.sw8.data.ServerCom;
 import aau.sw8.model.Recipe;
-import aau.sw8.model.User;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends DrawerActivity {
 
     /*Variables*/
     public static final String ARG_POSITION = "position";
@@ -60,7 +43,7 @@ public class MainActivity extends BaseActivity {
         /*Check the phone for sign-in tokens!*/
         //user = new User(1,1234,"KoenBjarne");
 
-        //BaseActivity.user = null;
+        //DrawerActivity.user = null;
 
         if (savedInstanceState == null) {
             this.selectItem(0);
@@ -116,6 +99,6 @@ public class MainActivity extends BaseActivity {
         myIntent.putExtra(RecipeActivity.ARG_RECIPE, recipe);
 
         // Start the activity and allow it to request fragment change
-        this.startActivityForResult(myIntent, BaseActivity.FRAGMENT_CHANGE_REQUEST);
+        this.startActivityForResult(myIntent, DrawerActivity.FRAGMENT_CHANGE_REQUEST);
     }
 }

@@ -49,7 +49,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         Button revokeAccesButton = (Button) rootView.findViewById(R.id.revoke_access_button);
         revokeAccesButton.setOnClickListener(this);
-        if(BaseActivity.user == null){
+        if(DrawerActivity.user == null){
             signInButton.setVisibility(View.VISIBLE);
             signOutButton.setVisibility(View.GONE);
             revokeAccesButton.setVisibility(View.GONE);
@@ -64,12 +64,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     public void onClick(View view) {
         if(view.getId() == R.id.sign_in_button){
-            ((MainActivity)getActivity()).googlePlusLogInActions(BaseActivity.SIGN_IN);
+            ((MainActivity)getActivity()).googlePlusLogInActions(DrawerActivity.SIGN_IN);
             ((MainActivity)getActivity()).selectItem(0);
         }else if(view.getId() == R.id.sign_out_button){
-            ((MainActivity)getActivity()).googlePlusLogInActions(BaseActivity.SIGN_OUT);
+            ((MainActivity)getActivity()).googlePlusLogInActions(DrawerActivity.SIGN_OUT);
         }else if(view.getId() == R.id.revoke_access_button){
-            ((MainActivity)getActivity()).googlePlusLogInActions(BaseActivity.REWOKE_ACCESS);
+            ((MainActivity)getActivity()).googlePlusLogInActions(DrawerActivity.REWOKE_ACCESS);
         }
     }
 
