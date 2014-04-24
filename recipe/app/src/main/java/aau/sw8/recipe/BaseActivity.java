@@ -120,12 +120,12 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             public void onClick(View view) {
                 if (((TextView) view).getText().equals(getResources().getString(R.string.sign_in))) {
                     if(isOnlyGooglePlus){
-                        googlePlusActions(BaseActivity.SIGN_IN);
+                        googlePlusLogInActions(BaseActivity.SIGN_IN);
                     }else{
                         BaseActivity.this.selectItem(99); //starts the Sign in fragment
                     }
                 } else {
-                    googlePlusActions(BaseActivity.SIGN_OUT); //sign out
+                    googlePlusLogInActions(BaseActivity.SIGN_OUT); //sign out
                 }
             }
         });
@@ -177,6 +177,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         });
     }
 
+    /***
+     * Updated the Navigation drawer UI
+     * @param IsSignIn
+     */
     public void updateUserUI(boolean IsSignIn){
         if(IsSignIn){
             BaseActivity.drawerSignInBtn.setText(R.string.sign_out);
@@ -188,7 +192,12 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     /*
      * GooglePlus methods
      */
-    public void googlePlusActions(int action){
+
+    /***
+     * The google plus log in actions, use the following actions: BaseActivity.SIGN_IN, .SIGN_OUT, .REVOKE_ACCESS
+     * @param action
+     */
+    public void googlePlusLogInActions(int action){
         switch (action) {
             case BaseActivity.SIGN_IN:
                 Log.v(TAG, "Tapped sign in");
@@ -246,8 +255,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     // Sets the user to null, meaning not signed in
                     BaseActivity.user = null;
 
-                    // Hide the sign out buttons, show the sign in button.
-                    updateUserUI(false);
+                    /*Update of UI is done later in "OnAccessRevoked"*/
                 }
                 break;
             default:
@@ -255,6 +263,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         }
     }
 
+    /***
+     * On revoke access called
+     * @param status
+     */
     @Override
     public void onAccessRevoked(ConnectionResult status) {
         // plusClient is now disconnected and access has been revoked.
@@ -265,9 +277,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         this.plusClient.connect();
 
         // Hide the sign out buttons, show the sign in button.
-        /*findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-        findViewById(R.id.sign_out_button).setVisibility(View.INVISIBLE);
-        findViewById(R.id.revoke_access_button).setVisibility(View.INVISIBLE);*/
+        updateUserUI(false);
     }
 
     @Override
@@ -276,6 +286,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         Log.v(TAG, "Disconnected. Bye!");
     }
 
+    /***
+     * When the log in is successful, and an connection as been established this method is called.
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
         // Yay! We can get the oAuth 2.0 access token we are using.
@@ -325,13 +339,23 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         task.execute((Void) null);
     }
 
+    /***
+     * Sets the user of the application.
+     * @param accountName
+     * @param token
+     */
     public void setUser(String accountName, String token){
-        /*Query the database for the user id*/
+        /*Query the database for the user id
+        * if he does not exist insert the user.*/
         int userid = 1;
 
         BaseActivity.user = new User(userid, token, accountName);
     }
 
+    /***
+     * If the sign in to Google plus failed this method is called.
+     * @param result
+     */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.v(TAG, "ConnectionFailed");
@@ -349,6 +373,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             }
         }
     }
+
     /**
      * A helper method to flip the resolveOnFail flag and start the resolution
      * of the ConnenctionResult from the failed connect() call.
@@ -408,6 +433,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         }
     }
 
+    /***
+     * This method is called when the activity is starts
+     * the method tries to connect to google plus.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -423,6 +452,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         }
     }
 
+    /***
+     * This method is called when the activity is stops
+     * the method stops the connection between the application and google sign in.
+     */
     @Override
     protected void onStop() {
         super.onStop();

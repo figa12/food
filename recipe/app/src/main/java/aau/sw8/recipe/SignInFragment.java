@@ -64,12 +64,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     public void onClick(View view) {
         if(view.getId() == R.id.sign_in_button){
-            ((MainActivity)getActivity()).googlePlusActions(BaseActivity.SIGN_IN);
+            ((MainActivity)getActivity()).googlePlusLogInActions(BaseActivity.SIGN_IN);
             ((MainActivity)getActivity()).selectItem(0);
         }else if(view.getId() == R.id.sign_out_button){
-            ((MainActivity)getActivity()).googlePlusActions(BaseActivity.SIGN_OUT);
+            ((MainActivity)getActivity()).googlePlusLogInActions(BaseActivity.SIGN_OUT);
         }else if(view.getId() == R.id.revoke_access_button){
-            ((MainActivity)getActivity()).googlePlusActions(BaseActivity.REWOKE_ACCESS);
+            ((MainActivity)getActivity()).googlePlusLogInActions(BaseActivity.REWOKE_ACCESS);
         }
     }
 
