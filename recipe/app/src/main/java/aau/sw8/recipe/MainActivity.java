@@ -8,8 +8,6 @@ import android.view.Menu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import java.io.IOException;
-
 import aau.sw8.model.Recipe;
 
 public class MainActivity extends DrawerActivity {
@@ -28,11 +26,6 @@ public class MainActivity extends DrawerActivity {
         /*Image loader*/
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
         ImageLoader.getInstance().init(config);
-
-        /*Check the phone for sign-in tokens!*/
-        //user = new User(1,1234,"KoenBjarne");
-
-        //DrawerActivity.user = null;
 
         if (savedInstanceState == null) {
             this.selectItem(0);
