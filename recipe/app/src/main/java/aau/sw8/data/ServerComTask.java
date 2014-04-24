@@ -38,9 +38,10 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     private OnResponseListener<T> onResponseListener;
 
     /*Constructors*/
-    protected ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog) {
+    protected ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener) {
         this.apiPath = ServerComTask.SERVER_API_URL + apiPath;
         this.serverAlertDialog = serverAlertDialog;
+        this.onResponseListener = onResponseListener;
     }
 
     protected void showAlertDialog() {
@@ -48,10 +49,6 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
         if (!serverAlertDialog.isShowing()) {
             serverAlertDialog.show();
         }
-    }
-
-    public void setOnResponseListener(OnResponseListener<T> onResponseListener) {
-        this.onResponseListener = onResponseListener;
     }
 
     protected abstract T parseJson(String json) throws Exception;
@@ -98,8 +95,6 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
         }
 
         // send the result
-        if (this.onResponseListener != null) {
-            this.onResponseListener.result(result);
-        }
+        this.onResponseListener.result(result);
     }
 }

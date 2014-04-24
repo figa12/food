@@ -8,16 +8,12 @@ import android.view.Menu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import aau.sw8.data.ServerCom;
 import aau.sw8.model.Recipe;
 
 public class MainActivity extends DrawerActivity {
 
     /*Variables*/
     public static final String ARG_POSITION = "position";
-
-    public ServerCom serverCom;
-
     // Logcat tag
     private static final String TAG = "Mainactivity";
 
@@ -30,20 +26,6 @@ public class MainActivity extends DrawerActivity {
         /*Image loader*/
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
         ImageLoader.getInstance().init(config);
-
-        /*Server communication*/
-        serverCom = ServerCom.getInstance();
-        serverCom.init(this);
-
-        /* ServerCom testing //TODO should be removed at some point
-        serverCom.startNewTask(new BasicNameValuePair("Request", "1"), new BasicNameValuePair("Data", "test1"));
-        serverCom.startNewTask(new BasicNameValuePair("Request", "2"), new BasicNameValuePair("Data", "test2"));
-        */
-
-        /*Check the phone for sign-in tokens!*/
-        //user = new User(1,1234,"KoenBjarne");
-
-        //DrawerActivity.user = null;
 
         if (savedInstanceState == null) {
             this.selectItem(0);
