@@ -73,9 +73,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         //MainActivity mainActivity = (MainActivity) this.getActivity();

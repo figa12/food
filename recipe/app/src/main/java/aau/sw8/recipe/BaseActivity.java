@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -65,8 +64,8 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected ProgressDialog mConnectionProgressDialog;          //Process dialog for sign in.
     protected ConnectionResult connectionResult;
     protected static final int OUR_REQUEST_CODE = 49404;                //A magic number we will use to know that our sign-in error, resolution activity has completed.
-    protected PlusClient mPlusClient;                            //The core Google+ client.
-    protected boolean mResolveOnFail; //A flag to stop multiple dialogues appearing for the user.
+    protected PlusClient plusClient;                            //The core Google+ client.
+    protected boolean resolveOnFail; //A flag to stop multiple dialogues appearing for the user.
 
     protected static final int SIGN_IN = 1;
     protected static final int SIGN_OUT = 2;
@@ -74,6 +73,8 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
 
     private static final String TAG = "BaseActivity";
 
+    //TODO: should be remove or changed to false when other sign in methods are implemented.
+    private final boolean isOnlyGooglePlus = true;
 
 
     @SuppressWarnings("ConstantConditions")
@@ -89,13 +90,13 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
 
     private void setupGooglePlus(){
         /*Google plus sign in*/
-        this.mPlusClient = new PlusClient.Builder(this, this, this)
+        this.plusClient = new PlusClient.Builder(this, this, this)
                 .setActions("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
                 .build();
 
-        // We use mResolveOnFail as a flag to say whether we should trigger
+        // We use resolveOnFail as a flag to say whether we should trigger
         // the resolution of a connectionFailed ConnectionResult.
-        this.mResolveOnFail = false;
+        this.resolveOnFail = false;
 
         // Configure the ProgressDialog that will be shown if there is a
         // delay in presenting the user with the next sign in step.
@@ -112,16 +113,19 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         BaseActivity.drawerListView = (ListView) super.findViewById(R.id.left_menu);
 
 
+        /*Sign in button in the bottom of the navigation drawer*/
         BaseActivity.drawerSignInBtn = (TextView) super.findViewById(R.id.btn_sign_in_drawer);
         BaseActivity.drawerSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((TextView) view).getText().equals("Sign in")) {
-                    //sign in
-                    BaseActivity.this.selectItem(99);
+                if (((TextView) view).getText().equals(getResources().getString(R.string.sign_in))) {
+                    if(isOnlyGooglePlus){
+                        googlePlusActions(BaseActivity.SIGN_IN);
+                    }else{
+                        BaseActivity.this.selectItem(99); //starts the Sign in fragment
+                    }
                 } else {
-                    googlePlusActions(BaseActivity.SIGN_OUT);
-                    //sign out
+                    googlePlusActions(BaseActivity.SIGN_OUT); //sign out
                 }
             }
         });
@@ -145,11 +149,11 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         // ActionBarDrawerToggle ties together the proper interactions
         // between the sliding drawer and the action bar app icon
         BaseActivity.drawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                BaseActivity.drawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
+                this,                               /* host Activity */
+                BaseActivity.drawerLayout,          /* DrawerLayout object */
+                R.drawable.ic_drawer,               /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,               /* "open drawer" description for accessibility */
+                R.string.drawer_close               /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
                 BaseActivity.super.getActionBar().setTitle(BaseActivity.this.title);
@@ -176,8 +180,6 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     public void updateUserUI(boolean IsSignIn){
         if(IsSignIn){
             BaseActivity.drawerSignInBtn.setText(R.string.sign_out);
-
-
         }else{
             BaseActivity.drawerSignInBtn.setText(R.string.sign_in);
         }
@@ -190,13 +192,13 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         switch (action) {
             case BaseActivity.SIGN_IN:
                 Log.v(TAG, "Tapped sign in");
-                if (!this.mPlusClient.isConnected()) {
+                if (!this.plusClient.isConnected()) {
                     // Show the dialog as we are now signing in.
                     this.mConnectionProgressDialog.show();
                     // Make sure that we will start the resolution (e.g. fire the
                     // intent and pop up a dialog for the user) for any errors
                     // that come in.
-                    this.mResolveOnFail = true;
+                    this.resolveOnFail = true;
                     // We should always have a connection result ready to resolve,
                     // so we can start that process.
                     if (this.connectionResult != null) {
@@ -204,48 +206,47 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     } else {
                         // If we don't have one though, we can start connect in
                         // order to retrieve one.
-                        this.mPlusClient.connect();
+                        this.plusClient.connect();
                     }
                 }
                 break;
             case BaseActivity.SIGN_OUT:
                 Log.v(TAG, "Tapped sign out");
                 // We only want to sign out if we're connected.
-                if (this.mPlusClient.isConnected()) {
+                if (this.plusClient.isConnected()) {
                     // Clear the default account in order to allow the user
                     // to potentially choose a different account from the
                     // account chooser.
-                    this.mPlusClient.clearDefaultAccount();
+                    this.plusClient.clearDefaultAccount();
 
                     // Disconnect from Google Play Services, then reconnect in
                     // order to restart the process from scratch.
-                    this.mPlusClient.disconnect();
-                    this.mPlusClient.connect();
+                    this.plusClient.disconnect();
+                    this.plusClient.connect();
 
+                    // Sets the user to null, meaning not signed in
                     BaseActivity.user = null;
 
                     // Hide the sign out buttons, show the sign in button.
                     updateUserUI(false);
-
-                    /*findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-                    findViewById(R.id.sign_out_button).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.revoke_access_button).setVisibility(View.INVISIBLE);*/
                 }
                 break;
             case BaseActivity.REWOKE_ACCESS:
                 Log.v(TAG, "Tapped disconnect");
-                if (this.mPlusClient.isConnected()) {
+                if (this.plusClient.isConnected()) {
                     // Clear the default account as in the Sign Out.
-                    this.mPlusClient.clearDefaultAccount();
+                    this.plusClient.clearDefaultAccount();
 
                     // Go away and revoke access to this entire application.
                     // This will call back to onAccessRevoked when it is
                     // complete as it needs to go away to the Google
                     // authentication servers to revoke all token.
-                    this.mPlusClient.revokeAccessAndDisconnect(this);
+                    this.plusClient.revokeAccessAndDisconnect(this);
 
+                    // Sets the user to null, meaning not signed in
                     BaseActivity.user = null;
 
+                    // Hide the sign out buttons, show the sign in button.
                     updateUserUI(false);
                 }
                 break;
@@ -256,12 +257,12 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
 
     @Override
     public void onAccessRevoked(ConnectionResult status) {
-        // mPlusClient is now disconnected and access has been revoked.
+        // plusClient is now disconnected and access has been revoked.
         // We should now delete any data we need to comply with the
         // developer properties. To reset ourselves to the original state,
         // we should now connect again. We don't have to disconnect as that
         // happens as part of the call.
-        this.mPlusClient.connect();
+        this.plusClient.connect();
 
         // Hide the sign out buttons, show the sign in button.
         /*findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
@@ -282,7 +283,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
 
         // Turn off the flag, so if the user signs out they'll have to
         // tap to sign in again.
-        this.mResolveOnFail = false;
+        this.resolveOnFail = false;
 
         // Hide the progress dialog if its showing.
         this.mConnectionProgressDialog.dismiss();
@@ -302,7 +303,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     // tokeninfo or to pass to a service-side
                     // application.
                     token = GoogleAuthUtil.getToken(context,
-                            BaseActivity.this.mPlusClient.getAccountName(), scope);
+                            BaseActivity.this.plusClient.getAccountName(), scope);
                 } catch (UserRecoverableAuthException e) {
                     // This error is recoverable, so we could fix this
                     // by displaying the intent to the user.
@@ -318,7 +319,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             @Override
             protected void onPostExecute(String token) {
                 Log.i(TAG, "Access token retrieved:" + token);
-                setUser(BaseActivity.this.mPlusClient.getAccountName(), token);
+                setUser(BaseActivity.this.plusClient.getAccountName(), token);
             }
         };
         task.execute((Void) null);
@@ -340,7 +341,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         // when the user clicks the sign-in button.
         if (result.hasResolution()) {
             this.connectionResult = result;
-            if (this.mResolveOnFail) {
+            if (this.resolveOnFail) {
                 // This is a local helper function that starts
                 // the resolution of the problem, which may be
                 // showing the user an account chooser or similar.
@@ -349,14 +350,14 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         }
     }
     /**
-     * A helper method to flip the mResolveOnFail flag and start the resolution
+     * A helper method to flip the resolveOnFail flag and start the resolution
      * of the ConnenctionResult from the failed connect() call.
      */
     private void startResolution() {
         try {
             // Don't start another resolution now until we have a
             // result from the activity we're about to start.
-            this.mResolveOnFail = false;
+            this.resolveOnFail = false;
             // If we can resolve the error, then call start resolution
             // and pass it an integer tag we can use to track. This means
             // that when we get the onActivityResult callback we'll know
@@ -365,7 +366,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         } catch (IntentSender.SendIntentException e) {
             // Any problems, just try to connect() again so we get a new
             // ConnectionResult.
-            this.mPlusClient.connect();
+            this.plusClient.connect();
         }
     }
 
@@ -393,11 +394,11 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
                     // If we have a successful result, we will want to be able to
                     // resolve any further errors, so turn on resolution with our
                     // flag.
-                    this.mResolveOnFail = true;
+                    this.resolveOnFail = true;
                     // If we have a successful result, lets call connect() again. If
                     // there are any more errors to resolve we'll get our
                     // onConnectionFailed, but if not, we'll get onConnected.
-                    this.mPlusClient.connect();
+                    this.plusClient.connect();
                 }else {
                     // If we've got an error we can't resolve, we're no
                     // longer in the midst of signing in, so we can stop
@@ -411,13 +412,13 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected void onStart() {
         super.onStart();
         Log.v(TAG, "Activity Started");
-        if(this.mPlusClient != null) {
-            if(!this.mPlusClient.isConnected()) {
+        if(this.plusClient != null) {
+            if(!this.plusClient.isConnected()) {
                 Log.v(TAG, "Connection Started");
                 // Every time we start we want to try to connect. If it
                 // succeeds we'll get an onConnected() callback. If it
                 // fails we'll get onConnectionFailed(), with a result!
-                this.mPlusClient.connect();
+                this.plusClient.connect();
             }
         }
     }
@@ -426,13 +427,13 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected void onStop() {
         super.onStop();
         Log.v(TAG, "Activity stopped");
-        if(this.mPlusClient != null) {
-            if(this.mPlusClient.isConnected()) {
+        if(this.plusClient != null) {
+            if(this.plusClient.isConnected()) {
                 Log.v(TAG, "Connection Closed");
                 // It can be a little costly to keep the connection open
                 // to Google Play Services, so each time our activity is
                 // stopped we should disconnect.
-                this.mPlusClient.disconnect();
+                this.plusClient.disconnect();
             }
         }
     }
@@ -554,7 +555,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             // update selected item and title, then close the drawer
             BaseActivity.drawerListView.setItemChecked(position, true);
             if(fragment instanceof SignInFragment){
-                this.setTitle("Sign In");
+                this.setTitle(R.string.sign_in);
             }else{
                 this.setTitle(this.pageTitles[position]);
             }
