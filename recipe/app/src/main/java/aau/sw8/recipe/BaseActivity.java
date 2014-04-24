@@ -1,10 +1,12 @@
 package aau.sw8.recipe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
@@ -32,6 +34,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 
+import aau.sw8.data.ServerComTask;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
@@ -45,7 +48,7 @@ import aau.sw8.model.User;
 /**
  * Created by Sam on 14/04/2014.
  */
-public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener,GooglePlayServicesClient.OnConnectionFailedListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener {
+public abstract class BaseActivity extends Activity implements RecipeSearchFragment.OnFragmentInteractionListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener, ServerComTask.ServerAlertDialog {
 
     protected CharSequence drawerTitle;
     protected CharSequence title;
@@ -59,6 +62,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     private int actionBarHeight;
     private TypedValue typedValue = new TypedValue();
     protected static TextView drawerSignInBtn;
+    private AlertDialog serverAlertDialog;
 
 
     protected ProgressDialog mConnectionProgressDialog;          //Process dialog for sign in.
@@ -82,6 +86,8 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.drawer_layout); // "super" is used because "this" is overridden
+
+        this.serverAlertDialog = this.createAlertDialog();
 
         BaseActivity.user = null;
         setupDrawer();
@@ -634,5 +640,22 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
     protected void dismissKeyboard() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(super.findViewById(R.id.content_frame).getWindowToken(), 0);
+    }
+
+    private AlertDialog createAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        //myAlertDialog.setTitle("Title");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setMessage("Server connection failed.");
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                //empty
+            }
+        });
+        return alertDialogBuilder.create();
+    }
+
+    public AlertDialog getServerAlertDialog() {
+        return this.serverAlertDialog;
     }
 }
