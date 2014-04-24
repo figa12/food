@@ -59,8 +59,6 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
         setupDrawer();
     }
 
-
-
     @SuppressWarnings("ConstantConditions")
     private void setupDrawer() {
         this.title = DrawerActivity.this.drawerTitle = super.getTitle();
@@ -75,7 +73,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             @Override
             public void onClick(View view) {
                 if (((TextView) view).getText().equals(getResources().getString(R.string.sign_in))) {
-                    if(isOnlyGooglePlus){
+                    if(LogInActivity.IS_ONLY_GOOGLE_PLUS){
                         googlePlusLogInActions(LogInActivity.SIGN_IN);
                     }else{
                         DrawerActivity.this.selectItem(99); //starts the Sign in fragment

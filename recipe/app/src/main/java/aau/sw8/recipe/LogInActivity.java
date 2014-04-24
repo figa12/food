@@ -27,7 +27,7 @@ import aau.sw8.model.User;
 public abstract class LogInActivity extends Activity implements GooglePlayServicesClient.OnConnectionFailedListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener {
     protected static User user;                                  //User of the application
 
-    protected ProgressDialog mConnectionProgressDialog;          //Process dialog for sign in.
+    protected ProgressDialog connectionProgressDialog;          //Process dialog for sign in.
     protected ConnectionResult connectionResult;
     protected static final int OUR_REQUEST_CODE = 49404;         //A magic number we will use to know that our sign-in error, resolution activity has completed.
     protected PlusClient plusClient;                             //The core Google+ client.
@@ -40,14 +40,14 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     private static final String TAG = "LogInActivity";
 
     //TODO: should be remove or changed to false when other sign in methods are implemented.
-    protected final boolean isOnlyGooglePlus = true;
+    public static final boolean IS_ONLY_GOOGLE_PLUS = true;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupGooglePlus();
+        this.setupGooglePlus();
     }
 
     /***
@@ -102,7 +102,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
         this.resolveOnFail = false;
 
         // Hide the progress dialog if its showing.
-        this.mConnectionProgressDialog.dismiss();
+        this.connectionProgressDialog.dismiss();
 
         //Update UI
         this.updateUserUI(true);
@@ -148,23 +148,6 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     }
 
     /***
-     * On revoke access called
-     * @param status
-     */
-    @Override
-    public void onAccessRevoked(ConnectionResult status) {
-        // plusClient is now disconnected and access has been revoked.
-        // We should now delete any data we need to comply with the
-        // developer properties. To reset ourselves to the original state,
-        // we should now connect again. We don't have to disconnect as that
-        // happens as part of the call.
-        this.plusClient.connect();
-
-        // Hide the sign out buttons, show the sign in button.
-        updateUserUI(false);
-    }
-
-    /***
      * If the sign in to Google plus failed this method is called.
      * @param result
      */
@@ -181,9 +164,26 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
                 // This is a local helper function that starts
                 // the resolution of the problem, which may be
                 // showing the user an account chooser or similar.
-                startResolution();
+                this.startResolution();
             }
         }
+    }
+
+    /***
+     * On revoke access called
+     * @param status
+     */
+    @Override
+    public void onAccessRevoked(ConnectionResult status) {
+        // plusClient is now disconnected and access has been revoked.
+        // We should now delete any data we need to comply with the
+        // developer properties. To reset ourselves to the original state,
+        // we should now connect again. We don't have to disconnect as that
+        // happens as part of the call.
+        this.plusClient.connect();
+
+        // Hide the sign out buttons, show the sign in button.
+        this.updateUserUI(false);
     }
 
     /**
@@ -194,7 +194,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "ActivityResult: " + requestCode);
 
-        if(requestCode == DrawerActivity.OUR_REQUEST_CODE){
+        if(requestCode == LogInActivity.OUR_REQUEST_CODE){
             if (resultCode == RESULT_OK){
                 // If we have a successful result, we will want to be able to
                 // resolve any further errors, so turn on resolution with our
@@ -208,7 +208,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
                 // If we've got an error we can't resolve, we're no
                 // longer in the midst of signing in, so we can stop
                 // the progress spinner.
-                this.mConnectionProgressDialog.dismiss();
+                this.connectionProgressDialog.dismiss();
             }
         }
     }
@@ -229,21 +229,21 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
 
         // Configure the ProgressDialog that will be shown if there is a
         // delay in presenting the user with the next sign in step.
-        this.mConnectionProgressDialog = new ProgressDialog(this);
-        this.mConnectionProgressDialog.setMessage("Signing in...");
+        this.connectionProgressDialog = new ProgressDialog(this);
+        this.connectionProgressDialog.setMessage("Signing in...");
     }
 
     /***
-     * The google plus log in actions, use the following actions: DrawerActivity.SIGN_IN, .SIGN_OUT, .REVOKE_ACCESS
+     * The google plus log in actions, use the following actions: LogInActivity.SIGN_IN, .SIGN_OUT, .REVOKE_ACCESS
      * @param action
      */
     public void googlePlusLogInActions(int action){
         switch (action) {
-            case DrawerActivity.SIGN_IN:
+            case LogInActivity.SIGN_IN:
                 Log.v(TAG, "Tapped sign in");
                 if (!this.plusClient.isConnected()) {
                     // Show the dialog as we are now signing in.
-                    this.mConnectionProgressDialog.show();
+                    this.connectionProgressDialog.show();
                     // Make sure that we will start the resolution (e.g. fire the
                     // intent and pop up a dialog for the user) for any errors
                     // that come in.
@@ -259,7 +259,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
                     }
                 }
                 break;
-            case DrawerActivity.SIGN_OUT:
+            case LogInActivity.SIGN_OUT:
                 Log.v(TAG, "Tapped sign out");
                 // We only want to sign out if we're connected.
                 if (this.plusClient.isConnected()) {
@@ -274,13 +274,13 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
                     this.plusClient.connect();
 
                     // Sets the user to null, meaning not signed in
-                    DrawerActivity.user = null;
+                    LogInActivity.user = null;
 
                     // Hide the sign out buttons, show the sign in button.
-                    updateUserUI(false);
+                    this.updateUserUI(false);
                 }
                 break;
-            case DrawerActivity.REWOKE_ACCESS:
+            case LogInActivity.REWOKE_ACCESS:
                 Log.v(TAG, "Tapped disconnect");
                 if (this.plusClient.isConnected()) {
                     // Clear the default account as in the Sign Out.
@@ -293,7 +293,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
                     this.plusClient.revokeAccessAndDisconnect(this);
 
                     // Sets the user to null, meaning not signed in
-                    DrawerActivity.user = null;
+                    LogInActivity.user = null;
 
                     /*Update of UI is done later in "OnAccessRevoked"*/
                 }
@@ -329,7 +329,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
             // and pass it an integer tag we can use to track. This means
             // that when we get the onActivityResult callback we'll know
             // its from being started here.
-            this.connectionResult.startResolutionForResult(this, DrawerActivity.OUR_REQUEST_CODE);
+            this.connectionResult.startResolutionForResult(this, LogInActivity.OUR_REQUEST_CODE);
         } catch (IntentSender.SendIntentException e) {
             // Any problems, just try to connect() again so we get a new
             // ConnectionResult.
