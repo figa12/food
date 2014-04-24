@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import aau.sw8.model.Ingredient;
+
 /**
  * Created by jeria_000 on 0010 10. apr.
  */
@@ -19,8 +21,7 @@ public class IngredientButton extends LinearLayout {
     }
 
     private IngredientButtonClickListener ingredientButtonClickListener;
-
-    private String ingredientName;
+    private Ingredient ingredient;
 
     private TextView nameTextView;
     //private LinearLayout layoutRoot;
@@ -36,6 +37,15 @@ public class IngredientButton extends LinearLayout {
     public IngredientButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.construct();
+    }
+
+    public Ingredient getIngredient() {
+        return this.ingredient;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+        this.nameTextView.setText(this.ingredient.getSingular());
     }
 
     public void setIngredientButtonClickListener(IngredientButtonClickListener ingredientButtonClickListener) {

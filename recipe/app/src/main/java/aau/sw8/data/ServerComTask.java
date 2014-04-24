@@ -1,7 +1,6 @@
 package aau.sw8.data;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpEntity;
@@ -23,7 +22,7 @@ import java.util.Arrays;
 public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Integer, T> {
 
     public interface OnResponseListener<T> {
-        void result(T result);
+        void onResponse(T result);
     }
 
     public interface ServerAlertDialog {
@@ -31,17 +30,20 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     }
 
     /*Variables*/
-    private Context context;
     private static final String SERVER_API_URL = "http://figz.dk/food/";
     private ServerAlertDialog serverAlertDialog;
     private String apiPath;
     private OnResponseListener<T> onResponseListener;
+    private BasicNameValuePair[] basicNameValuePairs;
 
     /*Constructors*/
-    protected ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener) {
+    protected ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener, BasicNameValuePair ... basicNameValuePairs) {
         this.apiPath = ServerComTask.SERVER_API_URL + apiPath;
         this.serverAlertDialog = serverAlertDialog;
         this.onResponseListener = onResponseListener;
+        this.basicNameValuePairs = basicNameValuePairs;
+
+        this.execute(this.basicNameValuePairs);
     }
 
     protected void showAlertDialog() {
@@ -81,20 +83,26 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
             response = null;
         }
 
-        try {
-            return this.parseJson(response);
-        } catch (Exception e) {
+        // if the communication failed, return null to the UI and let it handle the empty response
+        if (response == null || response == "" || response == "Timeout") {
             return null;
+        } else {
+            try {
+                return this.parseJson(response);
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 
     @Override
     protected void onPostExecute(T result) {
         if (result == null) {
+            this.showAlertDialog();
             return;
         }
 
         // send the result
-        this.onResponseListener.result(result);
+        this.onResponseListener.onResponse(result);
     }
 }

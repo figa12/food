@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -18,6 +16,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import aau.sw8.data.IngredientCom;
+import aau.sw8.data.ServerComTask;
 import aau.sw8.model.ExchangeableIngredient;
 import aau.sw8.model.Ingredient;
 import aau.sw8.model.IngredientGroup;
@@ -95,27 +95,34 @@ public class SearchFragment extends Fragment {
 
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
-        for (int i = 0; i < 10; i++) {
-            final IngredientButton hest = new IngredientButton(this.getActivity());
-            hest.setText("Hest " + String.valueOf(i));
-            hest.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
-                @Override
-                public void OnSelectedChanged(boolean isSelected) {
-                    SearchFragment.this.ingredientFlowLayout.removeView(hest);
-                    if (isSelected) {
-                        SearchFragment.this.ingredientFlowLayout.addView(hest, 0);
-                    } else {
-                        SearchFragment.this.ingredientFlowLayout.addView(hest);
-                    }
-                }
+        new IngredientCom((DrawerActivity) super.getActivity(), new ServerComTask.OnResponseListener<ArrayList<Ingredient>>() {
+            @Override
+            public void onResponse(ArrayList<Ingredient> result) {
+                for (Ingredient ingredient : result) {
+                    //TODO sort ingredients with Sam's fancy algorithm
+                    final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
+                    ingredientButton.setIngredient(ingredient);
 
-                @Override
-                public void OnHighlightedChanged(boolean isHighlighted) {
-                    //TODO handle
+                    ingredientButton.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
+                        @Override
+                        public void OnSelectedChanged(boolean isSelected) {
+                            SearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
+                            if (isSelected) {
+                                SearchFragment.this.ingredientFlowLayout.addView(ingredientButton, 0);
+                            } else {
+                                SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
+                            }
+                        }
+
+                        @Override
+                        public void OnHighlightedChanged(boolean isHighlighted) {
+                            //TODO handle
+                        }
+                    });
+                    SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
                 }
-            });
-            this.ingredientFlowLayout.addView(hest);
-        }
+            }
+        });
 
         this.popupLayout = (LinearLayout) rootView.findViewById(R.id.popupLayout);
 
