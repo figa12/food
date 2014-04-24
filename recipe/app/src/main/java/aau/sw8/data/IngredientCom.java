@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import aau.sw8.model.Category;
 import aau.sw8.model.Ingredient;
 
 /**
@@ -13,8 +14,8 @@ import aau.sw8.model.Ingredient;
  */
 public class IngredientCom extends ServerComTask<ArrayList<Ingredient>> {
 
-    public IngredientCom(ServerAlertDialog serverAlertDialog) {
-        super("ingredients.php?lang=us", serverAlertDialog);
+    public IngredientCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<Ingredient>> onResponseListener) {
+        super("ingredients.php?lang=us", serverAlertDialog, onResponseListener);
     }
 
     @Override
@@ -28,10 +29,15 @@ public class IngredientCom extends ServerComTask<ArrayList<Ingredient>> {
 
             long id = jsonObject.getLong("id");
             String name = jsonObject.getString("name");
+            Category category = null;
 
-            ingredients.add(new Ingredient(id, name, name, null));
+            if (jsonObject.has("category")) {
+                //TODO parse category
+            }
+
+            ingredients.add(new Ingredient(id, name, name, category));
         }
 
-        return null;//TODO return ingredients
+        return ingredients;//TODO return ingredients
     }
 }
