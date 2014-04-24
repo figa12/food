@@ -88,6 +88,10 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         setupGooglePlus();
     }
 
+    /***
+     * This methods sets up the plusClient,
+     * so the application is able to sign in to google plus.
+     */
     private void setupGooglePlus(){
         /*Google plus sign in*/
         this.plusClient = new PlusClient.Builder(this, this, this)
@@ -111,7 +115,6 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
         BaseActivity.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
         BaseActivity.drawerLinearLayout = (LinearLayout) super.findViewById(R.id.left_drawer);
         BaseActivity.drawerListView = (ListView) super.findViewById(R.id.left_menu);
-
 
         /*Sign in button in the bottom of the navigation drawer*/
         BaseActivity.drawerSignInBtn = (TextView) super.findViewById(R.id.btn_sign_in_drawer);
@@ -333,7 +336,7 @@ public abstract class BaseActivity extends Activity implements RecipeSearchFragm
             @Override
             protected void onPostExecute(String token) {
                 Log.i(TAG, "Access token retrieved:" + token);
-                setUser(BaseActivity.this.plusClient.getAccountName(), token);
+                BaseActivity.this.setUser(BaseActivity.this.plusClient.getAccountName(), token);
             }
         };
         task.execute((Void) null);
