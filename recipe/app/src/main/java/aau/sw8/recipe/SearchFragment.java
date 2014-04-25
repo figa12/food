@@ -64,16 +64,16 @@ public class SearchFragment extends Fragment {
         chocoYumYum.setInstructionSteps(instructionSteps);
 
         ArrayList<ExchangeableIngredient> exchangeableIngredients1 = new ArrayList<>();
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "cream", "cream", null), new Unit(0, "ml", "ml", 1f), 480d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "dark chocolate, chopped", "dark chocolate, chopped", null), new Unit(0, "g", "g", 1f), 120d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "earl grey tea", "earl grey tea", null), new Unit(0, "bags", "bags", 1f), 2d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "egg yolk", "egg yolk", null), null, 6d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "sugar", "sugar", null), new Unit(0, "tablespoons", "tablespoons", 1f), 3))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "cream", "cream", null), new Unit(0, "ml", "ml", 1f), 480d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "dark chocolate, chopped", "dark chocolate, chopped", null), new Unit(0, "g", "g", 1f), 120d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "earl grey tea", "earl grey tea", null), new Unit(0, "bags", "bags", 1f), 2d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "egg yolk", "egg yolk", null), null, 6d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "sugar", "sugar", null), new Unit(0, "tablespoons", "tablespoons", 1f), 3))), true));
 
         ArrayList<ExchangeableIngredient> exchangeableIngredients2 = new ArrayList<>();
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "whipping cream", "whipping cream", null), new Unit(0, "ml", "ml", 1f), 120d))), true));
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "powdered sugar", "powdered sugar", null), new Unit(0, "tablespoon", "tablespoon", 1f), 2d))), true));
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<>(Arrays.asList(
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "whipping cream", "whipping cream", null), new Unit(0, "ml", "ml", 1f), 120d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "powdered sugar", "powdered sugar", null), new Unit(0, "tablespoon", "tablespoon", 1f), 2d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(
                 new IngredientQuantity(0, new Ingredient(0, "cointreau", "cointreau", null), new Unit(0, "teaspoon", "teaspoon", 1f), 3d),
                 new IngredientQuantity(0, new Ingredient(0, "hest", "heste", null), new Unit(0, "kg", "kg", 1f), 5d))), true));
 
@@ -152,10 +152,10 @@ public class SearchFragment extends Fragment {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
-        menu.findItem(R.id.action_search).setVisible(!mainActivity.isDrawerOpen());
+        menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
 
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchBar = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchView searchBar = (SearchView) menu.findItem(R.id.ingredient_search).getActionView();
         searchBar.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchBar.setIconifiedByDefault(false);
 

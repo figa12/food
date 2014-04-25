@@ -33,7 +33,7 @@ public class MainActivity extends DrawerActivity {
             this.setActionBarArrowDependingOnFragmentsBackStack();
         }
 
-
+        handleIntent(getIntent());
     }
 
     @Override
@@ -51,9 +51,9 @@ public class MainActivity extends DrawerActivity {
 
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // handles a click on a search suggestion; launches activity to show word
-            //   Intent wordIntent = new Intent(this, WordActivity.class);
-            // wordIntent.setData(intent.getData());
-            // startActivity(wordIntent);
+           //  Intent wordIntent = new Intent(this, .class);
+           //  wordIntent.setData(intent.getData());
+           //  startActivity(wordIntent);
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query
             String query = intent.getStringExtra(SearchManager.QUERY);

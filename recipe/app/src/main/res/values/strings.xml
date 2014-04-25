@@ -40,16 +40,13 @@
 
 
     <!-- The label for use as a searchable item -->
-    <string name="search_label">Dictionary</string>
+    <string name="search_label">Recipe</string>
 
     <!-- The hint text that appears in the search box. -->
-    <string name="search_hint">Search the dictionary</string>
+    <string name="search_hint">Search the database</string>
 
     <!-- The menu entry that invokes search. -->
     <string name="menu_search">Search</string>
-
-    <!-- The description that will show up in the search settings for this source.  -->
-    <string name="settings_description">Definitions of words</string>
 
     <!-- General instructions in the main activity. -->
     <string name="search_instructions">Use the search box in the Action Bar to look up a word</string>

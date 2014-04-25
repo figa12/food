@@ -148,7 +148,8 @@ public abstract class ListLinearLayout<ListObject> extends LinearLayout {
 
     @Override
     public final void removeAllViewsInLayout() {
-        this.removeAllViews();
+        super.removeAllViewsInLayout();
+        this.items.clear();
     }
 
     @Override

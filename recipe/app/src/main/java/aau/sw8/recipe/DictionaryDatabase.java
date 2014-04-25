@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -28,10 +27,11 @@ public class DictionaryDatabase {
 
     //The columns we'll include in the dictionary table
     public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
-  //  public static final String KEY_DEFINITION = SearchManager.SUGGEST_COLUMN_TEXT_2;
+    //  public static final String KEY_DEFINITION = SearchManager.SUGGEST_COLUMN_TEXT_2;
 
     private static final String DATABASE_NAME = "dictionary";
-    private static final String FTS_VIRTUAL_TABLE = "FTSdictionary";
+    private static final String FTS_VIRTUAL_RECIPE_TABLE = "RECIPE";
+    private static final String FTS_VIRTUAL_INGREDIENTS_TABLE = "INGREDIENTS";
     private static final int DATABASE_VERSION = 2;
 
     private final DictionaryOpenHelper mDatabaseOpenHelper;
@@ -46,15 +46,15 @@ public class DictionaryDatabase {
     }
 
     /**
-     * Builds a map for all columns that may be requested, which will be given to the 
-     * SQLiteQueryBuilder. This is a good way to define aliases for column names, but must include 
+     * Builds a map for all columns that may be requested, which will be given to the
+     * SQLiteQueryBuilder. This is a good way to define aliases for column names, but must include
      * all columns, even if the value is the key. This allows the ContentProvider to request
      * columns w/o the need to know real column names and create the alias itself.
      */
     private static HashMap<String,String> buildColumnMap() {
         HashMap<String,String> map = new HashMap<String,String>();
         map.put(KEY_WORD, KEY_WORD);
-      //  map.put(KEY_DEFINITION, KEY_DEFINITION);
+        //  map.put(KEY_DEFINITION, KEY_DEFINITION);
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +
@@ -105,7 +105,7 @@ public class DictionaryDatabase {
          *   for suggestions to carry the proper intent data.
          *   These aliases are defined in the DictionaryProvider when queries are made.
          * - This can be revised to also search the definition text with FTS3 by changing
-         *   the selection clause to use FTS_VIRTUAL_TABLE instead of KEY_WORD (to search across
+         *   the selection clause to use FTS_VIRTUAL_RECIPE_TABLE instead of KEY_WORD (to search across
          *   the entire table, but sorting the relevance could be difficult.
          */
     }
@@ -122,8 +122,12 @@ public class DictionaryDatabase {
          * actual columns in the database, creating a simple column alias mechanism
          * by which the ContentProvider does not need to know the real column names
          */
+
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(FTS_VIRTUAL_TABLE);
+
+        if(BaseActivity.CHOSEN_FRAGMENT == 0)
+            builder.setTables(FTS_VIRTUAL_INGREDIENTS_TABLE);
+
         builder.setProjectionMap(mColumnMap);
 
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(),
@@ -151,10 +155,9 @@ public class DictionaryDatabase {
          * declare a primary key. However, "rowid" is automatically used as a unique
          * identifier, so when making requests, we will use "_id" as an alias for "rowid"
          */
-        private static final String FTS_TABLE_CREATE =
-                "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE +
-                        " USING fts3 (" +
-                        KEY_WORD +  ");";
+        private static final String FTS_TABLE_RECIPE = "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_RECIPE_TABLE + " USING fts3 (" + KEY_WORD +  ");";
+
+        private static final String FTS_TABLE_INGREDIENT = "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_INGREDIENTS_TABLE + " USING fts3 (" + KEY_WORD +  ");";
 
         /* ", " +
              KEY_DEFINITION +*/
@@ -167,7 +170,8 @@ public class DictionaryDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             mDatabase = db;
-            mDatabase.execSQL(FTS_TABLE_CREATE);
+            //    mDatabase.execSQL(FTS_TABLE_RECIPE);
+            mDatabase.execSQL(FTS_TABLE_INGREDIENT);
             loadDictionary();
         }
 
@@ -178,7 +182,8 @@ public class DictionaryDatabase {
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        loadWords();
+                        // loadRecipes();
+                        loadIngredients();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -186,10 +191,34 @@ public class DictionaryDatabase {
             }).start();
         }
 
-        private void loadWords() throws IOException {
-            Log.d(TAG, "Loading words...");
+    /*    private void loadRecipes() throws IOException {
+            Log.d(TAG, "Loading recipes...");
             final Resources resources = mHelperContext.getResources();
-            InputStream inputStream = resources.openRawResource(R.raw.definitions);
+            InputStream inputStream = resources.openRawResource(R.raw.recipes);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            try {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                   /* String[] strings = TextUtils.split(line, "-");
+                    if (strings.length < 2) continue;
+                    long id1 = addWord(strings[0].trim(), strings[1].trim());
+                    if (strings.length < 1) continue;
+                    long id = addWord(line, FTS_VIRTUAL_RECIPE_TABLE);
+                    if (id < 0) {
+                        Log.e(TAG, "unable to add recipe: " + line);
+                    }
+                }
+            } finally {
+                reader.close();
+            }
+
+        }*/
+
+        private void loadIngredients() throws IOException {
+            Log.d(TAG, "Loading ingredients...");
+            final Resources resources = mHelperContext.getResources();
+            InputStream inputStream = resources.openRawResource(R.raw.ingredients);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
             try {
@@ -199,43 +228,34 @@ public class DictionaryDatabase {
                     if (strings.length < 2) continue;
                     long id1 = addWord(strings[0].trim(), strings[1].trim());
                     if (strings.length < 1) continue;*/
-                    long id = addWord(line);
+                    long id = addWord(line, FTS_VIRTUAL_INGREDIENTS_TABLE);
                     if (id < 0) {
-                        Log.e(TAG, "unable to add word: " + line);
+                        Log.e(TAG, "unable to add ingredients: " + line);
                     }
                 }
             } finally {
                 reader.close();
             }
-            Log.d(TAG, "DONE loading words.");
+
         }
 
         /**
          * Add a word to the dictionary.
          * @return rowId or -1 if failed
          */
-      /*  public long addWord(String word, String definition) {
-            ContentValues initialValues = new ContentValues();
-            initialValues.put(KEY_WORD, word);
-            initialValues.put(KEY_DEFINITION, definition);
 
-            return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
-        }*/
-
-        public long addWord(String word) {
+        public long addWord(String word, String table) {
             ContentValues initialValues = new ContentValues();
             initialValues.put(KEY_WORD, word);
 
-            return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
+            return mDatabase.insert(table, null, initialValues);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "+ newVersion + ", which will destroy all old data");
+            db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_INGREDIENTS_TABLE);
             onCreate(db);
         }
     }
-
 }

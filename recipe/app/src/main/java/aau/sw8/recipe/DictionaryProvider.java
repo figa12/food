@@ -41,7 +41,8 @@ public class DictionaryProvider extends ContentProvider {
     public static final String DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
             "/vnd.sw8.recipe";
 
-    private DictionaryDatabase mDictionary;
+    private DictionaryDatabase recipeDictionary;
+    private DictionaryDatabase ingredientsDictionary;
 
     // UriMatcher stuff
     private static final int SEARCH_WORDS = 0;
@@ -75,7 +76,9 @@ public class DictionaryProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mDictionary = new DictionaryDatabase(getContext());
+        recipeDictionary = new DictionaryDatabase(getContext());
+        ingredientsDictionary = new DictionaryDatabase(getContext());
+
         return true;
     }
 
@@ -123,7 +126,7 @@ public class DictionaryProvider extends ContentProvider {
                         (only if you want to refresh shortcuts) */
                 SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
 
-        return mDictionary.getWordMatches(query, columns);
+        return recipeDictionary.getWordMatches(query, columns);
     }
 
     private Cursor search(String query) {
@@ -133,7 +136,7 @@ public class DictionaryProvider extends ContentProvider {
                 DictionaryDatabase.KEY_WORD};
            //     DictionaryDatabase.KEY_DEFINITION};
 
-        return mDictionary.getWordMatches(query, columns);
+        return recipeDictionary.getWordMatches(query, columns);
     }
 
     private Cursor getWord(Uri uri) {
@@ -142,7 +145,7 @@ public class DictionaryProvider extends ContentProvider {
                 DictionaryDatabase.KEY_WORD};
             //    DictionaryDatabase.KEY_DEFINITION};
 
-        return mDictionary.getWord(rowId, columns);
+        return recipeDictionary.getWord(rowId, columns);
     }
 
     private Cursor refreshShortcut(Uri uri) {
@@ -161,7 +164,7 @@ public class DictionaryProvider extends ContentProvider {
                 SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
                 SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
 
-        return mDictionary.getWord(rowId, columns);
+        return recipeDictionary.getWord(rowId, columns);
     }
 
     /**
