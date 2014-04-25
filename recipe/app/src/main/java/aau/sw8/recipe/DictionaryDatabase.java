@@ -125,7 +125,7 @@ public class DictionaryDatabase {
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
-        if(BaseActivity.CHOSEN_FRAGMENT == 0)
+        if(DrawerActivity.CHOSEN_FRAGMENT == 0)
             builder.setTables(FTS_VIRTUAL_INGREDIENTS_TABLE);
 
         builder.setProjectionMap(mColumnMap);

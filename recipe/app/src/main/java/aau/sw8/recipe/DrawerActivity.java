@@ -34,6 +34,7 @@ import aau.sw8.data.ServerComTask;
 public abstract class DrawerActivity extends LogInActivity implements RecipeSearchFragment.OnFragmentInteractionListener, ServerComTask.ServerAlertDialog {
 
     protected CharSequence drawerTitle;
+    public static int CHOSEN_FRAGMENT;
     protected CharSequence title;
     private String[] pageTitles;
     protected DrawerLayout drawerLayout;
