@@ -38,6 +38,6 @@ public class IngredientCom extends ServerComTask<ArrayList<Ingredient>> {
             ingredients.add(new Ingredient(id, name, name, category));
         }
 
-        return ingredients;//TODO return ingredients
+        return ingredients;
     }
 }

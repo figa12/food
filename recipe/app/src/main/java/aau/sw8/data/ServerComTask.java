@@ -2,6 +2,7 @@ package aau.sw8.data;
 
 import android.app.AlertDialog;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -90,6 +91,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
             try {
                 return this.parseJson(response);
             } catch (Exception e) {
+                Log.e(this.getClass().getName(), "Parsing JSON failed");
                 return null;
             }
         }
