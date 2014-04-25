@@ -31,7 +31,7 @@ import aau.sw8.data.ServerComTask;
 /**
  * Created by Sam on 14/04/2014.
  */
-public abstract class DrawerActivity extends LogInActivity implements RecipeSearchFragment.OnFragmentInteractionListener, ServerComTask.ServerAlertDialog {
+public abstract class DrawerActivity extends LogInActivity implements RecipeSearchFragment.OnFragmentInteractionListener {
 
     protected CharSequence drawerTitle;
     public static int CHOSEN_FRAGMENT;
@@ -45,7 +45,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     private int actionBarHeight;
     private TypedValue typedValue = new TypedValue();
     protected TextView drawerSignInBtn;
-    private AlertDialog serverAlertDialog;
+
 
     private static final String TAG = "DrawerActivity";
 
@@ -54,8 +54,6 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.drawer_layout); // "super" is used because "this" is overridden
-
-        this.serverAlertDialog = this.createAlertDialog();
 
         setupDrawer();
     }
@@ -325,22 +323,5 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected void dismissKeyboard() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(super.findViewById(R.id.content_frame).getWindowToken(), 0);
-    }
-
-    private AlertDialog createAlertDialog() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        //myAlertDialog.setTitle("Title");
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setMessage("Server connection failed.");
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                //empty
-            }
-        });
-        return alertDialogBuilder.create();
-    }
-
-    public AlertDialog getServerAlertDialog() {
-        return this.serverAlertDialog;
     }
 }

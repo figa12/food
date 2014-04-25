@@ -185,7 +185,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                 this.finish();
                 return true;
             case R.id.favourite_button:
-                addToFavourite(this.recipe, DrawerActivity.user);
+                addToFavourite(this.recipe, LogInActivity.user);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -195,6 +195,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     private void addToFavourite(Recipe recipe, User user){
         if(user != null){
             //add the recipe to the user's favourites
+
         }else {
             /* Alert dialog */
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -1,8 +1,10 @@
 package aau.sw8.recipe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.AsyncTask;
@@ -17,14 +19,18 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
 
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.IOException;
 
+import aau.sw8.data.ServerComTask;
+import aau.sw8.data.UserCom;
 import aau.sw8.model.User;
 
 /**
  * Created by jacob on 4/24/14.
  */
-public abstract class LogInActivity extends Activity implements GooglePlayServicesClient.OnConnectionFailedListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener {
+public abstract class LogInActivity extends Activity implements GooglePlayServicesClient.OnConnectionFailedListener, GooglePlayServicesClient.ConnectionCallbacks, PlusClient.OnAccessRevokedListener, ServerComTask.ServerAlertDialog {
     protected static User user;                                  //User of the application
 
     protected ProgressDialog connectionProgressDialog;          //Process dialog for sign in.
@@ -32,6 +38,8 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     protected static final int OUR_REQUEST_CODE = 49404;         //A magic number we will use to know that our sign-in error, resolution activity has completed.
     protected PlusClient plusClient;                             //The core Google+ client.
     protected boolean resolveOnFail;                             //A flag to stop multiple dialogues appearing for the user.
+
+    protected AlertDialog serverAlertDialog;
 
     public static final int SIGN_IN = 1;
     public static final int SIGN_OUT = 2;
@@ -46,6 +54,8 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.serverAlertDialog = this.createAlertDialog();
 
         this.setupGooglePlus();
     }
@@ -305,15 +315,19 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
 
     /***
      * Sets the user of the application.
-     * @param accountName
+     * @param username
      * @param token
      */
-    public void setUser(String accountName, String token){
+    public void setUser(final String username, final String token){
         /*Query the database for the user id
         * if he does not exist insert the user.*/
-        int userid = 1;
-
-        LogInActivity.user = new User(userid, token, accountName);
+         new UserCom(this, new ServerComTask.OnResponseListener<User>() {
+            @Override
+            public void onResponse(User result) {
+                result.setToken(token);
+                LogInActivity.user = result;
+            }
+        }).execute(new BasicNameValuePair("username", username));
     }
 
     /**
@@ -335,6 +349,23 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
             // ConnectionResult.
             this.plusClient.connect();
         }
+    }
+
+    private AlertDialog createAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        //myAlertDialog.setTitle("Title");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setMessage("Server connection failed.");
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                //empty
+            }
+        });
+        return alertDialogBuilder.create();
+    }
+
+    public AlertDialog getServerAlertDialog() {
+        return this.serverAlertDialog;
     }
 
     protected abstract void updateUserUI(boolean isLoggedIn);
