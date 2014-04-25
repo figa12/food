@@ -36,14 +36,14 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected CharSequence drawerTitle;
     protected CharSequence title;
     private String[] pageTitles;
-    protected static DrawerLayout drawerLayout;
-    protected static LinearLayout drawerLinearLayout;
-    protected static ListView drawerListView;
-    protected static ActionBarDrawerToggle drawerToggle;
+    protected DrawerLayout drawerLayout;
+    protected LinearLayout drawerLinearLayout;
+    protected ListView drawerListView;
+    protected ActionBarDrawerToggle drawerToggle;
     protected static final int FRAGMENT_CHANGE_REQUEST = 11; // can be any number
     private int actionBarHeight;
     private TypedValue typedValue = new TypedValue();
-    protected static TextView drawerSignInBtn;
+    protected TextView drawerSignInBtn;
     private AlertDialog serverAlertDialog;
 
     private static final String TAG = "DrawerActivity";
@@ -63,13 +63,13 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     private void setupDrawer() {
         this.title = DrawerActivity.this.drawerTitle = super.getTitle();
         this.pageTitles = super.getResources().getStringArray(R.array.pages_array);
-        DrawerActivity.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
-        DrawerActivity.drawerLinearLayout = (LinearLayout) super.findViewById(R.id.left_drawer);
-        DrawerActivity.drawerListView = (ListView) super.findViewById(R.id.left_menu);
+        this.drawerLayout = (DrawerLayout) super.findViewById(R.id.drawer_layout);
+        this.drawerLinearLayout = (LinearLayout) super.findViewById(R.id.left_drawer);
+        this.drawerListView = (ListView) super.findViewById(R.id.left_menu);
 
         /*Sign in button in the bottom of the navigation drawer*/
-        DrawerActivity.drawerSignInBtn = (TextView) super.findViewById(R.id.btn_sign_in_drawer);
-        DrawerActivity.drawerSignInBtn.setOnClickListener(new View.OnClickListener() {
+        this.drawerSignInBtn = (TextView) super.findViewById(R.id.btn_sign_in_drawer);
+        this.drawerSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (((TextView) view).getText().equals(getResources().getString(R.string.sign_in))) {
@@ -85,11 +85,11 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
         });
 
         // set a custom shadow that overlays the main content when the drawer opens
-        DrawerActivity.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        this.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         // set up the drawer's list view with items and click listener
-        DrawerActivity.drawerListView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, this.pageTitles));
-        DrawerActivity.drawerListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+        this.drawerListView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, this.pageTitles));
+        this.drawerListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DrawerActivity.this.selectItem(position);
@@ -102,9 +102,9 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
 
         // ActionBarDrawerToggle ties together the proper interactions
         // between the sliding drawer and the action bar app icon
-        DrawerActivity.drawerToggle = new ActionBarDrawerToggle(
+        this.drawerToggle = new ActionBarDrawerToggle(
                 this,                               /* host Activity */
-                DrawerActivity.drawerLayout,          /* DrawerLayout object */
+                this.drawerLayout,          /* DrawerLayout object */
                 R.drawable.ic_drawer,               /* nav drawer image to replace 'Up' caret */
                 R.string.drawer_open,               /* "open drawer" description for accessibility */
                 R.string.drawer_close               /* "close drawer" description for accessibility */
@@ -122,7 +122,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
                 DrawerActivity.super.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-        DrawerActivity.drawerLayout.setDrawerListener(DrawerActivity.drawerToggle);
+        this.drawerLayout.setDrawerListener(this.drawerToggle);
         super.getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -138,9 +138,9 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     @Override
     public void updateUserUI(boolean IsSignIn){
         if(IsSignIn){
-            DrawerActivity.drawerSignInBtn.setText(R.string.sign_out);
+            this.drawerSignInBtn.setText(R.string.sign_out);
         }else{
-            DrawerActivity.drawerSignInBtn.setText(R.string.sign_in);
+            this.drawerSignInBtn.setText(R.string.sign_in);
         }
     }
 
@@ -184,10 +184,10 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open/close the drawer or act as back button
-        if (DrawerActivity.drawerToggle.onOptionsItemSelected(item)) {
+        if (this.drawerToggle.onOptionsItemSelected(item)) {
             return true;
         } else if (this.isDrawerOpen()) {
-            DrawerActivity.drawerLayout.closeDrawers();
+            this.drawerLayout.closeDrawers();
             return true;
         } else if (item.getItemId() == android.R.id.home && super.getFragmentManager().popBackStackImmediate()) {
             return true;
@@ -208,14 +208,14 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        DrawerActivity.drawerToggle.syncState();
+        this.drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
-        DrawerActivity.drawerToggle.onConfigurationChanged(newConfig);
+        this.drawerToggle.onConfigurationChanged(newConfig);
     }
 
     /***
@@ -223,7 +223,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
      * @return isDrawerOpen
      */
     public boolean isDrawerOpen() {
-        return DrawerActivity.drawerLayout.isDrawerOpen(DrawerActivity.drawerLinearLayout);
+        return this.drawerLayout.isDrawerOpen(this.drawerLinearLayout);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -279,13 +279,13 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             fragment.setArguments(args);
 
             // update selected item and title, then close the drawer
-            DrawerActivity.drawerListView.setItemChecked(position, true);
+            this.drawerListView.setItemChecked(position, true);
             if(fragment instanceof SignInFragment){
                 this.setTitle(R.string.sign_in);
             }else{
                 this.setTitle(this.pageTitles[position]);
             }
-            DrawerActivity.drawerLayout.closeDrawers();
+            this.drawerLayout.closeDrawers();
 
             // replace the current view with the fragment
             super.getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -302,7 +302,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected void setActionBarArrowDependingOnFragmentsBackStack() {
         int backStackEntryCount = super.getFragmentManager().getBackStackEntryCount();
         boolean shouldEnableDrawerIndicator = (this.isTaskRoot() && backStackEntryCount == 0);
-        DrawerActivity.drawerToggle.setDrawerIndicatorEnabled(shouldEnableDrawerIndicator);
+        this.drawerToggle.setDrawerIndicatorEnabled(shouldEnableDrawerIndicator);
     }
 
     @Override

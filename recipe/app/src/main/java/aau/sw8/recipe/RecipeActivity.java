@@ -91,12 +91,12 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         actionBar.setIcon(R.drawable.ic_transparent);
         this.setTitle("");
 
-        DrawerActivity.drawerToggle.setDrawerIndicatorEnabled(false);
+        super.drawerToggle.setDrawerIndicatorEnabled(false);
 
         this.drawerTitle = "";
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) DrawerActivity.drawerLinearLayout.getLayoutParams();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) super.drawerLinearLayout.getLayoutParams();
         params.topMargin = this.getActionBarHeight();
-        DrawerActivity.drawerLinearLayout.setLayoutParams(params);
+        super.drawerLinearLayout.setLayoutParams(params);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -172,10 +172,10 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
-        if (RecipeActivity.drawerToggle.onOptionsItemSelected(item)) {
+        if (super.drawerToggle.onOptionsItemSelected(item)) {
             return true;
         } else if (this.isDrawerOpen()) {
-            RecipeActivity.drawerLayout.closeDrawers();
+            super.drawerLayout.closeDrawers();
             return true;
         }
 
