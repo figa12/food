@@ -218,7 +218,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                     .setPositiveButton(R.string.common_signin_button_text, new DialogInterface.OnClickListener() {         /*Sign in button*/
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //TODO add recipe to favourites
+                            //TODO go to sign in fragment
                         }
                     })
                     .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/

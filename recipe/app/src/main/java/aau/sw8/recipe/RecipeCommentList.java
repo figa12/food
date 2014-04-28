@@ -43,7 +43,7 @@ public class RecipeCommentList extends ListLinearLayout<Comment> {
         this.imageLoader.displayImage("http://figz.dk/images/microsfot.jpeg", commentImage, this.imageLoaderOptions);
 
         TextView authorTextView = (TextView) commentView.findViewById(R.id.commentAuthorTextView);
-        authorTextView.setText(authorTextView.getText() + " " + comment.getUser().getUsername());
+        authorTextView.setText(authorTextView.getText() + " " + comment.getUser().getHash());
 
         TextView commentTextView = (TextView) commentView.findViewById(R.id.commentText);
         commentTextView.setText(comment.getText());

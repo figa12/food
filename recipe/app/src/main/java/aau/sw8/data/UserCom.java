@@ -1,6 +1,5 @@
 package aau.sw8.data;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import aau.sw8.model.User;
@@ -8,28 +7,21 @@ import aau.sw8.model.User;
 /**
  * Created by jacob on 4/25/14.
  */
-public class UserCom extends ServerComTask<User> {
+public class UserCom extends ServerComTask<String> {
+    private String hash;
 
-    public UserCom(ServerAlertDialog serverAlertDialog, OnResponseListener<User> onResponseListener) {
-        super("user.php?", serverAlertDialog, onResponseListener);
+    public UserCom(ServerAlertDialog serverAlertDialog, OnResponseListener<String> onResponseListener, String hash) {
+        super(UserCom.getPath(hash), serverAlertDialog, onResponseListener);
+        this.hash = hash;
+    }
+
+    private static String getPath(String hash){
+        return "user.php?hash=" + hash;
     }
 
     @Override
-    protected User parseJson(String json) throws Exception {
-        JSONArray jsonArray = new JSONArray(json);
-        User user = null;
-
-        if(json.length() == 1){
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-            long userId = jsonObject.getLong("id");
-            String username = jsonObject.getString("username");
-            user = new User(userId, username, "");
-        }else{
-            //TODO: Error handling
-            /*Error, there should not be more than one user returned*/
-        }
-
-        return user;
+    protected String parseJson(String json) throws Exception {
+        JSONObject jsonObject = new JSONObject(json);
+        return jsonObject.getString("hash");
     }
 }

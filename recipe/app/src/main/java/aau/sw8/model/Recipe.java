@@ -25,7 +25,7 @@ public class Recipe implements Parcelable {
         this.imagePath = imagePath;
         this.recipeTitle = recipeTitle;
 
-        this.comments.add(new Comment(0, new User(0,"token","Ramin Sadre"),this, "mmmm, so yummy in my tummy"));
+        this.comments.add(new Comment(0, new User("Ramin Sadre", "Ramon@sadre.com", ""),this, "mmmm, so yummy in my tummy"));
     }
 
     public Recipe(long recipeId, String imagePath, String recipeTitle, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps) {

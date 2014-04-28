@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -17,9 +20,9 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient;
-
-import org.apache.http.message.BasicNameValuePair;
+import com.google.android.gms.plus.model.people.Person;
 
 import java.io.IOException;
 
@@ -38,6 +41,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     protected static final int OUR_REQUEST_CODE = 49404;         //A magic number we will use to know that our sign-in error, resolution activity has completed.
     protected PlusClient plusClient;                             //The core Google+ client.
     protected boolean resolveOnFail;                             //A flag to stop multiple dialogues appearing for the user.
+
 
     protected AlertDialog serverAlertDialog;
 
@@ -117,6 +121,8 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
         //Update UI
         this.updateUserUI(true);
 
+
+
         // Retrieve the oAuth 2.0 access token.
         final Context context = this.getApplicationContext();
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
@@ -145,7 +151,14 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
             @Override
             protected void onPostExecute(String token) {
                 Log.i(TAG, "Access token retrieved:" + token);
-                LogInActivity.this.setUser(LogInActivity.this.plusClient.getAccountName(), token);
+
+                String personName = "";
+                if (plusClient.getCurrentPerson() != null) {
+                    Person currentPerson = plusClient.getCurrentPerson();
+                    personName = currentPerson.getDisplayName();
+                }
+
+                LogInActivity.this.setUser(personName, LogInActivity.this.plusClient.getAccountName(), token);
             }
         };
         task.execute((Void) null);
@@ -313,21 +326,16 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
         }
     }
 
-    /***
-     * Sets the user of the application.
-     * @param username
-     * @param token
-     */
-    public void setUser(final String username, final String token){
+    public void setUser(final String personName, final String hash, final String token){
         /*Query the database for the user id
         * if he does not exist insert the user.*/
-         new UserCom(this, new ServerComTask.OnResponseListener<User>() {
-            @Override
-            public void onResponse(User result) {
-                result.setToken(token);
-                LogInActivity.user = result;
-            }
-        }).execute(new BasicNameValuePair("username", username));
+         new UserCom(this, new ServerComTask.OnResponseListener<String>() {
+                @Override
+                public void onResponse(String result) {
+                    LogInActivity.user = new User(personName, result, token);
+                    Log.w(LogInActivity.TAG, "Current user is {personName: " + LogInActivity.user.getPersonName() + " hash: " + LogInActivity.user.getHash() + " token: " + LogInActivity.user.getToken() + "}");
+                }
+         }, hash);
     }
 
     /**
@@ -363,6 +371,18 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
         });
         return alertDialogBuilder.create();
     }
+
+    public boolean isNetworkConnected(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     public AlertDialog getServerAlertDialog() {
         return this.serverAlertDialog;
