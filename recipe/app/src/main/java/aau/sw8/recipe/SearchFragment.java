@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,7 +34,10 @@ public class SearchFragment extends Fragment {
 
     private FlowLayout ingredientFlowLayout;
     private LinearLayout popupLayout;
+    public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private RecipeSearchFragment.OnFragmentInteractionListener interactionListener;
+    private SearchView searchBar;
+    private int i = 0;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -135,7 +139,7 @@ public class SearchFragment extends Fragment {
                     SearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
                     Toast.makeText(SearchFragment.this.getActivity(), "Keyboard shown", Toast.LENGTH_SHORT).show();
                 } else {
-                    // keyobard hidden
+                    // keyboard hidden
                     SearchFragment.this.popupLayout.setVisibility(View.GONE);
                     Toast.makeText(SearchFragment.this.getActivity(), "Keyboard hidden", Toast.LENGTH_SHORT).show();
                 }
@@ -149,21 +153,52 @@ public class SearchFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
 
+        if(i == 0) {
+            try {
+                i++;
+                getAllIngredients(menu);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        
         // Inflate the menu; this adds items to the action bar if it is present.
         super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
-        menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
 
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchBar = (SearchView) menu.findItem(R.id.ingredient_search).getActionView();
+        searchBar = (SearchView) menu.findItem(R.id.ingredient_search).getActionView();
         searchBar.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
         searchBar.setIconifiedByDefault(false);
 
-        // Set hint text
-        searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
+        if(allIngredients.size() != 0){
+            menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
+        }
 
         super.onPrepareOptionsMenu(menu);
     }
+
+    private void getAllIngredients(Menu menu) throws IOException {
+
+        final MainActivity mainActivity = (MainActivity) this.getActivity();
+        final Menu menu1 = menu;
+
+        new IngredientCom((DrawerActivity) super.getActivity(), new ServerComTask.OnResponseListener<ArrayList<Ingredient>>() {
+            @Override
+            public void onResponse(ArrayList<Ingredient> result) {
+                for (Ingredient ingredient : result) {
+                    allIngredients.add(ingredient);
+                }
+
+                menu1.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
+
+            }
+        });
+
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
