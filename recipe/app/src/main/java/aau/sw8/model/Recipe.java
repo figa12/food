@@ -10,13 +10,15 @@ import java.util.ArrayList;
  */
 public class Recipe implements Parcelable {
 
-    private int recipeId;
+    private long recipeId;
     private String imagePath;
     private String recipeTitle;
     private String recipeDescription;
     private ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
     private ArrayList<InstructionStep> instructionSteps = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
+    private long upvotes;
+    private long downvotes;
 
     /*Constructors*/
     public Recipe(String imagePath, String recipeTitle) {
@@ -26,7 +28,27 @@ public class Recipe implements Parcelable {
         this.comments.add(new Comment(0, new User(0,"token","Ramin Sadre"),this, "mmmm, so yummy in my tummy"));
     }
 
+    public Recipe(long recipeId, String imagePath, String recipeTitle, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps) {
+        this.recipeId = recipeId;
+        this.imagePath = imagePath;
+        this.recipeTitle = recipeTitle;
+        this.recipeDescription = recipeDescription;
+        this.ingredientGroups = ingredientGroups;
+        this.instructionSteps = instructionSteps;
+    }
+
+    public Recipe(long recipeId, String imagePath, String recipeTitle, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps, long upvotes, long downvotes) {
+        this(recipeId, imagePath, recipeTitle, recipeDescription, ingredientGroups, instructionSteps);
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+    }
+
     /*Methods*/
+
+    public long getRecipeId() {
+        return recipeId;
+    }
+
     public String getImagePath() {
         return imagePath;
     }
@@ -73,6 +95,14 @@ public class Recipe implements Parcelable {
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public long getUpvotes() {
+        return this.upvotes;
+    }
+
+    public long getDownvotes() {
+        return this.downvotes;
     }
 
     @Override

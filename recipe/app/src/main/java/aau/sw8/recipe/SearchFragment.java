@@ -64,22 +64,22 @@ public class SearchFragment extends Fragment {
         chocoYumYum.setInstructionSteps(instructionSteps);
 
         ArrayList<ExchangeableIngredient> exchangeableIngredients1 = new ArrayList<>();
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "cream", "cream", null), new Unit(0, "ml", "ml", 1f), 480d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "dark chocolate, chopped", "dark chocolate, chopped", null), new Unit(0, "g", "g", 1f), 120d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "earl grey tea", "earl grey tea", null), new Unit(0, "bags", "bags", 1f), 2d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "egg yolk", "egg yolk", null), null, 6d))), true));
-        exchangeableIngredients1.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "sugar", "sugar", null), new Unit(0, "tablespoons", "tablespoons", 1f), 3))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "cream", "cream", null), new Unit(0L, "ml", "ml", 1f), 480d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "dark chocolate, chopped", "dark chocolate, chopped", null), new Unit(0L, "g", "g", 1f), 120d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "earl grey tea", "earl grey tea", null), new Unit(0L, "bags", "bags", 1f), 2d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "egg yolk", "egg yolk", null), null, 6d))), true));
+        exchangeableIngredients1.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "sugar", "sugar", null), new Unit(0L, "tablespoons", "tablespoons", 1f), 3))), true));
 
         ArrayList<ExchangeableIngredient> exchangeableIngredients2 = new ArrayList<>();
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "whipping cream", "whipping cream", null), new Unit(0, "ml", "ml", 1f), 120d))), true));
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0, new Ingredient(0, "powdered sugar", "powdered sugar", null), new Unit(0, "tablespoon", "tablespoon", 1f), 2d))), true));
-        exchangeableIngredients2.add(new ExchangeableIngredient(0, null, new ArrayList<IngredientQuantity>(Arrays.asList(
-                new IngredientQuantity(0, new Ingredient(0, "cointreau", "cointreau", null), new Unit(0, "teaspoon", "teaspoon", 1f), 3d),
-                new IngredientQuantity(0, new Ingredient(0, "hest", "heste", null), new Unit(0, "kg", "kg", 1f), 5d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "whipping cream", "whipping cream", null), new Unit(0L, "ml", "ml", 1f), 120d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(new IngredientQuantity(0L, new Ingredient(0L, "powdered sugar", "powdered sugar", null), new Unit(0L, "tablespoon", "tablespoon", 1f), 2d))), true));
+        exchangeableIngredients2.add(new ExchangeableIngredient(0L, new ArrayList<IngredientQuantity>(Arrays.asList(
+                new IngredientQuantity(0L, new Ingredient(0L, "cointreau", "cointreau", null), new Unit(0L, "teaspoon", "teaspoon", 1f), 3d),
+                new IngredientQuantity(0L, new Ingredient(0L, "hest", "heste", null), new Unit(0L, "kg", "kg", 1f), 5d))), true));
 
         ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
-        ingredientGroups.add(new IngredientGroup(0, "The puddings", exchangeableIngredients1));
-        ingredientGroups.add(new IngredientGroup(0, "Cointreau cream", exchangeableIngredients2));
+        ingredientGroups.add(new IngredientGroup(0L, "The puddings", exchangeableIngredients1));
+        ingredientGroups.add(new IngredientGroup(0L, "Cointreau cream", exchangeableIngredients2));
 
         chocoYumYum.setIngredientGroups(ingredientGroups);
 

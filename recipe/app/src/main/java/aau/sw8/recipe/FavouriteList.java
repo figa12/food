@@ -24,9 +24,10 @@ public class FavouriteList extends RecipeList {
         super(context, attrs);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onClick(View view) {
-        if (isLongClick != true) { /*if OnClick is enabled*/
+        if (!isLongClick) { /*if OnClick is enabled*/
             // Flash the image
             flashView(view);
 
@@ -34,7 +35,7 @@ public class FavouriteList extends RecipeList {
             Recipe recipe = (Recipe) view.getTag();
 
             // Open recipe fragment
-            ((MainActivity) this.getContext()).openRecipeActivity(recipe);
+            ((MainActivity) this.getContext()).openRecipeActivity(recipe.getRecipeId());
         }
     }
 
