@@ -105,7 +105,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     private void setupActionBar() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setIcon(R.drawable.ic_transparent);
-        this.setTitle("");
+        this.setTitle("                                                          ");
 
         super.drawerToggle.setDrawerIndicatorEnabled(false);
 
