@@ -68,6 +68,7 @@ public class SearchList extends RecipeList {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onClick(View view) {
         // Flash the image
@@ -77,6 +78,6 @@ public class SearchList extends RecipeList {
         Recipe recipe = (Recipe) view.getTag();
 
         // Open recipe fragment
-        ((MainActivity) this.getContext()).openRecipeActivity(recipe);
+        ((MainActivity) this.getContext()).openRecipeActivity(recipe.getRecipeId());
     }
 }

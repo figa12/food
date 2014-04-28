@@ -7,25 +7,18 @@ import java.util.ArrayList;
  */
 public class ExchangeableIngredient {
 
-    private int exchangeableIngredientId;
-    private String name;
+    private long exchangeableIngredientId;
     private ArrayList<IngredientQuantity> ingredientQuantities = new ArrayList<>();
     private boolean mandatory;
 
-    public ExchangeableIngredient(int exchangeableIngredientId, String name,
-                                  ArrayList<IngredientQuantity> ingredientQuantities, boolean mandatory) {
+    public ExchangeableIngredient(long exchangeableIngredientId, ArrayList<IngredientQuantity> ingredientQuantities, boolean mandatory) {
         this.exchangeableIngredientId = exchangeableIngredientId;
-        this.name = name;
         this.ingredientQuantities = ingredientQuantities;
         this.mandatory = mandatory;
     }
 
-    public int getId() {
+    public long getId() {
         return exchangeableIngredientId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean isMandatory() {

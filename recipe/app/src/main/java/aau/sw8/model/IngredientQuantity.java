@@ -4,19 +4,19 @@ package aau.sw8.model;
  * Created by jacob on 3/27/14.
  */
 public class IngredientQuantity {
-    private int quantityId;
+    private long quantityId;
     private Ingredient ingredient;
     private Unit unit;
     private double amount;
 
-    public IngredientQuantity(int quantityId, Ingredient ingredient, Unit unit, double amount) {
+    public IngredientQuantity(long quantityId, Ingredient ingredient, Unit unit, double amount) {
         this.quantityId = quantityId;
         this.ingredient = ingredient;
         this.unit = unit;
         this.amount = amount;
     }
 
-    public int getId() {
+    public long getId() {
         return quantityId;
     }
 

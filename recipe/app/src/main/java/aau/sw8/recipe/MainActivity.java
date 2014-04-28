@@ -8,8 +8,6 @@ import android.view.Menu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import aau.sw8.model.Recipe;
-
 public class MainActivity extends DrawerActivity {
 
     /*Variables*/
@@ -71,14 +69,14 @@ public class MainActivity extends DrawerActivity {
     /*Class methods*/
 
     @SuppressWarnings("ConstantConditions")
-    public void openRecipeActivity(Recipe recipe) {
+    public void openRecipeActivity(long recipeId) {
         super.dismissKeyboard();
 
         // Create an intent for a recipe activity
         Intent myIntent = new Intent(this, RecipeActivity.class);
 
         // Put the recipe into the intent
-        myIntent.putExtra(RecipeActivity.ARG_RECIPE, recipe);
+        myIntent.putExtra(RecipeActivity.ARG_RECIPE_ID, recipeId);
 
         // Start the activity and allow it to request fragment change
         this.startActivityForResult(myIntent, DrawerActivity.FRAGMENT_CHANGE_REQUEST);

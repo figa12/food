@@ -38,7 +38,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     private BasicNameValuePair[] basicNameValuePairs;
 
     /*Constructors*/
-    protected ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener, BasicNameValuePair ... basicNameValuePairs) {
+    public ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener, BasicNameValuePair ... basicNameValuePairs) {
         this.apiPath = ServerComTask.SERVER_API_URL + apiPath;
         this.serverAlertDialog = serverAlertDialog;
         this.onResponseListener = onResponseListener;
