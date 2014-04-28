@@ -25,7 +25,7 @@ public class Recipe implements Parcelable {
         this.imagePath = imagePath;
         this.recipeTitle = recipeTitle;
 
-        this.comments.add(new Comment(0, new User(0,"token","Ramin Sadre"),this, "mmmm, so yummy in my tummy"));
+        this.comments.add(new Comment(0L, new User(0,"token","Ramin Sadre"), "mmmm, so yummy in my tummy"));
     }
 
     public Recipe(long recipeId, String imagePath, String recipeTitle, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps) {
@@ -112,9 +112,15 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
+        out.writeLong(this.recipeId);
         out.writeString(this.imagePath);
         out.writeString(this.recipeTitle);
         out.writeString(this.recipeDescription);
+        out.writeList(this.ingredientGroups);
+        out.writeList(this.instructionSteps);
+        out.writeList(this.comments);
+        out.writeLong(this.upvotes);
+        out.writeLong(this.downvotes);
     }
 
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
@@ -130,8 +136,14 @@ public class Recipe implements Parcelable {
     };
 
     private Recipe(Parcel in) {
+        this.recipeId = in.readLong();
         this.imagePath = in.readString();
         this.recipeTitle = in.readString();
         this.recipeDescription = in.readString();
+        in.readList(this.ingredientGroups, IngredientGroup.class.getClassLoader());
+        in.readList(this.instructionSteps, InstructionStep.class.getClassLoader());
+        in.readList(this.comments, Comment.class.getClassLoader());
+        this.upvotes = in.readLong();
+        this.downvotes = in.readLong();
     }
 }
