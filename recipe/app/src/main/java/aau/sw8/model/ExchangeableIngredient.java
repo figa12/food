@@ -1,11 +1,14 @@
 package aau.sw8.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
  * Created by jacob on 3/27/14.
  */
-public class ExchangeableIngredient {
+public class ExchangeableIngredient implements Parcelable {
 
     private long exchangeableIngredientId;
     private ArrayList<IngredientQuantity> ingredientQuantities = new ArrayList<>();
@@ -37,5 +40,35 @@ public class ExchangeableIngredient {
         }
 
         return strings;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeLong(this.exchangeableIngredientId);
+        out.writeList(this.ingredientQuantities);
+        out.writeValue(this.mandatory); // sigh, WriteBoolean does not exist
+    }
+
+    public static final Parcelable.Creator<ExchangeableIngredient> CREATOR = new Parcelable.Creator<ExchangeableIngredient>() {
+        @Override
+        public ExchangeableIngredient createFromParcel(Parcel in) {
+            return new ExchangeableIngredient(in);
+        }
+
+        @Override
+        public ExchangeableIngredient[] newArray(int size) {
+            return new ExchangeableIngredient[size];
+        }
+    };
+
+    private ExchangeableIngredient(Parcel in) {
+        this.exchangeableIngredientId = in.readLong();
+        in.readList(this.ingredientQuantities, IngredientQuantity.class.getClassLoader());
+        this.mandatory = (boolean) in.readValue(Boolean.class.getClassLoader());
     }
 }

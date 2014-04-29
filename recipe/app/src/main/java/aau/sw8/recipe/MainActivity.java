@@ -3,10 +3,19 @@ package aau.sw8.recipe;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.SearchView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import aau.sw8.data.IngredientCom;
+import aau.sw8.data.ServerComTask;
+import aau.sw8.model.Ingredient;
 
 public class MainActivity extends DrawerActivity {
 

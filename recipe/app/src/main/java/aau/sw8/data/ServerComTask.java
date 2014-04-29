@@ -31,7 +31,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     }
 
     /*Variables*/
-    private static final String SERVER_API_URL = "http://figz.dk/food/";
+    protected static final String SERVER_API_URL = "http://figz.dk/food/";
     private ServerAlertDialog serverAlertDialog;
     private String apiPath;
     private OnResponseListener<T> onResponseListener;
@@ -47,7 +47,11 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
         this.execute(this.basicNameValuePairs);
     }
 
-    protected void showAlertDialog() {
+    public static String getImagePath(String fileName) {
+        return ServerComTask.SERVER_API_URL + "upload/" + fileName;
+    }
+
+    private void showAlertDialog() {
         AlertDialog serverAlertDialog = this.serverAlertDialog.getServerAlertDialog();
         if (!serverAlertDialog.isShowing()) {
             serverAlertDialog.show();

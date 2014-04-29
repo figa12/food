@@ -32,12 +32,11 @@ public class RecipeCom extends ServerComTask<Recipe> {
 
     @Override
     protected Recipe parseJson(String json) throws Exception {
-        JSONArray jsonArray = new JSONArray(json);
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
+        JSONObject jsonObject = new JSONObject(json);
 
         String name = jsonObject.getString("name");
         String description = jsonObject.getString("desc");
-        String imagePath = "http://figz.dk/food/upload/" + jsonObject.getString("image");
+        String imagePath = ServerComTask.getImagePath(jsonObject.getString("image"));
 
         long upvotes = jsonObject.getLong("upvotes");
         long downvotes = jsonObject.getLong("downvotes");

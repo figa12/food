@@ -4,6 +4,8 @@
         android:title="@string/menu_search"
         android:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_action_search"
-        android:showAsAction="always"/>
+        android:showAsAction="always"
+        android:visible="false"
+        />
 
 </menu>

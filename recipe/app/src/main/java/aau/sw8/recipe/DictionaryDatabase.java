@@ -16,7 +16,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import aau.sw8.data.IngredientCom;
+import aau.sw8.data.ServerComTask;
+import aau.sw8.model.Ingredient;
 
 /**
  * Contains logic to return specific words from the dictionary, and
@@ -155,7 +160,6 @@ public class DictionaryDatabase {
          * declare a primary key. However, "rowid" is automatically used as a unique
          * identifier, so when making requests, we will use "_id" as an alias for "rowid"
          */
-        private static final String FTS_TABLE_RECIPE = "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_RECIPE_TABLE + " USING fts3 (" + KEY_WORD +  ");";
 
         private static final String FTS_TABLE_INGREDIENT = "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_INGREDIENTS_TABLE + " USING fts3 (" + KEY_WORD +  ");";
 
@@ -191,53 +195,12 @@ public class DictionaryDatabase {
             }).start();
         }
 
-    /*    private void loadRecipes() throws IOException {
-            Log.d(TAG, "Loading recipes...");
-            final Resources resources = mHelperContext.getResources();
-            InputStream inputStream = resources.openRawResource(R.raw.recipes);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            try {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                   /* String[] strings = TextUtils.split(line, "-");
-                    if (strings.length < 2) continue;
-                    long id1 = addWord(strings[0].trim(), strings[1].trim());
-                    if (strings.length < 1) continue;
-                    long id = addWord(line, FTS_VIRTUAL_RECIPE_TABLE);
-                    if (id < 0) {
-                        Log.e(TAG, "unable to add recipe: " + line);
-                    }
-                }
-            } finally {
-                reader.close();
-            }
-
-        }*/
-
         private void loadIngredients() throws IOException {
-            Log.d(TAG, "Loading ingredients...");
-            final Resources resources = mHelperContext.getResources();
-            InputStream inputStream = resources.openRawResource(R.raw.ingredients);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            try {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                   /* String[] strings = TextUtils.split(line, "-");
-                    if (strings.length < 2) continue;
-                    long id1 = addWord(strings[0].trim(), strings[1].trim());
-                    if (strings.length < 1) continue;*/
-                    long id = addWord(line, FTS_VIRTUAL_INGREDIENTS_TABLE);
-                    if (id < 0) {
-                        Log.e(TAG, "unable to add ingredients: " + line);
-                    }
-                }
-            } finally {
-                reader.close();
-            }
-
+        for(Ingredient ingredients : SearchFragment.allIngredients)
+            addWord(ingredients.getSingular(), FTS_VIRTUAL_INGREDIENTS_TABLE);
         }
+
 
         /**
          * Add a word to the dictionary.
