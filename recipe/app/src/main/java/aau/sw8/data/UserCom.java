@@ -8,10 +8,11 @@ import aau.sw8.model.User;
  * Created by jacob on 4/25/14.
  */
 public class UserCom extends ServerComTask<String> {
+    //TODO: Delete this class, it is not used anymore
     private String hash;
 
-    public UserCom(ServerAlertDialog serverAlertDialog, OnResponseListener<String> onResponseListener, String hash) {
-        super(UserCom.getPath(hash), serverAlertDialog, onResponseListener);
+    public UserCom(ServerAlertDialog serverAlertDialog, OnResponseListener<String> onResponseListener) {
+        super(UserCom.getPath("hash"), serverAlertDialog, onResponseListener);
         this.hash = hash;
     }
 
