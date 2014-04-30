@@ -169,6 +169,8 @@ public class SearchFragment extends Fragment {
                 menu1.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
 
             }
+            @Override
+            public void onFailed() { }
         });
 
     }

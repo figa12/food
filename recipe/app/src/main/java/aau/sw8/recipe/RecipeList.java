@@ -37,17 +37,17 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
 
     public RecipeList(Context context) {
         super(context);
-        this.construct();
+        this.construct(context);
     }
 
     public RecipeList(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.construct();
+        this.construct(context);
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void construct() {
-        this.progressDialog = new ProgressDialog(this.getContext());
+    private void construct(Context context) {
+        this.progressDialog = new ProgressDialog(context);
         this.progressDialog.setMessage("Loading");
         this.progressDialog.setCancelable(false);
     }
