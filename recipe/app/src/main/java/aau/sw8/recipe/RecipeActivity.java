@@ -116,15 +116,25 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         if(LogInActivity.user != null) {
             new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
                 @Override
-                public void onResponse(ServerMessage result) {
-                    if(result.getStatus() == ServerMessage.FAVOURITED){
+                public void onResponse(ServerMessage message) {
+                    Log.w(TAG, "(ServerMessage) status: " + message.getStatus() + " description: " + message.getDescription());
+                    if(message.getStatus() == ServerMessage.FAVOURITED){
                         isFavourited = true;
-
                     }else{
                         isFavourited = false;
                     }
+
+                    setFavouriteButton(isFavourited);
                 }
-            }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+            }, FavouriteCom.STATUS, id, LogInActivity.user.getHash());
+        }
+    }
+
+    private void setFavouriteButton(boolean isFav){
+        if(isFav){
+            favouriteButton.setIcon(android.R.drawable.btn_star_big_on);
+        }else{
+            favouriteButton.setIcon(android.R.drawable.btn_star_big_off);
         }
     }
 
@@ -204,15 +214,11 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        Log.w(TAG, "OnCreateOptionMenu");
         super.getMenuInflater().inflate(R.menu.recipe, menu);
 
         favouriteButton = menu.findItem(R.id.favourite_button);
 
-        if(isFavourited) {
-            favouriteButton.setIcon(android.R.drawable.btn_star_big_on);
-        }else{
-            favouriteButton.setIcon(android.R.drawable.btn_star_big_off);
-        }
         return true;
     }
 
@@ -234,7 +240,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                 return true;
             case R.id.favourite_button:
                 if (LogInActivity.user != null){
-                     addOrRemoveFromFavourite(!isFavourited, this.recipe, LogInActivity.user);
+                     addOrRemoveFromFavourite(!isFavourited, this.recipe.getRecipeId(), LogInActivity.user);
                 }else{
                     showLoginDialog();
                 }
@@ -244,25 +250,36 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         }
     }
 
-    private void addOrRemoveFromFavourite(boolean adding, Recipe recipe, User user){
+    private void addOrRemoveFromFavourite(final boolean adding, long recipeId, User user){
+        String action;
         if(adding){
-            //add the recipe to the user's favourites
-            Log.w(TAG, "adding favourite...");
-            new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>(){
-                @Override
-                public void onResponse(ServerMessage message) {
-                    switch (message.getStatus()){
-                        case ServerMessage.SUCCESS:
-                            //TODO: change the icon to highlighted or change it to grey depending on the current set image.
-                            break;
-
-                        case ServerMessage.ERROR:
-                            //TODO: Toast with failure.
-                            break;
-                    }
-                }
-            }, FavouriteCom.ADD, recipe.getRecipeId(), user.getHash());
+            action = FavouriteCom.ADD;
+        }else{
+            action = FavouriteCom.REMOVE;
         }
+
+        //add the recipe to the user's favourites
+        Log.w(TAG, action + "ing " +  "favourite...");
+        new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>(){
+            @Override
+            public void onResponse(ServerMessage message) {
+                switch (message.getStatus()){
+                    case ServerMessage.SUCCESS:
+                        //TODO: change the icon to highlighted or change it to grey depending on the current set image.
+                        if(adding){
+                            isFavourited = true;
+                        }else{
+                            isFavourited = false;
+                        }
+                        setFavouriteButton(isFavourited);
+                        break;
+
+                    case ServerMessage.ERROR:
+                        //TODO: Toast with failure.
+                        break;
+                }
+            }
+        }, action, recipeId, user.getHash());
 
     }
 

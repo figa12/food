@@ -20,7 +20,7 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
     public FavouriteCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ServerMessage> onResponseListener,
                         String action, long recipeId, String hash){
         super(getPath(action, recipeId, hash), serverAlertDialog, onResponseListener);
-
+        Log.w(TAG, "server query: " + getPath(action, recipeId, hash));
         this.action = action;
         this.recipeId = recipeId;
         this.hash = hash;
@@ -29,7 +29,7 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
     public static String getPath(String action, long recipeId, String hash){
         String apiPath = "favourites.php?action=";
 
-        if (action.equals("add") || action.equals("remove")){
+        if (action.equals(ADD) || action.equals(REMOVE) || action.equals(STATUS)){
             apiPath = apiPath + action + "&recipeId=" + recipeId + "&hash=" + hash;
         } else{
             apiPath = apiPath + "unknown";
@@ -44,6 +44,7 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
 
         int status = jsonObject.getInt("status");
         String description = jsonObject.getString("description");
+
         Log.w(TAG, "ServerMessage Json Parsed: " + String.valueOf(status) + ", " + description);
         return new ServerMessage(status, description);
     }
