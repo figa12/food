@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-import aau.sw8.model.Recipe;
+import aau.sw8.model.IntermediateRecipe;
 
 /**
  * Created by Sam on 26/03/2014.
@@ -24,7 +24,7 @@ public class SearchList extends RecipeList {
 
 
     @Override
-    protected View makeView(Recipe recipe) {
+    protected View makeView(IntermediateRecipe recipe) {
         View recipeView = super.makeView(recipe);
 
         // TODO proper data
@@ -66,18 +66,5 @@ public class SearchList extends RecipeList {
             notificationView.append(strings[random.nextInt(5)]);
         }
 
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    protected void onClick(View view) {
-        // Flash the image
-        flashView(view);
-
-        // The tag is the recipe which was clicked
-        Recipe recipe = (Recipe) view.getTag();
-
-        // Open recipe fragment
-        ((MainActivity) this.getContext()).openRecipeActivity(recipe.getRecipeId());
     }
 }

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by jeria_000 on 0026 26. mar.
+ * Created by Jesper on 0026 26. mar.
  */
 public class InstructionStep implements Parcelable {
 

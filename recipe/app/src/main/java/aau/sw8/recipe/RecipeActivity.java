@@ -21,8 +21,6 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import aau.sw8.data.RecipeCom;
-import aau.sw8.data.ServerComTask;
 import aau.sw8.model.Comment;
 import aau.sw8.model.ExchangeableIngredient;
 import aau.sw8.model.IngredientGroup;
@@ -37,7 +35,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
     private static final float FONT_SIZES[] = { 12f, 14f, 19f, 24f };
 
-    public static final String ARG_RECIPE_ID = "recipeId";
+    public static final String ARG_RECIPE = "recipeId";
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -63,7 +61,9 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
         this.instructionList = (InstructionList) findViewById(R.id.instructionList);
 
-        this.downloadRecipe(getIntent().getExtras().getLong(RecipeActivity.ARG_RECIPE_ID));
+        this.recipe = getIntent().getExtras().getParcelable(RecipeActivity.ARG_RECIPE);
+
+        this.insertRecipeData();
 
         // set up font size spinner
         Spinner fontSpinner = (Spinner) findViewById(R.id.fontSpinner);
@@ -85,20 +85,6 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
         ObservableScrollView scroller = (ObservableScrollView) findViewById(R.id.recipe_scroller);
         scroller.setScrollViewListener(this);
-    }
-
-    private void downloadRecipe(long id) {
-        /*if (id == 0L) {
-            return;
-        }*/
-
-        new RecipeCom(this, new ServerComTask.OnResponseListener<Recipe>() {
-            @Override
-            public void onResponse(Recipe result) {
-                RecipeActivity.this.recipe = result;
-                RecipeActivity.this.insertRecipeData();
-            }
-        }, 1L); //TODO static id, change bitte
     }
 
     @SuppressWarnings("ConstantConditions")

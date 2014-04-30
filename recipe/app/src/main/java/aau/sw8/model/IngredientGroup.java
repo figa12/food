@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class IngredientGroup implements Parcelable {
     private long ingredientGroupId;
     private String name;
-    private ArrayList<ExchangeableIngredient> exchangeableIngredients;
+    private ArrayList<ExchangeableIngredient> exchangeableIngredients = new ArrayList<>();
 
     public IngredientGroup(long ingredientGroupId, String name, ArrayList<ExchangeableIngredient> exchangeableIngredients) {
         this.ingredientGroupId = ingredientGroupId;

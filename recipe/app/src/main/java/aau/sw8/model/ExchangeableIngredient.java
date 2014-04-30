@@ -66,9 +66,10 @@ public class ExchangeableIngredient implements Parcelable {
         }
     };
 
+    @SuppressWarnings("ConstantConditions")
     private ExchangeableIngredient(Parcel in) {
         this.exchangeableIngredientId = in.readLong();
         in.readList(this.ingredientQuantities, IngredientQuantity.class.getClassLoader());
-        this.mandatory = (boolean) in.readValue(Boolean.class.getClassLoader());
+        this.mandatory = (Boolean) in.readValue(Boolean.class.getClassLoader());
     }
 }
