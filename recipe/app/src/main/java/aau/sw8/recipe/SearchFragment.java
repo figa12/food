@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class SearchFragment extends Fragment {
     private RecipeSearchFragment.OnFragmentInteractionListener interactionListener;
     private SearchView searchBar;
     private int i = 0;
+    private ProgressBar progressCircle;
 
     private SearchList searchList;
 
@@ -54,14 +56,9 @@ public class SearchFragment extends Fragment {
 
         this.searchList = (SearchList) rootView.findViewById(R.id.searchList);
 
-        new RecipeListCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
-            @Override
-            public void onResponse(ArrayList<IntermediateRecipe> result) {
-                SearchFragment.this.displayRecipeList(result);
-            }
-            @Override
-            public void onFailed() { }
-        }, new ArrayList<Long>(Arrays.asList(1L, 5L)));
+        this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
+
+        this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L, 5L)));
 
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
@@ -115,6 +112,22 @@ public class SearchFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void searchForRecipes(ArrayList<Long> ingredientIds) {
+        this.progressCircle.setVisibility(View.VISIBLE);
+
+        new RecipeListCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
+            @Override
+            public void onResponse(ArrayList<IntermediateRecipe> result) {
+                SearchFragment.this.displayRecipeList(result);
+                SearchFragment.this.progressCircle.setVisibility(View.GONE);
+            }
+            @Override
+            public void onFailed() {
+                SearchFragment.this.progressCircle.setVisibility(View.GONE);
+            }
+        }, ingredientIds);
     }
 
     private void displayRecipeList(ArrayList<IntermediateRecipe> intermediateRecipes) {
