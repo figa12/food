@@ -14,11 +14,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <aau.sw8.recipe.SearchList
-                android:id="@+id/searchList"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical">
+
+                <aau.sw8.recipe.SearchList
+                    android:id="@+id/searchList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                <ProgressBar
+                    android:id="@+id/progressCircle"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
         </ScrollView>
 
         <LinearLayout

@@ -7,7 +7,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import aau.sw8.model.Recipe;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import aau.sw8.model.IntermediateRecipe;
 
 /**
  * Created by jacob on 3/25/14.
@@ -29,6 +32,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView;
@@ -39,7 +43,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
 
         /*testdata*/
         for (int i = 1; i <= 10; i++) {
-            favouriteList.addView(new Recipe("http://figz.dk/images/microsfot.jpeg", "Favorite Title" + String.valueOf(i)));
+            favouriteList.addView(new IntermediateRecipe(1L, "Hest", "Hest", null, new ArrayList<Long>(Arrays.asList(1L))));
         }
         //TODO: Load the favourite list from the database
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);

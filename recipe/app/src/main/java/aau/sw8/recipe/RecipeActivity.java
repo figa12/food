@@ -41,7 +41,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
     private static final float FONT_SIZES[] = { 12f, 14f, 19f, 24f };
 
-    public static final String ARG_RECIPE_ID = "recipeId";
+    public static final String ARG_RECIPE = "recipeId";
 
     private final String TAG = "RecipeActivity";
 
@@ -73,7 +73,9 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
         this.instructionList = (InstructionList) findViewById(R.id.instructionList);
 
-        this.downloadRecipe(getIntent().getExtras().getLong(RecipeActivity.ARG_RECIPE_ID));
+        this.recipe = getIntent().getExtras().getParcelable(RecipeActivity.ARG_RECIPE);
+
+        this.insertRecipeData();
 
         // set up font size spinner
         Spinner fontSpinner = (Spinner) findViewById(R.id.fontSpinner);

@@ -50,10 +50,12 @@ public class RecipeCom extends ServerComTask<Recipe> {
             ingredientGroups.add(this.parseIngredientGroup(groupsArray.getJSONObject(i)));
         }
 
-        JSONArray stepsArray = jsonObject.getJSONArray("steps");
+        if (!jsonObject.isNull("steps")) {
+            JSONArray stepsArray = jsonObject.getJSONArray("steps");
 
-        for (int i = 0; i < stepsArray.length(); i++) {
-            instructionSteps.add(RecipeCom.parseInstructionStep(stepsArray.getJSONObject(i), i+1));
+            for (int i = 0; i < stepsArray.length(); i++) {
+                instructionSteps.add(RecipeCom.parseInstructionStep(stepsArray.getJSONObject(i), i + 1));
+            }
         }
 
         return new Recipe(this.recipeId, imagePath, name, description, ingredientGroups, instructionSteps, upvotes, downvotes);

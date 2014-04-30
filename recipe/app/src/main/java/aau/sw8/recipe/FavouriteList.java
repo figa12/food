@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
 
-import aau.sw8.model.Recipe;
+import aau.sw8.model.IntermediateRecipe;
 
 /**
  * Created by jacob on 3/26/14.
@@ -24,23 +24,15 @@ public class FavouriteList extends RecipeList {
         super(context, attrs);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onClick(View view) {
         if (!isLongClick) { /*if OnClick is enabled*/
-            // Flash the image
-            flashView(view);
-
-            // The tag is the recipe which was clicked
-            Recipe recipe = (Recipe) view.getTag();
-
-            // Open recipe fragment
-            ((MainActivity) this.getContext()).openRecipeActivity(recipe.getRecipeId());
+            super.onClick(view);
         }
     }
 
     @Override
-    protected void onLongClick(final Recipe recipe, final View view) {
+    protected void onLongClick(final IntermediateRecipe recipe, final View view) {
         isLongClick = true; /*Disable OnClick functionality*/
 
         /* Alert dialog */

@@ -17,6 +17,8 @@ import aau.sw8.data.IngredientCom;
 import aau.sw8.data.ServerComTask;
 import aau.sw8.model.Ingredient;
 
+import aau.sw8.model.Recipe;
+
 public class MainActivity extends DrawerActivity {
 
     /*Variables*/
@@ -78,14 +80,14 @@ public class MainActivity extends DrawerActivity {
     /*Class methods*/
 
     @SuppressWarnings("ConstantConditions")
-    public void openRecipeActivity(long recipeId) {
+    public void openRecipeActivity(Recipe recipe) {
         super.dismissKeyboard();
 
         // Create an intent for a recipe activity
         Intent myIntent = new Intent(this, RecipeActivity.class);
 
         // Put the recipe into the intent
-        myIntent.putExtra(RecipeActivity.ARG_RECIPE_ID, recipeId);
+        myIntent.putExtra(RecipeActivity.ARG_RECIPE, recipe);
 
         // Start the activity and allow it to request fragment change
         this.startActivityForResult(myIntent, DrawerActivity.FRAGMENT_CHANGE_REQUEST);

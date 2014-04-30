@@ -24,6 +24,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
 
     public interface OnResponseListener<T> {
         void onResponse(T result);
+        void onFailed();
     }
 
     public interface ServerAlertDialog {
@@ -35,19 +36,17 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     private ServerAlertDialog serverAlertDialog;
     private String apiPath;
     private OnResponseListener<T> onResponseListener;
-    private BasicNameValuePair[] basicNameValuePairs;
 
     /*Constructors*/
     public ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener, BasicNameValuePair ... basicNameValuePairs) {
         this.apiPath = ServerComTask.SERVER_API_URL + apiPath;
         this.serverAlertDialog = serverAlertDialog;
         this.onResponseListener = onResponseListener;
-        this.basicNameValuePairs = basicNameValuePairs;
 
-        this.execute(this.basicNameValuePairs);
+        this.execute(basicNameValuePairs);
     }
 
-    public static String getImagePath(String fileName) {
+    protected static String getImagePath(String fileName) {
         return ServerComTask.SERVER_API_URL + "upload/" + fileName;
     }
 
@@ -56,6 +55,11 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
         if (!serverAlertDialog.isShowing()) {
             serverAlertDialog.show();
         }
+    }
+
+    private void onFailed() {
+        this.onResponseListener.onFailed();
+        this.showAlertDialog();
     }
 
     protected abstract T parseJson(String json) throws Exception;
@@ -104,7 +108,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     @Override
     protected void onPostExecute(T result) {
         if (result == null) {
-            this.showAlertDialog();
+            this.onFailed();
             return;
         }
 

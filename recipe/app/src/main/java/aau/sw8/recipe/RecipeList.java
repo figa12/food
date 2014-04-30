@@ -1,5 +1,6 @@
 package aau.sw8.recipe;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
@@ -13,12 +14,15 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import aau.sw8.data.RecipeCom;
+import aau.sw8.data.ServerComTask;
+import aau.sw8.model.IntermediateRecipe;
 import aau.sw8.model.Recipe;
 
 /**
  * Created by Jesper on 07-03-14.
  */
-public class RecipeList extends ListLinearLayout<Recipe> {
+public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -29,28 +33,39 @@ public class RecipeList extends ListLinearLayout<Recipe> {
 
     private View focusedView = null;
 
+    private ProgressDialog progressDialog;
+
     public RecipeList(Context context) {
         super(context);
+        this.construct(context);
     }
 
     public RecipeList(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.construct(context);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void construct(Context context) {
+        this.progressDialog = new ProgressDialog(context);
+        this.progressDialog.setMessage("Loading");
+        this.progressDialog.setCancelable(false);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    protected View makeView(Recipe recipe) {
+    protected View makeView(IntermediateRecipe recipe) {
         // Get inflater and inflate item
         LayoutInflater layoutInflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View recipeView = layoutInflater.inflate(R.layout.recipe_list_item, null);
 
         // Set recipe image
         ImageView recipeImage = (ImageView) recipeView.findViewById(R.id.recipeImageView);
-        this.imageLoader.displayImage(recipe.getImagePath(), recipeImage, this.imageLoaderOptions);
+        this.imageLoader.displayImage(recipe.getImage(), recipeImage, this.imageLoaderOptions);
 
         // Set recipe title
         TextView recipeTitle = (TextView) recipeView.findViewById(R.id.titleTextView);
-        recipeTitle.setText(recipe.getRecipeTitle());
+        recipeTitle.setText(recipe.getName());
 
         // Find the clickable part of the item layout and add the recipe as a tag
         View clickableLayout = recipeView.findViewById(R.id.mainLayout);
@@ -62,9 +77,41 @@ public class RecipeList extends ListLinearLayout<Recipe> {
         return recipeView;
     }
 
-    protected void onClick(View view) { }
+    @SuppressWarnings("ConstantConditions")
+    protected void onClick(View view) {
+        // Flash the image
+        flashView(view);
 
-    protected void onLongClick(Recipe recipe, View view) { }
+        // The tag is the recipe which was clicked
+        IntermediateRecipe recipe = (IntermediateRecipe) view.getTag();
+
+        // downloads and open RecipeActivity
+        this.openRecipe(recipe.getId());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void openRecipe(long id) {
+        this.progressDialog.show();
+
+        new RecipeCom((DrawerActivity) super.getContext(), new ServerComTask.OnResponseListener<Recipe>() {
+            @Override
+            public void onResponse(Recipe result) {
+                RecipeList.this.progressDialog.dismiss();
+
+                if (result != null) {
+                    // Open recipe fragment
+                    ((MainActivity) RecipeList.super.getContext()).openRecipeActivity(result);
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                RecipeList.this.progressDialog.dismiss();
+            }
+        }, id);
+    }
+
+    protected void onLongClick(IntermediateRecipe recipe, View view) { }
 
     protected void clearHighlight(View view){
         ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
@@ -82,8 +129,8 @@ public class RecipeList extends ListLinearLayout<Recipe> {
     }
 
     private class RecipeOnTouchListener implements OnTouchListener{
-        private Recipe recipe;
-        public RecipeOnTouchListener(Recipe recipe) {
+        private IntermediateRecipe recipe;
+        public RecipeOnTouchListener(IntermediateRecipe recipe) {
             this.recipe = recipe;
         }
 
