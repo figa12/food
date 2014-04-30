@@ -61,6 +61,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     private boolean isFavourited = false;
 
     private MenuItem favouriteButton;
+    private Menu menu;
 
     /*Override methods*/
     @SuppressWarnings("ConstantConditions")
@@ -74,6 +75,8 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         this.instructionList = (InstructionList) findViewById(R.id.instructionList);
 
         this.recipe = getIntent().getExtras().getParcelable(RecipeActivity.ARG_RECIPE);
+
+        this.downloadRecipe(this.recipe.getRecipeId());
 
         this.insertRecipeData();
 
@@ -97,46 +100,21 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
         ObservableScrollView scroller = (ObservableScrollView) findViewById(R.id.recipe_scroller);
         scroller.setScrollViewListener(this);
-
-
-
     }
 
     private void downloadRecipe(long id) {
-        /*if (id == 0L) {
-            return;
-        }*/
 
-        new RecipeCom(this, new ServerComTask.OnResponseListener<Recipe>() {
-            @Override
-            public void onResponse(Recipe result) {
-                RecipeActivity.this.recipe = result;
-                RecipeActivity.this.insertRecipeData();
-            }
-        }, 1L); //TODO static id, change bitte
-
-        if(LogInActivity.user != null) {
-            new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
-                @Override
-                public void onResponse(ServerMessage message) {
-                    Log.w(TAG, "(ServerMessage) status: " + message.getStatus() + " description: " + message.getDescription());
-                    if(message.getStatus() == ServerMessage.FAVOURITED){
-                        isFavourited = true;
-                    }else{
-                        isFavourited = false;
-                    }
-
-                    setFavouriteButton(isFavourited);
-                }
-            }, FavouriteCom.STATUS, id, LogInActivity.user.getHash());
-        }
     }
 
     private void setFavouriteButton(boolean isFav){
-        if(isFav){
-            favouriteButton.setIcon(android.R.drawable.btn_star_big_on);
-        }else{
-            favouriteButton.setIcon(android.R.drawable.btn_star_big_off);
+        try {
+            if (isFav) {
+                favouriteButton.setIcon(android.R.drawable.btn_star_big_on);
+            } else {
+                favouriteButton.setIcon(android.R.drawable.btn_star_big_off);
+            }
+        }catch (NullPointerException e){
+
         }
     }
 
@@ -218,8 +196,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         // Inflate the menu; this adds items to the action bar if it is present.
         Log.w(TAG, "OnCreateOptionMenu");
         super.getMenuInflater().inflate(R.menu.recipe, menu);
-
-        favouriteButton = menu.findItem(R.id.favourite_button);
+        this.menu = menu;
 
         return true;
     }
@@ -281,6 +258,11 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                         break;
                 }
             }
+
+            @Override
+            public void onFailed() {
+
+            }
         }, action, recipeId, user.getHash());
 
     }
@@ -314,6 +296,27 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     public boolean onPrepareOptionsMenu(Menu menu) {
         //Show the favourite button, is dependent on "isDrawerOpen()"
         menu.findItem(R.id.favourite_button).setVisible(!this.isDrawerOpen());
+
+        if(LogInActivity.user != null) {
+            new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
+                @Override
+                public void onResponse(ServerMessage message) {
+                    Log.w(TAG, "(ServerMessage) status: " + message.getStatus() + " description: " + message.getDescription());
+                    if(message.getStatus() == ServerMessage.FAVOURITED){
+                        isFavourited = true;
+                    }else{
+                        isFavourited = false;
+                    }
+
+                    setFavouriteButton(isFavourited);
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+            }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+        }
 
         super.onPrepareOptionsMenu(menu);
 
