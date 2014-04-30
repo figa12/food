@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import aau.sw8.data.FavouriteCom;
 import aau.sw8.data.RecipeCom;
 import aau.sw8.data.ServerComTask;
 import aau.sw8.model.Comment;
@@ -28,6 +31,7 @@ import aau.sw8.model.ExchangeableIngredient;
 import aau.sw8.model.IngredientGroup;
 import aau.sw8.model.InstructionStep;
 import aau.sw8.model.Recipe;
+import aau.sw8.model.ServerMessage;
 import aau.sw8.model.User;
 
 /**
@@ -38,6 +42,8 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     private static final float FONT_SIZES[] = { 12f, 14f, 19f, 24f };
 
     public static final String ARG_RECIPE_ID = "recipeId";
+
+    private final String TAG = "RecipeActivity";
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -51,6 +57,10 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     private String pageTitle;
 
     private InstructionList instructionList;
+
+    private boolean isFavourited = false;
+
+    private MenuItem favouriteButton;
 
     /*Override methods*/
     @SuppressWarnings("ConstantConditions")
@@ -85,6 +95,9 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
         ObservableScrollView scroller = (ObservableScrollView) findViewById(R.id.recipe_scroller);
         scroller.setScrollViewListener(this);
+
+
+
     }
 
     private void downloadRecipe(long id) {
@@ -99,6 +112,20 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                 RecipeActivity.this.insertRecipeData();
             }
         }, 1L); //TODO static id, change bitte
+
+        if(LogInActivity.user != null) {
+            new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
+                @Override
+                public void onResponse(ServerMessage result) {
+                    if(result.getStatus() == ServerMessage.FAVOURITED){
+                        isFavourited = true;
+
+                    }else{
+                        isFavourited = false;
+                    }
+                }
+            }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -178,6 +205,14 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.getMenuInflater().inflate(R.menu.recipe, menu);
+
+        favouriteButton = menu.findItem(R.id.favourite_button);
+
+        if(isFavourited) {
+            favouriteButton.setIcon(android.R.drawable.btn_star_big_on);
+        }else{
+            favouriteButton.setIcon(android.R.drawable.btn_star_big_off);
+        }
         return true;
     }
 
@@ -198,40 +233,62 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                 this.finish();
                 return true;
             case R.id.favourite_button:
-                addToFavourite(this.recipe, LogInActivity.user);
+                if (LogInActivity.user != null){
+                     addOrRemoveFromFavourite(!isFavourited, this.recipe, LogInActivity.user);
+                }else{
+                    showLoginDialog();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void addToFavourite(Recipe recipe, User user){
-        if(user != null){
+    private void addOrRemoveFromFavourite(boolean adding, Recipe recipe, User user){
+        if(adding){
             //add the recipe to the user's favourites
+            Log.w(TAG, "adding favourite...");
+            new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>(){
+                @Override
+                public void onResponse(ServerMessage message) {
+                    switch (message.getStatus()){
+                        case ServerMessage.SUCCESS:
+                            //TODO: change the icon to highlighted or change it to grey depending on the current set image.
+                            break;
 
-        }else {
-            /* Alert dialog */
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        case ServerMessage.ERROR:
+                            //TODO: Toast with failure.
+                            break;
+                    }
+                }
+            }, FavouriteCom.ADD, recipe.getRecipeId(), user.getHash());
+        }
+
+    }
+
+    private void showLoginDialog(){
+        /* Alert dialog */
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             /* Build Alert dialog*/
-            builder.setMessage(R.string.sign_in_text) /*Set text description*/
-                    .setPositiveButton(R.string.common_signin_button_text, new DialogInterface.OnClickListener() {         /*Sign in button*/
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //TODO go to sign in fragment
-                        }
-                    })
-                    .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+        builder.setMessage(R.string.sign_in_text) /*Set text description*/
+                .setPositiveButton(R.string.common_signin_button_text, new DialogInterface.OnClickListener() {         /*Sign in button*/
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //TODO go to sign in fragment
+                    }
+                })
+                .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                             /*Do nothing*/
-                        }
-                    });
+                    }
+                });
 
-            builder.create();
-            builder.show(); /*Show the Alert dialog*/
-        }
+        builder.create();
+        builder.show(); /*Show the Alert dialog*/
     }
+
 
     @SuppressWarnings("ConstantConditions")
     @Override

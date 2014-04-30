@@ -3,7 +3,7 @@ package aau.sw8.data;
 import org.json.JSONObject;
 
 import aau.sw8.model.ServerMessage;
-import aau.sw8.recipe.FavouriteList;
+import android.util.Log;
 
 /**
  * Created by jacob on 4/29/14.
@@ -12,6 +12,10 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
     private String action;
     private long recipeId;
     private String hash;
+    public static final String ADD = "add";
+    public static final String REMOVE = "remove";
+    public static final String STATUS = "status";
+    private final String TAG = "FavouriteCom";
 
     public FavouriteCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ServerMessage> onResponseListener,
                         String action, long recipeId, String hash){
@@ -26,7 +30,7 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
         String apiPath = "favourites.php?action=";
 
         if (action.equals("add") || action.equals("remove")){
-            apiPath = apiPath + action + "?recipeId=" + recipeId + "?hash=" + hash;
+            apiPath = apiPath + action + "&recipeId=" + recipeId + "&hash=" + hash;
         } else{
             apiPath = apiPath + "unknown";
         }
@@ -40,9 +44,7 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
 
         int status = jsonObject.getInt("status");
         String description = jsonObject.getString("description");
-
-        ServerMessage serverMessage = new ServerMessage(status, description);
-
-        return serverMessage;
+        Log.w(TAG, "ServerMessage Json Parsed: " + String.valueOf(status) + ", " + description);
+        return new ServerMessage(status, description);
     }
 }
