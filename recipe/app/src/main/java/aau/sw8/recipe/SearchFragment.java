@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -43,6 +44,20 @@ public class SearchFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+
+        if(i == 0) {
+            try {
+                i++;
+                getAllIngredients(menu);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -67,7 +82,7 @@ public class SearchFragment extends Fragment {
             public void onResponse(ArrayList<Ingredient> result) {
                 for (Ingredient ingredient : result) {
                     //TODO sort ingredients with Sam's fancy algorithm
-                    final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
+                   final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
                     ingredientButton.setIngredient(ingredient);
 
                     ingredientButton.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
@@ -106,7 +121,9 @@ public class SearchFragment extends Fragment {
                 } else {
                     // keyboard hidden
                     SearchFragment.this.popupLayout.setVisibility(View.GONE);
+                    SearchFragment.this.popupLayout.clearFocus();
                     Toast.makeText(SearchFragment.this.getActivity(), "Keyboard hidden", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -140,16 +157,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
 
-        if(i == 0) {
-            try {
-                i++;
-                getAllIngredients(menu);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
@@ -167,10 +174,9 @@ public class SearchFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
     }
 
-    private void getAllIngredients(Menu menu) throws IOException {
+    private void getAllIngredients(final Menu menu) throws IOException {
 
         final MainActivity mainActivity = (MainActivity) this.getActivity();
-        final Menu menu1 = menu;
 
         new IngredientCom((DrawerActivity) super.getActivity(), new ServerComTask.OnResponseListener<ArrayList<Ingredient>>() {
             @Override
@@ -179,7 +185,7 @@ public class SearchFragment extends Fragment {
                     allIngredients.add(ingredient);
                 }
 
-                menu1.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
+                menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
 
             }
             @Override
@@ -188,6 +194,16 @@ public class SearchFragment extends Fragment {
 
     }
 
+    public void updateFlowLayout(){
+
+        for (int i = 0; i < allIngredients.size(); i++) {
+            if(allIngredients.equals(MainActivity.ingredientResult)){
+                final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
+                ingredientButton.setIngredient(allIngredients.get(i));
+                SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
+            }
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
