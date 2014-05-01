@@ -30,7 +30,7 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
         String apiPath = "favourites.php?action=";
 
         if (action.equals(ADD) || action.equals(REMOVE) || action.equals(STATUS)){
-            apiPath = apiPath + action + "&recipeId=" + recipeId + "&hash=" + hash;
+            apiPath = apiPath + action + "&recipeid=" + recipeId + "&hash=" + hash;
         } else{
             apiPath = apiPath + "unknown";
         }

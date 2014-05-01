@@ -60,7 +60,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
     private boolean isFavourited = false;
 
-    private MenuItem favouriteButton;
+    //private MenuItem favouriteButton;
     private Menu menu;
 
     /*Override methods*/
@@ -75,8 +75,6 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         this.instructionList = (InstructionList) findViewById(R.id.instructionList);
 
         this.recipe = getIntent().getExtras().getParcelable(RecipeActivity.ARG_RECIPE);
-
-        this.downloadRecipe(this.recipe.getRecipeId());
 
         this.insertRecipeData();
 
@@ -102,16 +100,13 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         scroller.setScrollViewListener(this);
     }
 
-    private void downloadRecipe(long id) {
-
-    }
-
     private void setFavouriteButton(boolean isFav){
+        MenuItem item = menu.findItem(R.id.favourite_button);
         try {
             if (isFav) {
-                favouriteButton.setIcon(android.R.drawable.btn_star_big_on);
+                item.setIcon(android.R.drawable.btn_star_big_on);
             } else {
-                favouriteButton.setIcon(android.R.drawable.btn_star_big_off);
+                item.setIcon(android.R.drawable.btn_star_big_off);
             }
         }catch (NullPointerException e){
 
@@ -191,15 +186,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        Log.w(TAG, "OnCreateOptionMenu");
-        super.getMenuInflater().inflate(R.menu.recipe, menu);
-        this.menu = menu;
 
-        return true;
-    }
 
 
     @Override
@@ -290,6 +277,15 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         builder.show(); /*Show the Alert dialog*/
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        Log.w(TAG, "OnCreateOptionMenu");
+        super.getMenuInflater().inflate(R.menu.recipe, menu);
+        this.menu = menu;
+
+        return true;
+    }
 
     @SuppressWarnings("ConstantConditions")
     @Override
