@@ -2,10 +2,12 @@ package aau.sw8.recipe;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -25,6 +27,7 @@ public class MainActivity extends DrawerActivity {
     public static final String ARG_POSITION = "position";
     // Logcat tag
     private static final String TAG = "Mainactivity";
+    public static String ingredientResult;
 
     /*Override methods*/
     @SuppressWarnings("ConstantConditions")
@@ -60,9 +63,21 @@ public class MainActivity extends DrawerActivity {
 
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // handles a click on a search suggestion; launches activity to show word
-           //  Intent wordIntent = new Intent(this, .class);
-           //  wordIntent.setData(intent.getData());
+            // Intent wordIntent = new Intent(this, MainActivity.class);
+             //wordIntent.setData(intent.getData());
            //  startActivity(wordIntent);
+
+            Uri uri = intent.getData();
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+
+            int wIndex = cursor.getColumnIndexOrThrow(DictionaryDatabase.KEY_WORD);
+
+            ingredientResult = cursor.getString(wIndex);
+
+           // SearchFragment searchFragment = (SearchFragment) super.getFragmentManager().findFragmentByTag("fisk");
+           // searchFragment.updateFlowLayout();
+
+            Toast.makeText(this, ingredientResult, Toast.LENGTH_SHORT).show();
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query
             String query = intent.getStringExtra(SearchManager.QUERY);
