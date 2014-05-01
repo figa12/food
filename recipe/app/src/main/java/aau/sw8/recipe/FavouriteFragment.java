@@ -7,9 +7,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import aau.sw8.model.IntermediateRecipe;
 
 /**
@@ -43,7 +40,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
 
         /*testdata*/
         for (int i = 1; i <= 10; i++) {
-            favouriteList.addView(new IntermediateRecipe(1L, "Hest", "Hest", null, new ArrayList<Long>(Arrays.asList(1L))));
+            favouriteList.addView(new IntermediateRecipe(1L, "Hest", "Hest", null, "hest"));
         }
         //TODO: Load the favourite list from the database
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
@@ -66,6 +63,4 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         // use mainActivity.isDrawerOpen() to handle fragment specific menu
         super.onPrepareOptionsMenu(menu);
     }
-
-
 }

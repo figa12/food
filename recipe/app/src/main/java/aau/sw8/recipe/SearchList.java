@@ -22,26 +22,14 @@ public class SearchList extends RecipeList {
         super(context, attrs);
     }
 
-
     @Override
-    protected View makeView(IntermediateRecipe recipe) {
-        View recipeView = super.makeView(recipe);
+    protected View makeView(IntermediateRecipe intermediateRecipe) {
+        View recipeView = super.makeView(intermediateRecipe);
 
-        // TODO proper data
         TextView notification = (TextView) recipeView.findViewById(R.id.notification);
-
-        first = true;
-
-        moreNotifications(notification);
-        moreNotifications(notification);
-        moreNotifications(notification);
-        moreNotifications(notification);
-        moreNotifications(notification);
-
-
+        notification.setText(intermediateRecipe.getMissingIngredients());
 
         TextView rating = (TextView) recipeView.findViewById(R.id.rating);
-
         for (int i = random.nextInt(5); i != 5; ++i) {
             rating.append("★");
         }
@@ -50,21 +38,4 @@ public class SearchList extends RecipeList {
     }
 
     private Random random = new Random();
-
-    private boolean first = true;
-
-    private void moreNotifications(TextView notificationView) {
-        String[] strings = new String[]{"Apples", "Lemons", "Eggs", "Flour", "Sugar"};
-
-        if (random.nextBoolean()) {
-            if (first)
-                first = false;
-            else
-                notificationView.append(", ");
-
-
-            notificationView.append(strings[random.nextInt(5)]);
-        }
-
-    }
 }
