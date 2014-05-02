@@ -2,7 +2,6 @@ package aau.sw8.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -47,17 +46,17 @@ public class User implements Parcelable{
 
     public static String doHash(String email) {
         try {
+            // get sha256 hash of the email
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
             sha256.update(email.getBytes());
             sha256.reset();
-
             byte[] hashBytes = sha256.digest();
 
-            StringBuffer hashString = new StringBuffer();
+            // convert to hex
+            StringBuilder hashString = new StringBuilder();
             for (byte b : hashBytes) {
                 hashString.append(String.format("%02x", b));
             }
-            Log.i("hash", hashString.toString());
             return hashString.toString();
         }
         catch (NoSuchAlgorithmException e) {
