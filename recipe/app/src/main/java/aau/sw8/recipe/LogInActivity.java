@@ -321,10 +321,11 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
         }
     }
 
-    public void setUser(final String personName, final String hash, final String token){
+    public void setUser(String personName, String email, String token){
         /*Set the user, the user will be created in the database
         * when adding a recipe to favourites or any action that requires a user.
         * */
+        String hash = User.doHash(email);
         LogInActivity.user = new User(personName, hash, token);
         Log.w(LogInActivity.TAG, "Current user is {personName: " + LogInActivity.user.getPersonName() + " hash: " + LogInActivity.user.getHash() + " token: " + LogInActivity.user.getToken() + "}");
     }
