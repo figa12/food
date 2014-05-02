@@ -79,7 +79,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
         HttpClient httpClient = new DefaultHttpClient(httpParams);
         HttpPost httpPost = new HttpPost(this.apiPath);
 
-        String response = "Timeout";
+        String response;
 
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -94,7 +94,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
         }
 
         // if the communication failed, return null to the UI and let it handle the empty response
-        if (response == null || response == "" || response == "Timeout") {
+        if (response == null || response.equals("")) {
             return null;
         } else {
             try {

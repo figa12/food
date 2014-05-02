@@ -96,6 +96,4 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
             this.favouriteList.addView(intermediateRecipe);
         }
     }
-
-
 }

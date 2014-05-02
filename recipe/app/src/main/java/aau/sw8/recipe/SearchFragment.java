@@ -44,6 +44,15 @@ public class SearchFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static Ingredient getIngredient(long id) {
+        for (Ingredient ingredient : SearchFragment.allIngredients) {
+            if (ingredient.getId() == id) {
+                return ingredient;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
@@ -73,7 +82,7 @@ public class SearchFragment extends Fragment {
 
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
 
-        this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L, 5L)));
+        this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
 
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 

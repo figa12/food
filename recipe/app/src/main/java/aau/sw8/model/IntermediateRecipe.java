@@ -1,7 +1,5 @@
 package aau.sw8.model;
 
-import java.util.ArrayList;
-
 /**
  * Created by Jesper on 0028 28. apr.
  */
@@ -10,14 +8,18 @@ public class IntermediateRecipe {
     private String name;
     private String description;
     private String image;
-    private ArrayList<Long> missingIngredientIds;
+    private String missingIngredients;
 
-    public IntermediateRecipe(long id, String name, String description, String image, ArrayList<Long> missingIngredientIds) {
+    public IntermediateRecipe(long id, String name, String description, String image, String missingIngredients) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
-        this.missingIngredientIds = missingIngredientIds;
+        this.missingIngredients = missingIngredients;
+    }
+
+    public IntermediateRecipe(long id, String name, String description, String image) {
+        this(id, name, description, image, "");
     }
 
     public long getId() {
@@ -36,7 +38,7 @@ public class IntermediateRecipe {
         return image;
     }
 
-    public ArrayList<Long> getMissingIngredientIds() {
-        return missingIngredientIds;
+    public String getMissingIngredients() {
+        return missingIngredients;
     }
 }

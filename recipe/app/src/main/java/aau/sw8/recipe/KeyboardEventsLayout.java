@@ -34,7 +34,7 @@ public class KeyboardEventsLayout extends FrameLayout {
 
         if (this.viewCreated) {
             // if actualheight > proposedHeight, then the keyboard is visible
-            this.setKeyboardVisible(actualHeight >= proposedheight);
+            this.setKeyboardVisible(actualHeight > proposedheight);
         } else {
             if (actualHeight == proposedheight) {
                 this.viewCreated = true;

@@ -10,14 +10,11 @@ import android.widget.Button;
 
 import com.google.android.gms.common.SignInButton;
 
-import aau.sw8.model.User;
-
 /**
  * Created by jacob on 4/21/14.
  */
 public class SignInFragment extends Fragment implements View.OnClickListener {
     String pageTitle;
-    private User currentUser;
 
     /* Contstructors */
     public SignInFragment() {
@@ -34,7 +31,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
-        int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         // TODO: make it possible to change the pagetitle accordingly to language.
         this.pageTitle = super.getResources().getString(R.string.sign_in);

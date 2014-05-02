@@ -8,8 +8,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import aau.sw8.data.RecipeQueryCom;
+import aau.sw8.data.ServerComTask;
+import aau.sw8.model.IntermediateRecipe;
 
 /**
 * Created by Reedtz on 31-03-2014.
@@ -19,7 +26,8 @@ public class RecipeSearchFragment extends Fragment {
     private String pageTitle; // Not really needed, but saved just in case
 
     private OnFragmentInteractionListener interactionListener;
-    private SearchList recipeList;
+    private SearchList searchList;
+    private ProgressBar progressCircle;
 
     public RecipeSearchFragment() {
         // Required empty public constructor
@@ -31,12 +39,13 @@ public class RecipeSearchFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
-        // TODO: make it possible to change the pagetitle accordingly to language.
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
 
-        this.recipeList = (SearchList) rootView.findViewById(R.id.searchList);
+        this.searchList = (SearchList) rootView.findViewById(R.id.searchList);
         // temporary display.test code
+
+        this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
 
         return rootView;
     }
@@ -77,16 +86,27 @@ public class RecipeSearchFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
     }
 
-    public void searchResults(String query){
-        recipeList.removeAllViews();
+    public void searchResults(String query) {
+        this.searchList.removeAllViews();
+        this.progressCircle.setVisibility(View.VISIBLE);
+
+        new RecipeQueryCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
+            @Override
+            public void onResponse(ArrayList<IntermediateRecipe> result) {
+                RecipeSearchFragment.this.displayRecipeList(result);
+                RecipeSearchFragment.this.progressCircle.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailed() {
+                RecipeSearchFragment.this.progressCircle.setVisibility(View.GONE);
+            }
+        }, query);
     }
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (this.interactionListener != null) {
-            this.interactionListener.onFragmentInteraction(uri);
-        }
+    private void displayRecipeList(ArrayList<IntermediateRecipe> intermediateRecipes) {
+        for (IntermediateRecipe intermediateRecipe : intermediateRecipes)
+            this.searchList.addView(intermediateRecipe);
     }
 
     @Override
