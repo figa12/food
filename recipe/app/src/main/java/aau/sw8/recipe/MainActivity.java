@@ -1,33 +1,24 @@
 package aau.sw8.recipe;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import aau.sw8.data.IngredientCom;
-import aau.sw8.data.ServerComTask;
-import aau.sw8.model.Ingredient;
-
 import aau.sw8.model.Recipe;
 
-public class MainActivity extends DrawerActivity {
+public class MainActivity extends DrawerActivity implements SearchFragment.OnFragmentInteractionListener {
 
     /*Variables*/
     public static final String ARG_POSITION = "position";
     // Logcat tag
     private static final String TAG = "Mainactivity";
     public static String ingredientResult;
+    private static SearchFragment searchFragment;
 
     /*Override methods*/
     @SuppressWarnings("ConstantConditions")
@@ -59,13 +50,9 @@ public class MainActivity extends DrawerActivity {
 
     private void handleIntent(Intent intent) {
         //TODO Implement what happens when the user clicks a suggestion
-        /* Also need to find out how to give different suggestions for ingredients and recipes */
 
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            // handles a click on a search suggestion; launches activity to show word
-            // Intent wordIntent = new Intent(this, MainActivity.class);
-             //wordIntent.setData(intent.getData());
-           //  startActivity(wordIntent);
+            // handles a click on a search suggestion;
 
             Uri uri = intent.getData();
             Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -74,15 +61,15 @@ public class MainActivity extends DrawerActivity {
 
             ingredientResult = cursor.getString(wIndex);
 
-           // SearchFragment searchFragment = (SearchFragment) super.getFragmentManager().findFragmentByTag("fisk");
-           // searchFragment.updateFlowLayout();
-
-            Toast.makeText(this, ingredientResult, Toast.LENGTH_SHORT).show();
-        } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            // handles a search query
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //showResults(query);
+            if(searchFragment != null) {
+                searchFragment.updateFlowLayout();
+            }
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(SearchFragment fragment) {
+        searchFragment = fragment;
     }
 
     @SuppressWarnings("ConstantConditions")

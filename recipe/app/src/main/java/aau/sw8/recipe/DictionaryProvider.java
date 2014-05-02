@@ -41,7 +41,6 @@ public class DictionaryProvider extends ContentProvider {
     public static final String DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
             "/vnd.sw8.recipe";
 
-    private DictionaryDatabase recipeDictionary;
     private DictionaryDatabase ingredientsDictionary;
 
     // UriMatcher stuff
@@ -76,7 +75,6 @@ public class DictionaryProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        recipeDictionary = new DictionaryDatabase(getContext());
         ingredientsDictionary = new DictionaryDatabase(getContext());
 
         return true;
@@ -126,7 +124,7 @@ public class DictionaryProvider extends ContentProvider {
                         (only if you want to refresh shortcuts) */
                 SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
 
-        return recipeDictionary.getWordMatches(query, columns);
+        return ingredientsDictionary.getWordMatches(query, columns);
     }
 
     private Cursor search(String query) {
@@ -136,7 +134,7 @@ public class DictionaryProvider extends ContentProvider {
                 DictionaryDatabase.KEY_WORD};
            //     DictionaryDatabase.KEY_DEFINITION};
 
-        return recipeDictionary.getWordMatches(query, columns);
+        return ingredientsDictionary.getWordMatches(query, columns);
     }
 
     private Cursor getWord(Uri uri) {
@@ -145,7 +143,7 @@ public class DictionaryProvider extends ContentProvider {
                 DictionaryDatabase.KEY_WORD};
             //    DictionaryDatabase.KEY_DEFINITION};
 
-        return recipeDictionary.getWord(rowId, columns);
+        return ingredientsDictionary.getWord(rowId, columns);
     }
 
     private Cursor refreshShortcut(Uri uri) {
@@ -164,7 +162,7 @@ public class DictionaryProvider extends ContentProvider {
                 SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
                 SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
 
-        return recipeDictionary.getWord(rowId, columns);
+        return ingredientsDictionary.getWord(rowId, columns);
     }
 
     /**

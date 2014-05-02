@@ -161,4 +161,14 @@ public class IngredientButton extends LinearLayout {
     public String getText() {
         return this.nameTextView.getText().toString();
     }
+
+
+    public boolean equals(IngredientButton ingredientButton){
+        if(this.getIngredient().getId() == ingredientButton.getIngredient().getId()){
+            return true;
+        }
+        else
+            return false;
+    }
+
 }
