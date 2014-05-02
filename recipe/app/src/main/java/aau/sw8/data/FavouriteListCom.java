@@ -47,7 +47,7 @@ public class FavouriteListCom extends ServerComTask<ArrayList<IntermediateRecipe
             String name = favouriteObject.getString("name");
             String description = favouriteObject.getString("description");
             String image = ServerComTask.getImagePath(favouriteObject.getString("image"));
-            ArrayList<Long> missingIngredients = new ArrayList<>();
+            String missingIngredients = "";
 
             intermediateRecipes.add(new IntermediateRecipe(id, name, description, image, missingIngredients));
         }

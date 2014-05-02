@@ -68,6 +68,13 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
+    }
+
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MainActivity mainActivity = (MainActivity) this.getActivity();
         // use mainActivity.isDrawerOpen() to handle fragment specific menu
