@@ -10,11 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
         <aau.sw8.recipe.FavouriteList
             android:id="@+id/favouriteList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"/>
+
+        <ProgressBar
+            android:id="@+id/progressCircleFavouriteFragment"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+        </LinearLayout>
     </ScrollView>
+
 
 </LinearLayout>

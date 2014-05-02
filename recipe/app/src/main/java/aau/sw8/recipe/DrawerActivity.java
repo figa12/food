@@ -149,8 +149,8 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         Log.v(TAG, "ActivityResult: " + requestCode);
+        super.onActivityResult(requestCode, resultCode, data);
 
          if(requestCode == DrawerActivity.FRAGMENT_CHANGE_REQUEST) {
              if (resultCode == RESULT_OK) { // child activity is requesting a fragment change
@@ -243,7 +243,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
                     break;
 
                 case 2:
-                    if (DrawerActivity.user != null){
+                    if (LogInActivity.user != null){
                         fragment = new FavouriteFragment();
                     }else{
                         fragment = new SignInFragment();
@@ -251,7 +251,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
                     break;
 
                 case 3:
-                    if(DrawerActivity.user != null){
+                    if(LogInActivity.user != null){
                         fragment = new ShoppingListFragment();
                     }else{
                         fragment = new SignInFragment();

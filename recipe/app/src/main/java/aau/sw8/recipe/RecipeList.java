@@ -33,7 +33,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
 
     private View focusedView = null;
 
-    private ProgressDialog progressDialog;
+    protected ProgressDialog progressDialog;
 
     public RecipeList(Context context) {
         super(context);
@@ -46,7 +46,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void construct(Context context) {
+    protected void construct(Context context) {
         this.progressDialog = new ProgressDialog(context);
         this.progressDialog.setMessage("Loading");
         this.progressDialog.setCancelable(false);
@@ -90,7 +90,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void openRecipe(long id) {
+    protected void openRecipe(long id) {
         this.progressDialog.show();
 
         new RecipeCom((DrawerActivity) super.getContext(), new ServerComTask.OnResponseListener<Recipe>() {

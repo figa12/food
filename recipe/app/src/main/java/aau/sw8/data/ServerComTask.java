@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Integer, T> {
+    private final String TAG = "ServerComTask";
 
     public interface OnResponseListener<T> {
         void onResponse(T result);
@@ -97,6 +98,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
             return null;
         } else {
             try {
+                Log.w(TAG, "Trying to parse JSON");
                 return this.parseJson(response);
             } catch (Exception e) {
                 Log.e(this.getClass().getName(), "Parsing JSON failed");
