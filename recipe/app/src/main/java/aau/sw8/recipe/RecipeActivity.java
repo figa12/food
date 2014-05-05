@@ -229,20 +229,16 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>(){
             @Override
             public void onResponse(ServerMessage message) {
-                switch (message.getStatus()){
-                    case ServerMessage.SUCCESS:
-                        //TODO: change the icon to highlighted or change it to grey depending on the current set image.
-                        if(adding){
-                            isFavourited = true;
-                        }else{
-                            isFavourited = false;
-                        }
-                        setFavouriteButton(isFavourited);
-                        break;
-
-                    case ServerMessage.ERROR:
-                        //TODO: Toast with failure.
-                        break;
+                if (message.getStatus()){
+                    //TODO: change the icon to highlighted or change it to grey depending on the current set image.
+                    if(adding){
+                        isFavourited = true;
+                    }else{
+                        isFavourited = false;
+                    }
+                    setFavouriteButton(isFavourited);
+                }else{
+                    //TODO: Toast with failure.
                 }
             }
 
@@ -297,8 +293,8 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
             new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
                 @Override
                 public void onResponse(ServerMessage message) {
-                    Log.w(TAG, "(ServerMessage) status: " + message.getStatus() + " description: " + message.getDescription());
-                    if(message.getStatus() == ServerMessage.FAVOURITED){
+                    Log.w(TAG, "(ServerMessage) status: " + message.getStatus());
+                    if(message.getStatus()){
                         isFavourited = true;
                     }else{
                         isFavourited = false;

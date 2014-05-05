@@ -4,23 +4,15 @@ package aau.sw8.model;
  * Created by jacob on 4/29/14.
  */
 public class ServerMessage {
-    private int status;
-    private String description;
-    public static final int ERROR = 0;
-    public static final int SUCCESS = 1;
-    public static final int FAVOURITED = 2;
-    public static final int UNFAVOURITED = 3;
+    private boolean status;
+    public static final boolean ERROR = false;
+    public static final boolean SUCCESS = true;
 
-    public ServerMessage(int status, String description){
+    public ServerMessage(boolean status){
         this.status = status;
-        this.description = description;
     }
 
-    public int getStatus() {
+    public boolean getStatus() {
         return status;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

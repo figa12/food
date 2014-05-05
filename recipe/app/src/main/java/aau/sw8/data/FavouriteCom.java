@@ -42,10 +42,9 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
     protected ServerMessage parseJson(String json) throws Exception {
         JSONObject jsonObject = new JSONObject(json);
 
-        int status = jsonObject.getInt("status");
-        String description = jsonObject.getString("description");
+        boolean status = jsonObject.getBoolean("status");
 
-        Log.w(TAG, "ServerMessage Json Parsed: " + String.valueOf(status) + ", " + description);
-        return new ServerMessage(status, description);
+        Log.w(TAG, "ServerMessage Json Parsed: " + String.valueOf(status));
+        return new ServerMessage(status);
     }
 }

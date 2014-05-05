@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import aau.sw8.data.FavouriteCom;
@@ -18,6 +19,7 @@ import aau.sw8.model.ServerMessage;
 public class FavouriteList extends RecipeList {
     private boolean isLongClick = false; /*Enable OnCLick*/
     private Context context;
+    private final String TAG = "FavouriteList";
     /*Constructors*/
     public FavouriteList(Context context) {
         super(context);
@@ -71,13 +73,17 @@ public class FavouriteList extends RecipeList {
     private void removeRecipeFromDatabase(long recipeId, String hash){
         new FavouriteCom((MainActivity)context, new ServerComTask.OnResponseListener<ServerMessage>() {
             @Override
-            public void onResponse(ServerMessage result) {
-
+            public void onResponse(ServerMessage message) {
+                if(message.getStatus()){
+                    Log.w(TAG,"Recipe was successfully removed");
+                }else {
+                    Log.w(TAG,"An error occurred");
+                }
             }
 
             @Override
             public void onFailed() {
-
+                Log.w(TAG,"An error occurred");
             }
         }, FavouriteCom.REMOVE, recipeId, hash);
     }
