@@ -246,14 +246,6 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
                     }
                     break;
 
-                case 3:
-                    if(LogInActivity.user != null){
-                        fragment = new ShoppingListFragment();
-                    }else{
-                        fragment = new SignInFragment();
-                    }
-                    break;
-
                 case 99:
                     fragment = new SignInFragment();
                     break;

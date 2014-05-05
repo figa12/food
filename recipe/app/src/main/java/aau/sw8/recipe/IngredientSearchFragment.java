@@ -343,4 +343,10 @@ public class IngredientSearchFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(IngredientSearchFragment ingredientSearchFragment);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        searchList.clearHighlight();
+    }
 }

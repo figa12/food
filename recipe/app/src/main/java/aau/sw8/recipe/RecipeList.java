@@ -113,6 +113,12 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
 
     protected void onLongClick(IntermediateRecipe recipe, View view) { }
 
+    public void clearHighlight() {
+        View focus = this.getFocusedChild();
+        if (focus != null)
+            clearHighlight(focus);
+    }
+
     protected void clearHighlight(View view){
         ImageView image = (ImageView)view.findViewById(R.id.recipeImageView);
         image.setColorFilter(null);

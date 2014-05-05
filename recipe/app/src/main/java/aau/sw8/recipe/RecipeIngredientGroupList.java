@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -45,29 +44,28 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
         LayoutInflater layoutInflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View ingredientView = layoutInflater.inflate(R.layout.recipe_ingredient_item, null);
 
-        Button shoppingListButton = (Button) ingredientView.findViewById(R.id.recipeShoppingListButton);
+        /*Button shoppingListButton = (Button) ingredientView.findViewById(R.id.recipeShoppingListButton);
         shoppingListButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO add/remove in shopping list
+
             }
-        });
+        });*/
 
+        ArrayList<String> exchangeables = exchangeableIngredient.getExchangeableIngredientStrings();
 
-        ArrayList<String> str = exchangeableIngredient.getExchangeableIngredientStrings();
-
-        if (str.size() > 1) {
+        if (exchangeables.size() > 1) {
             //TODO make actual exchangeable ingredient adapter
             Spinner spinner = (Spinner) ingredientView.findViewById(R.id.exchangeableIngredientSpinner);
             spinner.setVisibility(VISIBLE);
 
-            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, str);
+            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, exchangeables);
             ingredientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(ingredientAdapter);
-        } else if (str.size() == 1) {
+        } else if (exchangeables.size() == 1) {
             TextView textView = (TextView) ingredientView.findViewById(R.id.exchangeableIngredientTextView);
             textView.setVisibility(VISIBLE);
-            textView.setText(str.get(0));
+            textView.setText(exchangeables.get(0));
         }
 
         return ingredientView;
