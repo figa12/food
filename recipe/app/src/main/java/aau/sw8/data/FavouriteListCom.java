@@ -29,7 +29,7 @@ public class FavouriteListCom extends ServerComTask<ArrayList<IntermediateRecipe
         apiPath += "&hash=" + hash;
         apiPath += "&limit=" + String.valueOf(limit);
         apiPath += "&offset=" + String.valueOf(offset);
-        apiPath += "&lang=" + lang;
+        apiPath += "&lang=" +  lang;
 
         return apiPath;
     }
