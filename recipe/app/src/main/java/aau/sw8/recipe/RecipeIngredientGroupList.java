@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -45,13 +44,13 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
         LayoutInflater layoutInflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View ingredientView = layoutInflater.inflate(R.layout.recipe_ingredient_item, null);
 
-        Button shoppingListButton = (Button) ingredientView.findViewById(R.id.recipeShoppingListButton);
+        /*Button shoppingListButton = (Button) ingredientView.findViewById(R.id.recipeShoppingListButton);
         shoppingListButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO add/remove in shopping list
+
             }
-        });
+        });*/
 
 
         ArrayList<String> str = exchangeableIngredient.getExchangeableIngredientStrings();

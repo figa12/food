@@ -5,8 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -24,9 +25,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import aau.sw8.data.FavouriteCom;
-import aau.sw8.data.RecipeCom;
 import aau.sw8.data.ServerComTask;
-import aau.sw8.model.Comment;
 import aau.sw8.model.ExchangeableIngredient;
 import aau.sw8.model.IngredientGroup;
 import aau.sw8.model.InstructionStep;
@@ -141,12 +140,14 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         // create and add the ingredient groups
         LinearLayout ingredientGroupsLayout = (LinearLayout) findViewById(R.id.ingredientGroupsLinearLayout);
         for (IngredientGroup ingredientGroup : this.recipe.getIngredientGroups()) {
-            // create a header for each group
-            TextView ingredientGroupHeader = new TextView(this);
-            ingredientGroupHeader.setText(ingredientGroup.getName());
-            ingredientGroupHeader.setTypeface(null, Typeface.BOLD_ITALIC);
-            ingredientGroupHeader.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
-            ingredientGroupsLayout.addView(ingredientGroupHeader);
+            if (!ingredientGroup.getName().equals("") && ingredientGroup.getName() != null) {
+                // create a header for each group, if it exists
+                TextView ingredientGroupHeader = new TextView(this);
+                ingredientGroupHeader.setText(ingredientGroup.getName());
+                ingredientGroupHeader.setTypeface(null, Typeface.BOLD_ITALIC);
+                ingredientGroupHeader.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                ingredientGroupsLayout.addView(ingredientGroupHeader);
+            }
 
             // create the ingredient list
             RecipeIngredientGroupList ingredientGroupList = new RecipeIngredientGroupList(this);
@@ -180,13 +181,21 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
             this.instructionList.addView(instructionStep);
         }
 
-        RecipeCommentList commentList = (RecipeCommentList) findViewById(R.id.recipeCommentList);
+        /*RecipeCommentList commentList = (RecipeCommentList) findViewById(R.id.recipeCommentList);
         for (Comment comment : this.recipe.getComments()) {
             commentList.addView(comment);
-        }
+        }*/
+
+        TextView licenseTextView = (TextView) super.findViewById(R.id.licenseTextView);
+        this.setLicense(licenseTextView, "violetta opensourcefoods.com", "Creative Commons Attribution-Share Alike 3.0 License", "http://creativecommons.org/licenses/by-sa/3.0/");
     }
 
-
+    private void setLicense(TextView licenseTextView, String credits, String linkText, String link) {
+        licenseTextView.setText(Html.fromHtml(
+                credits + "<br><a href=\"" + link + "\">" + linkText + "</a> "
+        ));
+        licenseTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
 
 
     @Override
@@ -225,7 +234,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         }
 
         //add the recipe to the user's favourites
-        Log.w(TAG, action + "ing " +  "favourite...");
+        Log.w(TAG, action + "ing " + "favourite...");
         new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>(){
             @Override
             public void onResponse(ServerMessage message) {
