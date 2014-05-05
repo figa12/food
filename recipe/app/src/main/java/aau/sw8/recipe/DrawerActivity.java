@@ -1,10 +1,8 @@
 package aau.sw8.recipe;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -24,8 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import aau.sw8.data.ServerComTask;
 
 
 /**
@@ -235,7 +231,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             // the indexes corresponds to the order their page names are defined in strings.xml
             switch (position) {
                 case 0:
-                    fragment = new SearchFragment();
+                    fragment = new IngredientSearchFragment();
                     break;
 
                 case 1:

@@ -11,14 +11,14 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import aau.sw8.model.Recipe;
 
-public class MainActivity extends DrawerActivity implements SearchFragment.OnFragmentInteractionListener {
+public class MainActivity extends DrawerActivity implements IngredientSearchFragment.OnFragmentInteractionListener {
 
     /*Variables*/
     public static final String ARG_POSITION = "position";
     // Logcat tag
     private static final String TAG = "Mainactivity";
     public static String ingredientResult;
-    private static SearchFragment searchFragment;
+    private static IngredientSearchFragment ingredientSearchFragment;
 
     /*Override methods*/
     @SuppressWarnings("ConstantConditions")
@@ -61,15 +61,15 @@ public class MainActivity extends DrawerActivity implements SearchFragment.OnFra
 
             ingredientResult = cursor.getString(wIndex);
 
-            if(searchFragment != null) {
-                searchFragment.updateFlowLayout();
+            if(ingredientSearchFragment != null) {
+                ingredientSearchFragment.updateFlowLayout();
             }
         }
     }
 
     @Override
-    public void onFragmentInteraction(SearchFragment fragment) {
-        searchFragment = fragment;
+    public void onFragmentInteraction(IngredientSearchFragment fragment) {
+        ingredientSearchFragment = fragment;
     }
 
     @SuppressWarnings("ConstantConditions")

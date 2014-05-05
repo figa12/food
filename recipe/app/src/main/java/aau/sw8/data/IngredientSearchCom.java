@@ -7,15 +7,15 @@ import java.util.ArrayList;
 
 import aau.sw8.model.Ingredient;
 import aau.sw8.model.IntermediateRecipe;
-import aau.sw8.recipe.SearchFragment;
+import aau.sw8.recipe.IngredientSearchFragment;
 
 /**
  * Created by Jesper on 0028 28. apr.
  */
-public class RecipeListCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
+public class IngredientSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
 
-    public RecipeListCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, ArrayList<Long> chosenIngredients) {
-        super(RecipeListCom.getPath(chosenIngredients), serverAlertDialog, onResponseListener);
+    public IngredientSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, ArrayList<Long> chosenIngredients) {
+        super(IngredientSearchCom.getPath(chosenIngredients), serverAlertDialog, onResponseListener);
     }
 
     private static String getPath(ArrayList<Long> chosenIngredients) {
@@ -63,7 +63,7 @@ public class RecipeListCom extends ServerComTask<ArrayList<IntermediateRecipe>> 
                 secondFirst = false;
 
                 long ingredientId = ingredientArray.getLong(j);
-                Ingredient ingredient = SearchFragment.getIngredient(ingredientId);
+                Ingredient ingredient = IngredientSearchFragment.getIngredient(ingredientId);
 
                 if (ingredient != null) {
                     missing += ingredient.getSingular();

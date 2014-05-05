@@ -22,13 +22,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import aau.sw8.data.IngredientCom;
-import aau.sw8.data.RecipeListCom;
+import aau.sw8.data.IngredientSearchCom;
 import aau.sw8.data.ServerComTask;
 import aau.sw8.model.Ingredient;
 import aau.sw8.model.IntermediateRecipe;
 
 
-public class SearchFragment extends Fragment {
+public class IngredientSearchFragment extends Fragment {
 
     private String pageTitle; // Not really needed, but saved just in case
 
@@ -42,12 +42,12 @@ public class SearchFragment extends Fragment {
 
     private SearchList searchList;
 
-    public SearchFragment() {
+    public IngredientSearchFragment() {
         // Required empty public constructor
     }
 
     public static Ingredient getIngredient(long id) {
-        for (Ingredient ingredient : SearchFragment.allIngredients) {
+        for (Ingredient ingredient : IngredientSearchFragment.allIngredients) {
             if (ingredient.getId() == id) {
                 return ingredient;
             }
@@ -93,17 +93,17 @@ public class SearchFragment extends Fragment {
             public void onResponse(ArrayList<Ingredient> result) {
                 for (Ingredient ingredient : result) {
                     //TODO sort ingredients with Sam's fancy algorithm
-                   final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
+                   final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
                     ingredientButton.setIngredient(ingredient);
 
                     ingredientButton.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
                         @Override
                         public void OnSelectedChanged(boolean isSelected) {
-                            SearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
+                            IngredientSearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
                             if (isSelected) {
-                                SearchFragment.this.ingredientFlowLayout.addView(ingredientButton, 0);
+                                IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton, 0);
                             } else {
-                                SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
+                                IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
                             }
                         }
 
@@ -112,7 +112,7 @@ public class SearchFragment extends Fragment {
                             //TODO handle
                         }
                     });
-                    SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
+                    IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
                 }
             }
             @Override
@@ -127,12 +127,12 @@ public class SearchFragment extends Fragment {
             public void OnVisibilityChanged(boolean isVisible) {
                 if (isVisible) {
                     // keyboard shown
-                    SearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
-                    Toast.makeText(SearchFragment.this.getActivity(), "Keyboard shown", Toast.LENGTH_SHORT).show();
+                    IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(IngredientSearchFragment.this.getActivity(), "Keyboard shown", Toast.LENGTH_SHORT).show();
                 } else {
                     // keyboard hidden
-                    SearchFragment.this.popupLayout.setVisibility(View.GONE);
-                    Toast.makeText(SearchFragment.this.getActivity(), "Keyboard hidden", Toast.LENGTH_SHORT).show();
+                    IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
+                    Toast.makeText(IngredientSearchFragment.this.getActivity(), "Keyboard hidden", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -143,16 +143,16 @@ public class SearchFragment extends Fragment {
     private void searchForRecipes(ArrayList<Long> ingredientIds) {
         this.progressCircle.setVisibility(View.VISIBLE);
 
-        new RecipeListCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
+        new IngredientSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
             @Override
             public void onResponse(ArrayList<IntermediateRecipe> result) {
-                SearchFragment.this.displayRecipeList(result);
-                SearchFragment.this.progressCircle.setVisibility(View.GONE);
+                IngredientSearchFragment.this.displayRecipeList(result);
+                IngredientSearchFragment.this.progressCircle.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailed() {
-                SearchFragment.this.progressCircle.setVisibility(View.GONE);
+                IngredientSearchFragment.this.progressCircle.setVisibility(View.GONE);
             }
         }, ingredientIds);
     }
@@ -225,11 +225,11 @@ public class SearchFragment extends Fragment {
 
     public void updateFlowLayout() {
 
-        final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
+        final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
         for (Ingredient ingredient : allIngredients) {
             if (ingredient.getSingular().contains(MainActivity.ingredientResult)) {
-                if (SearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
+                if (IngredientSearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
 
                     addButton(ingredientButton, ingredient);
                     break;
@@ -246,7 +246,7 @@ public class SearchFragment extends Fragment {
 
         Pattern p = Pattern.compile("(^|\\s)" + query);
 
-        final IngredientButton ingredientButton = new IngredientButton(SearchFragment.super.getActivity());
+        final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
         for (Ingredient ingredient : allIngredients) {
 
@@ -254,7 +254,7 @@ public class SearchFragment extends Fragment {
 
             if(matcher.find()) {
 
-                if (SearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
+                if (IngredientSearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
 
                     addButton(ingredientButton, ingredient);
 
@@ -274,9 +274,9 @@ public class SearchFragment extends Fragment {
         boolean test = false;
         boolean f;
 
-        for (int i = 0; i < SearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+        for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
 
-            IngredientButton testButton = (IngredientButton) SearchFragment.this.ingredientFlowLayout.getChildAt(i);
+            IngredientButton testButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
             ingredientButton.setIngredient(ingredient);
             f = ingredientButton.equals(testButton);
 
@@ -299,12 +299,12 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void OnSelectedChanged(boolean isSelected) {
-                SearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
+                IngredientSearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
 
                 if (isSelected) {
-                    SearchFragment.this.ingredientFlowLayout.addView(ingredientButton, 0);
+                    IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton, 0);
                 } else {
-                    SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
+                    IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
                 }
             }
 
@@ -314,7 +314,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        SearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
+        IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
         ingredientButton.setSelected(true);
     }
 
@@ -341,6 +341,6 @@ public class SearchFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(SearchFragment searchFragment);
+        public void onFragmentInteraction(IngredientSearchFragment ingredientSearchFragment);
     }
 }

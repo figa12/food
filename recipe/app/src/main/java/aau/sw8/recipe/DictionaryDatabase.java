@@ -4,7 +4,6 @@ package aau.sw8.recipe;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,15 +11,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import aau.sw8.data.IngredientCom;
-import aau.sw8.data.ServerComTask;
 import aau.sw8.model.Ingredient;
 
 /**
@@ -197,7 +190,7 @@ public class DictionaryDatabase {
 
         private void loadIngredients() throws IOException {
 
-        for(Ingredient ingredients : SearchFragment.allIngredients)
+        for(Ingredient ingredients : IngredientSearchFragment.allIngredients)
             addWord(ingredients.getSingular(), FTS_VIRTUAL_INGREDIENTS_TABLE);
         }
 

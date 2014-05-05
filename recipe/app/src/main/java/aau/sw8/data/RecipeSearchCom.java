@@ -11,9 +11,9 @@ import aau.sw8.model.IntermediateRecipe;
 /**
  * Created by jeria_000 on 0001 1. maj.
  */
-public class RecipeQueryCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
+public class RecipeSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
 
-    public RecipeQueryCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, String query, BasicNameValuePair... basicNameValuePairs) {
+    public RecipeSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, String query, BasicNameValuePair... basicNameValuePairs) {
         super("textsearch.php?q=" + query, serverAlertDialog, onResponseListener, basicNameValuePairs);
     }
 

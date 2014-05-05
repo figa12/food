@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import aau.sw8.data.RecipeQueryCom;
+import aau.sw8.data.RecipeSearchCom;
 import aau.sw8.data.ServerComTask;
 import aau.sw8.model.IntermediateRecipe;
 
@@ -90,7 +90,7 @@ public class RecipeSearchFragment extends Fragment {
         this.searchList.removeAllViews();
         this.progressCircle.setVisibility(View.VISIBLE);
 
-        new RecipeQueryCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
+        new RecipeSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
             @Override
             public void onResponse(ArrayList<IntermediateRecipe> result) {
                 RecipeSearchFragment.this.displayRecipeList(result);
