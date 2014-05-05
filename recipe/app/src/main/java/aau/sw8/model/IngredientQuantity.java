@@ -44,16 +44,16 @@ public class IngredientQuantity implements Parcelable {
         else
             string = String.valueOf(this.amount);
 
-        // it may be an unit-less ingredient
+        // it may be a unit-less ingredient
         if (this.unit != null)
             string += " " + this.unit.getMetric() + " ";
         else
             string += " ";
 
-        if (this.amount != 1.0) {
-            string += this.ingredient.getPlural();
-        } else {
+        if (this.unit == null && this.amount == 1.0) {
             string += this.ingredient.getSingular();
+        } else {
+            string += this.ingredient.getPlural();
         }
 
         return string;

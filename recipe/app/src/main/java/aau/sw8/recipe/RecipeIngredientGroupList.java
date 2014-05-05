@@ -52,21 +52,20 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
             }
         });*/
 
+        ArrayList<String> exchangeables = exchangeableIngredient.getExchangeableIngredientStrings();
 
-        ArrayList<String> str = exchangeableIngredient.getExchangeableIngredientStrings();
-
-        if (str.size() > 1) {
+        if (exchangeables.size() > 1) {
             //TODO make actual exchangeable ingredient adapter
             Spinner spinner = (Spinner) ingredientView.findViewById(R.id.exchangeableIngredientSpinner);
             spinner.setVisibility(VISIBLE);
 
-            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, str);
+            ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, exchangeables);
             ingredientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(ingredientAdapter);
-        } else if (str.size() == 1) {
+        } else if (exchangeables.size() == 1) {
             TextView textView = (TextView) ingredientView.findViewById(R.id.exchangeableIngredientTextView);
             textView.setVisibility(VISIBLE);
-            textView.setText(str.get(0));
+            textView.setText(exchangeables.get(0));
         }
 
         return ingredientView;
