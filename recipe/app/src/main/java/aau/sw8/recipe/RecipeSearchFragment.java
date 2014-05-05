@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -75,7 +74,6 @@ public class RecipeSearchFragment extends Fragment {
                 //Here u can get the value "query" which is entered in the search box.
 
                 searchResults(query);
-                Toast.makeText(getActivity(), query, Toast.LENGTH_SHORT).show();
 
                 return true;
             }

@@ -47,6 +47,8 @@
     <!-- The menu entry that invokes search. -->
     <string name="menu_search">Search</string>
 
+    <string name="button_search">Search</string>
+
     <!-- General instructions in the main activity. -->
     <string name="search_instructions">Use the search box in the Action Bar to look up a word</string>
 

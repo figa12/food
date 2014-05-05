@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -128,11 +129,8 @@ public class IngredientSearchFragment extends Fragment {
                 if (isVisible) {
                     // keyboard shown
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
-                    Toast.makeText(IngredientSearchFragment.this.getActivity(), "Keyboard shown", Toast.LENGTH_SHORT).show();
                 } else {
                     // keyboard hidden
-                    IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
-                    Toast.makeText(IngredientSearchFragment.this.getActivity(), "Keyboard hidden", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -170,6 +168,31 @@ public class IngredientSearchFragment extends Fragment {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
+
+        Button searchButton = (Button) getActivity().findViewById(R.id.searchButton);
+        searchButton.setText("Search");
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
+                ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
+                ArrayList<Long> searchResult = new ArrayList<>();
+
+                for(int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+
+                    if(IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
+                        IngredientButton tempButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
+                        searchResult.add(tempButton.getIngredient().getId());
+                    }
+                }
+
+                if(searchResult.isEmpty())
+                    Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
+                else
+                    searchForRecipes(searchResult);
+            }
+        });
 
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchBar = (SearchView) menu.findItem(R.id.ingredient_search).getActionView();
