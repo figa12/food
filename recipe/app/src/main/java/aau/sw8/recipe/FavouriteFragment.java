@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import aau.sw8.data.FavouriteListCom;
 import aau.sw8.data.ServerComTask;
@@ -72,6 +71,8 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         super.onResume();
 
         getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
+
+        favouriteList.clearHighlight();
     }
 
     @Override

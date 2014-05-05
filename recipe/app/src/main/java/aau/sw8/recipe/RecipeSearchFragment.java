@@ -141,4 +141,10 @@ public class RecipeSearchFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        searchList.clearHighlight();
+    }
 }
