@@ -28,14 +28,15 @@ public class IngredientCom extends ServerComTask<ArrayList<Ingredient>> {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
             long id = jsonObject.getLong("id");
-            String name = jsonObject.getString("name");
+            String singular = jsonObject.getString("singular");
+            String plural = jsonObject.getString("plural");
             Category category = null;
 
             if (jsonObject.has("category")) {
                 //TODO parse category
             }
 
-            ingredients.add(new Ingredient(id, name, name, category));
+            ingredients.add(new Ingredient(id, singular, plural, category));
         }
 
         return ingredients;
