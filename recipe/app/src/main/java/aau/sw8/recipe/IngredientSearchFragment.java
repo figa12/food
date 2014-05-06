@@ -191,10 +191,16 @@ public class IngredientSearchFragment extends Fragment {
                     }
                 }
 
-                if(searchResult.isEmpty())
+                if(searchResult.isEmpty()) {
+                    searchBar.setQuery("", false);
+                    searchBar.clearFocus();
                     Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
-                else
+                }
+                else {
+                    searchBar.setQuery("", false);
+                    searchBar.clearFocus();
                     searchForRecipes(searchResult);
+                }
             }
         });
 

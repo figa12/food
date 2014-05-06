@@ -90,6 +90,7 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
 
         if (ingredientSearchFragment != null && ingredientSearchFragment.popupLayout.getVisibility() == View.VISIBLE) {
             ingredientSearchFragment.popupLayout.setVisibility(View.GONE);
+            ingredientSearchFragment.searchBar.setQuery("", false);
         } else {
             super.onBackPressed();
         }
