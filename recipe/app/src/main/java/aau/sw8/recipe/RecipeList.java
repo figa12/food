@@ -173,6 +173,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                         if (focusedView != null && longTouchHold) {
                             onLongClick(recipe, focusedView);
                             longTouchHold = false;
+                            focusedView = null;
                         }
                     }
                 }, ViewConfiguration.getLongPressTimeout());
