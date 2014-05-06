@@ -81,6 +81,11 @@ public class RecipeSearchFragment extends Fragment {
 
         searchBar.setOnQueryTextListener(queryTextListener);
 
+        if (!((DrawerActivity)getActivity()).isDrawerOpen()) {
+            searchBar.setIconified(false);
+            searchBar.requestFocusFromTouch();
+        }
+
         super.onPrepareOptionsMenu(menu);
     }
 
