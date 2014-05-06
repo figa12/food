@@ -114,9 +114,10 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
     protected void onLongClick(IntermediateRecipe recipe, View view) { }
 
     public void clearHighlight() {
-        View focus = this.getFocusedChild();
-        if (focus != null)
-            clearHighlight(focus);
+        if (focusedView != null) {
+            clearHighlight(focusedView);
+            focusedView = null;
+        }
     }
 
     protected void clearHighlight(View view){
@@ -139,6 +140,8 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
         public RecipeOnTouchListener(IntermediateRecipe recipe) {
             this.recipe = recipe;
         }
+        private float oldX;
+        private float oldY;
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -149,6 +152,8 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && focusedView == null) {
                 // Set this image as the current focused
                 focusedView = view;
+                oldX = motionEvent.getX();
+                oldY = motionEvent.getY();
 
                 // Schedule a task to highlight the image if it hasn't been canceled before it is run
                 focusedView.postDelayed(new Runnable() {
@@ -173,12 +178,21 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                 // If the action is UP, it is a click
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     onClick(focusedView);
-                    focusedView = null;
                 }
                 // If the action is CANCEL, the focus and highlight should be removed
                 else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
                     clearHighlight(focusedView);
                     focusedView = null;
+                }
+                // If the action is MOVE and the position is past the touch slop, the focus and highlight should be removed
+                else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    float dX = Math.abs(oldX - motionEvent.getX());
+                    float dY = Math.abs(oldY - motionEvent.getY());
+                    int dL = (int)Math.sqrt(dX*dX + dY*dY);
+                    if (dL > ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
+                        clearHighlight(focusedView);
+                        focusedView = null;
+                    }
                 }
             }
 
