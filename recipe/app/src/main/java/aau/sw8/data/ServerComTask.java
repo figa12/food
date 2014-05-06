@@ -40,6 +40,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
 
     /*Constructors*/
     public ServerComTask(String apiPath, ServerAlertDialog serverAlertDialog, OnResponseListener<T> onResponseListener, BasicNameValuePair ... basicNameValuePairs) {
+        Log.w(TAG, "server query: " + ServerComTask.SERVER_API_URL + apiPath);
         this.apiPath = ServerComTask.SERVER_API_URL + apiPath;
         this.serverAlertDialog = serverAlertDialog;
         this.onResponseListener = onResponseListener;
@@ -101,7 +102,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
                 Log.w(TAG, "Trying to parse JSON");
                 return this.parseJson(response);
             } catch (Exception e) {
-                Log.e(this.getClass().getName(), "Parsing JSON failed");
+                Log.e(TAG, "Parsing JSON failed");
                 return null;
             }
         }

@@ -58,6 +58,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     private InstructionList instructionList;
 
     private boolean isFavourited = false;
+    private boolean isFirstLoad = true;
 
     //private MenuItem favouriteButton;
     private Menu menu;
@@ -197,7 +198,6 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         licenseTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
@@ -229,17 +229,17 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         String action;
         if(adding){
             action = FavouriteCom.ADD;
+            Log.w(TAG, "adding " + "favourite...");
         }else{
             action = FavouriteCom.REMOVE;
+            Log.w(TAG, "removing " + "favourite...");
         }
 
         //add the recipe to the user's favourites
-        Log.w(TAG, action + "ing " + "favourite...");
         new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>(){
             @Override
             public void onResponse(ServerMessage message) {
                 if (message.getStatus()){
-                    //TODO: change the icon to highlighted or change it to grey depending on the current set image.
                     if(adding){
                         isFavourited = true;
                     }else{
@@ -285,7 +285,6 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        Log.w(TAG, "OnCreateOptionMenu");
         super.getMenuInflater().inflate(R.menu.recipe, menu);
         this.menu = menu;
 
@@ -299,24 +298,28 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         menu.findItem(R.id.favourite_button).setVisible(!this.isDrawerOpen());
 
         if(LogInActivity.user != null) {
-            new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
-                @Override
-                public void onResponse(ServerMessage message) {
-                    Log.w(TAG, "(ServerMessage) status: " + message.getStatus());
-                    if(message.getStatus()){
-                        isFavourited = true;
-                    }else{
-                        isFavourited = false;
+            if(isFirstLoad) {
+                isFirstLoad = false;
+                new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
+                    @Override
+                    public void onResponse(ServerMessage message) {
+                        if (message.getStatus()) {
+                            isFavourited = true;
+                        } else {
+                            isFavourited = false;
+                        }
+
+                        setFavouriteButton(isFavourited);
                     }
 
-                    setFavouriteButton(isFavourited);
-                }
+                    @Override
+                    public void onFailed() {
 
-                @Override
-                public void onFailed() {
-
-                }
-            }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+                    }
+                }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+            }else{
+                setFavouriteButton(isFavourited);
+            }
         }
 
         super.onPrepareOptionsMenu(menu);

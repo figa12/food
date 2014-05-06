@@ -20,7 +20,6 @@ public class FavouriteCom extends ServerComTask<ServerMessage> {
     public FavouriteCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ServerMessage> onResponseListener,
                         String action, long recipeId, String hash){
         super(getPath(action, recipeId, hash), serverAlertDialog, onResponseListener);
-        Log.w(TAG, "server query: " + getPath(action, recipeId, hash));
         this.action = action;
         this.recipeId = recipeId;
         this.hash = hash;
