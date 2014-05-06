@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:focusable="false"
         android:background="@drawable/clickable_list_item">
 
         <ImageView
@@ -56,10 +55,12 @@
             android:id="@+id/notification"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="6dp"
-            android:maxLines="2"
+            android:gravity="right"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textSize="8pt"
             android:textColor="#fdc938"

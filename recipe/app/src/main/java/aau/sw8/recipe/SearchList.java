@@ -29,11 +29,6 @@ public class SearchList extends RecipeList {
         TextView notification = (TextView) recipeView.findViewById(R.id.notification);
         notification.setText(intermediateRecipe.getMissingIngredients());
 
-        TextView rating = (TextView) recipeView.findViewById(R.id.rating);
-        for (int i = random.nextInt(5); i != 5; ++i) {
-            rating.append("★");
-        }
-
         return recipeView;
     }
 
