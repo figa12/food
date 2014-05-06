@@ -32,6 +32,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
             .build();
 
     private View focusedView = null;
+    private boolean longTouchHold = false;
 
     protected ProgressDialog progressDialog;
 
@@ -151,6 +152,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
             // Check whether the action is down and there are no focused view
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && focusedView == null) {
                 // Set this image as the current focused
+                longTouchHold = true;
                 focusedView = view;
                 oldX = motionEvent.getX();
                 oldY = motionEvent.getY();
@@ -168,8 +170,10 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                 focusedView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (focusedView != null)
+                        if (focusedView != null && longTouchHold) {
                             onLongClick(recipe, focusedView);
+                            longTouchHold = false;
+                        }
                     }
                 }, ViewConfiguration.getLongPressTimeout());
             }
@@ -178,11 +182,13 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                 // If the action is UP, it is a click
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     onClick(focusedView);
+                    longTouchHold = false;
                 }
                 // If the action is CANCEL, the focus and highlight should be removed
                 else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
                     clearHighlight(focusedView);
                     focusedView = null;
+                    longTouchHold = false;
                 }
                 // If the action is MOVE and the position is past the touch slop, the focus and highlight should be removed
                 else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
@@ -192,6 +198,7 @@ public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                     if (dL > ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
                         clearHighlight(focusedView);
                         focusedView = null;
+                        longTouchHold = false;
                     }
                 }
             }
