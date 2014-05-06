@@ -48,8 +48,8 @@ public class User implements Parcelable{
         try {
             // get sha256 hash of the email
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            sha256.update(email.getBytes());
             sha256.reset();
+            sha256.update(email.getBytes());
             byte[] hashBytes = sha256.digest();
 
             // convert to hex
