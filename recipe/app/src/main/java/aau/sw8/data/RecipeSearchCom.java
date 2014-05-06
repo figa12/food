@@ -1,5 +1,7 @@
 package aau.sw8.data;
 
+import android.net.Uri;
+
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,7 +16,7 @@ import aau.sw8.model.IntermediateRecipe;
 public class RecipeSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
 
     public RecipeSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, String query, BasicNameValuePair... basicNameValuePairs) {
-        super("textsearch.php?q=" + query, serverAlertDialog, onResponseListener, basicNameValuePairs);
+        super("textsearch.php?q=" + Uri.encode(query), serverAlertDialog, onResponseListener, basicNameValuePairs);
     }
 
     @Override
