@@ -1,10 +1,12 @@
 package aau.sw8.recipe;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -54,6 +56,9 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // handles a click on a search suggestion;
 
+            ingredientSearchFragment.searchBar.setQuery("", false);
+            ingredientSearchFragment.searchBar.clearFocus();
+
             Uri uri = intent.getData();
             Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 
@@ -61,9 +66,32 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
 
             ingredientResult = cursor.getString(wIndex);
 
-            if(ingredientSearchFragment != null) {
+            if (ingredientSearchFragment != null) {
                 ingredientSearchFragment.updateFlowLayout();
             }
+        }
+        if(Intent.ACTION_SEARCH.equals(intent.getAction()))
+        {
+
+            ingredientSearchFragment.searchBar.setQuery("", false);
+            ingredientSearchFragment.searchBar.clearFocus();
+
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            if (ingredientSearchFragment != null) {
+                ingredientSearchFragment.updateFlowLayout(query);
+            }
+
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if (ingredientSearchFragment != null && ingredientSearchFragment.popupLayout.getVisibility() == View.VISIBLE) {
+            ingredientSearchFragment.popupLayout.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
         }
     }
 

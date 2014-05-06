@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,10 +35,10 @@ public class IngredientSearchFragment extends Fragment {
     private String pageTitle; // Not really needed, but saved just in case
 
     private FlowLayout ingredientFlowLayout;
-    private LinearLayout popupLayout;
+    public  LinearLayout popupLayout;
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private OnFragmentInteractionListener interactionListener;
-    private SearchView searchBar;
+    public SearchView searchBar;
     private int i = 0;
     private ProgressBar progressCircle;
 
@@ -129,8 +130,10 @@ public class IngredientSearchFragment extends Fragment {
                 if (isVisible) {
                     // keyboard shown
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
+
                 } else {
                     // keyboard hidden
+
                 }
             }
         });
@@ -160,6 +163,7 @@ public class IngredientSearchFragment extends Fragment {
         for (IntermediateRecipe intermediateRecipe : intermediateRecipes)
             this.searchList.addView(intermediateRecipe);
     }
+
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -200,11 +204,25 @@ public class IngredientSearchFragment extends Fragment {
         searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
         searchBar.setIconifiedByDefault(false);
 
+        searchBar.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    if(searchBar.getQuery().toString().isEmpty() && searchBar.getQuery().length() == 0) {
+                        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         if (allIngredients.size() != 0) {
             menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
         }
 
-        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+      /*  SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
                 return true;
@@ -213,16 +231,36 @@ public class IngredientSearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 //Here u can get the value "query" which is entered in the search box.
 
-                updateFlowLayout(query);
+                ArrayList<Long> searchResult = new ArrayList<>();
+
+                if(query.isEmpty()){
+                    IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
+                    ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
+
+                    for(int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+
+                        if(IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
+                            IngredientButton tempButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
+                            searchResult.add(tempButton.getIngredient().getId());
+                        }
+                    }
+
+                    if(searchResult.isEmpty())
+                        Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
+                }
+
+                else
+                    updateFlowLayout(query);
 
                 return true;
             }
         };
 
-        searchBar.setOnQueryTextListener(queryTextListener);
+        searchBar.setOnQueryTextListener(queryTextListener);*/
 
         super.onPrepareOptionsMenu(menu);
     }
+
 
     private void getAllIngredients(final Menu menu) throws IOException {
 
@@ -251,14 +289,16 @@ public class IngredientSearchFragment extends Fragment {
         final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
         for (Ingredient ingredient : allIngredients) {
-            if (ingredient.getSingular().contains(MainActivity.ingredientResult)) {
+            if (ingredient.getSingular().equals(MainActivity.ingredientResult)) {
                 if (IngredientSearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
 
                     addButton(ingredientButton, ingredient);
+
                     break;
 
                 } else {
                     testIfExists(ingredientButton, ingredient);
+
                     break;
                 }
             }
@@ -315,7 +355,7 @@ public class IngredientSearchFragment extends Fragment {
         }
     }
 
-    private void addButton(final IngredientButton ingredientButton, Ingredient ingredient) {
+    public void addButton(final IngredientButton ingredientButton, Ingredient ingredient) {
         ingredientButton.setIngredient(ingredient);
 
         ingredientButton.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {

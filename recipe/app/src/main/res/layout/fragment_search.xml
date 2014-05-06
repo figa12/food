@@ -55,10 +55,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"/>
 
-
             <Button
                 android:id="@+id/searchButton"
                 android:title="@string/button_search"
+                android:layout_gravity="bottom"
                 android:layout_width="100dp"
                 android:layout_height="40dp" />
 
