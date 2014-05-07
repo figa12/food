@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +31,7 @@ import android.widget.Toast;
  */
 public abstract class DrawerActivity extends LogInActivity implements RecipeSearchFragment.OnFragmentInteractionListener {
 
+    private Settings settings;
     protected CharSequence drawerTitle;
     public static int CHOSEN_FRAGMENT;
     protected CharSequence title;
@@ -52,6 +55,20 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
         super.setContentView(R.layout.drawer_layout); // "super" is used because "this" is overridden
 
         setupDrawer();
+
+        this.settings = new Settings(this);
+
+        // open the navigation drawer the first time the application opens
+        if (!this.settings.isNavigationDrawerDisplayed()) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    drawerLayout.openDrawer(Gravity.LEFT);
+                }
+            }, 200);
+            this.settings.setNavigationDrawerDisplayed(true);
+            this.settings.saveSettings();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
