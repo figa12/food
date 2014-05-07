@@ -39,7 +39,7 @@ public class IngredientQuantity implements Parcelable {
         String string;
 
         // if the amount is an integer, convert it
-        if (this.amount == Math.abs(this.amount))
+        if (this.amount == Math.floor(this.amount))
             string = String.valueOf((int) this.amount);
         else
             string = String.valueOf(this.amount);
