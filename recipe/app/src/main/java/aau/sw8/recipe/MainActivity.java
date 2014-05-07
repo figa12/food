@@ -56,7 +56,7 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // handles a click on a search suggestion;
 
-            ingredientSearchFragment.searchBar.setQuery("", false);
+            ingredientSearchFragment.searchBar.setText("");
             ingredientSearchFragment.searchBar.clearFocus();
 
             Uri uri = intent.getData();
@@ -73,12 +73,12 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
         if(Intent.ACTION_SEARCH.equals(intent.getAction()))
         {
 
-            ingredientSearchFragment.searchBar.setQuery("", false);
+            ingredientSearchFragment.searchBar.setText("");
             ingredientSearchFragment.searchBar.clearFocus();
 
             String query = intent.getStringExtra(SearchManager.QUERY);
             if (ingredientSearchFragment != null) {
-                ingredientSearchFragment.updateFlowLayout(query);
+                ingredientSearchFragment.addIngredientToFlowLayout(query);
             }
 
         }
@@ -90,7 +90,7 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
 
         if (ingredientSearchFragment != null && ingredientSearchFragment.popupLayout.getVisibility() == View.VISIBLE) {
             ingredientSearchFragment.popupLayout.setVisibility(View.GONE);
-            ingredientSearchFragment.searchBar.setQuery("", false);
+            ingredientSearchFragment.searchBar.setText("");
         } else {
             super.onBackPressed();
         }

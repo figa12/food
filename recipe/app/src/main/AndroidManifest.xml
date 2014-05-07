@@ -37,10 +37,6 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
         </activity>
 
         <activity
@@ -54,16 +50,6 @@
                 android:value="aau.sw8.recipe.BaseActivity" />
 
         </activity>
-
-        <provider
-            android:authorities="aau.sw8.recipe.DictionaryProvider"
-            android:name=".DictionaryProvider"
-            />
-
-        <!-- Points to searchable activity so the whole app can invoke search. -->
-        <meta-data
-            android:name="android.app.default_searchable"
-            android:value=".MainActivity" />
 
     </application>
 

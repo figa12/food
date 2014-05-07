@@ -1,15 +1,21 @@
 package aau.sw8.recipe;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -52,38 +58,35 @@ public class RecipeSearchFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
-        menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
 
-        SearchView searchBar = (SearchView) menu.findItem(R.id.ingredient_search).getActionView();
-        searchBar.setIconifiedByDefault(false);
+        ActionBar actionBar = mainActivity.getActionBar();
+        // add the custom view to the action bar
+        actionBar.setCustomView(R.layout.menu_search_item);
+
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        final EditText searchBar = (EditText) actionBar.getCustomView().findViewById(R.id.menu_search);
+
+        searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+
+        searchBar.setEnabled(!mainActivity.isDrawerOpen());
 
         // Set hint text
-        searchBar.setQueryHint(getString(R.string.recipe_search_hint));
+        searchBar.setHint(getString(R.string.recipe_search_hint));
 
-        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-            public boolean onQueryTextChange(String newText) {
-                // this is your adapter that will be filtered
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int x, KeyEvent keyEvent) {
+                searchResults(searchBar.getText().toString());
                 return true;
             }
-
-            public boolean onQueryTextSubmit(String query) {
-                //Here u can get the value "query" which is entered in the search box.
-
-                searchResults(query);
-
-                return true;
-            }
-        };
-
-        searchBar.setOnQueryTextListener(queryTextListener);
+        });
 
         if (!((DrawerActivity)getActivity()).isDrawerOpen()) {
-            searchBar.setIconified(false);
-            searchBar.requestFocusFromTouch();
+            searchBar.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
         }
 
         super.onPrepareOptionsMenu(menu);
