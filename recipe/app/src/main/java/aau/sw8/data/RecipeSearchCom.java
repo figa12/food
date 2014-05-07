@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import aau.sw8.model.IntermediateRecipe;
 
 /**
- * Created by jeria_000 on 0001 1. maj.
+ * Created by Jesper on 0001 1. maj.
  */
 public class RecipeSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
 
