@@ -106,6 +106,7 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         return true;
+
     }
 
     /*Class methods*/

@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,11 +90,20 @@ public class IngredientSearchFragment extends Fragment {
 
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
 
-        this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
+       // this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
 
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
         this.popupLayout = (LinearLayout) rootView.findViewById(R.id.popupLayout);
+        this.search_list = (ListView) rootView.findViewById(R.id.search_suggestion);
+        IngredientSearchFragment.this.search_list.setVisibility(View.INVISIBLE);
+        String[] list = {"Test", "Hej", "Fedt", "Ged"};
+
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, list);
+
+        this.search_list.setAdapter(arrayAdapter);
+        this.search_list.setTextFilterEnabled(true);
 
         KeyboardEventsLayout keyboardEventsLayout = (KeyboardEventsLayout) rootView.findViewById(R.id.keyboardEventsLayout);
         keyboardEventsLayout.setOnKeyboardVisibilityChangedListener(new KeyboardEventsLayout.OnKeyboardVisibilityChangedListener() {
