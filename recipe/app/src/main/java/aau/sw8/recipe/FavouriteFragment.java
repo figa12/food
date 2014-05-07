@@ -49,8 +49,11 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
 
         /*Gets favourites from the database*/
         //TODO: Load the favourite list from the database
-        getFavourites(LogInActivity.user.getHash(), this.limit, this.offset, "us");
-
+        if(LogInActivity.user != null) {
+            getFavourites(LogInActivity.user.getHash(), this.limit, this.offset, "us");
+        }else{
+            ((DrawerActivity)this.getActivity()).selectItem(2);
+        }
         //TODO: Load the favourite list from the database
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
