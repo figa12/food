@@ -120,6 +120,14 @@ public class IngredientSearchFragment extends Fragment {
             }
         });
 
+        ObservableScrollView observableScrollView = (ObservableScrollView) rootView.findViewById(R.id.oberservableScrollView);
+        observableScrollView.setOnBottomReachedListener(new ObservableScrollView.OnBottomReachedListener() {
+            @Override
+            public void onBottomReached() {
+                int htest = 2;
+            }
+        });
+
         return rootView;
     }
 
