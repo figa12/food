@@ -13,8 +13,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +42,7 @@ public class IngredientSearchFragment extends Fragment {
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private OnFragmentInteractionListener interactionListener;
     public EditText searchBar;
+    private ListView search_list;
     private int i = 0;
     private ProgressBar progressCircle;
 
