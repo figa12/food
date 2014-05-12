@@ -1,9 +1,9 @@
 package aau.sw8.recipe;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -75,6 +75,10 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
             }
         });
 
+        MainActivity mainActivity = (MainActivity) this.getActivity();
+        ActionBar actionBar = mainActivity.getActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME);
+
         return rootView;
     }
 
@@ -93,13 +97,6 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         }else{
             ((DrawerActivity)this.getActivity()).selectItem(2);
         }
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MainActivity mainActivity = (MainActivity) this.getActivity();
-        // use mainActivity.isDrawerOpen() to handle fragment specific menu
-        super.onPrepareOptionsMenu(menu);
     }
 
     private void getFavourites(String hash){
