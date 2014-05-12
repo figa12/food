@@ -1,5 +1,6 @@
 package aau.sw8.recipe;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,6 +55,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             signOutButton.setVisibility(View.VISIBLE);
             revokeAccesButton.setVisibility(View.VISIBLE);
         }
+
+
+        // remove search bar
+        MainActivity mainActivity = (MainActivity) this.getActivity();
+        ActionBar actionBar = mainActivity.getActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME);
 
         return rootView;
     }
