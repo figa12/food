@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/color_gradient">
 
-    <ScrollView
+    <aau.sw8.recipe.ObservableScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -15,20 +16,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <aau.sw8.recipe.FavouriteList
-            android:id="@+id/favouriteList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            <aau.sw8.recipe.FavouriteList
+                android:id="@+id/favouriteList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
-        <ProgressBar
-            android:id="@+id/progressCircleFavouriteFragment"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            <FrameLayout
+                android:id="@+id/favProgressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/favProgressCircle"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
+
         </LinearLayout>
-    </ScrollView>
+    </aau.sw8.recipe.ObservableScrollView>
 
 
 </LinearLayout>

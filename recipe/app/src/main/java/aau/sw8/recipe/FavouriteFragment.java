@@ -47,6 +47,9 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         this.favouriteList = (FavouriteList) rootView.findViewById(R.id.favouriteList);
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircleFavouriteFragment);
 
+        this.progressContainer = (FrameLayout) rootView.findViewById(R.id.favProgressContainer);
+        this.progressCircle = (ProgressBar) rootView.findViewById(R.id.favProgressCircle);
+
         /*Gets favourites from the database*/
         //TODO: Load the favourite list from the database
         if(LogInActivity.user != null) {
@@ -54,7 +57,6 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         }else{
             ((DrawerActivity)this.getActivity()).selectItem(2);
         }
-        //TODO: Load the favourite list from the database
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         //TODO: make it possible to change the pagetitle accordingly to language.
@@ -73,12 +75,9 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         super.onResume();
 
-        if(LogInActivity.user != null) {
-            getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
-            favouriteList.clearHighlight();
-        }else{
-            ((DrawerActivity)this.getActivity()).selectItem(2); //reselect favourite fragment
-        }
+        getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
+
+        favouriteList.clearHighlight();
     }
 
     @Override

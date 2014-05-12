@@ -22,7 +22,9 @@ import aau.sw8.model.Recipe;
 /**
  * Created by Jesper on 07-03-14.
  */
-public class RecipeList extends ListLinearLayout<IntermediateRecipe> {
+public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
+
+    protected static final int LIMIT = 5;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
