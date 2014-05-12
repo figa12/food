@@ -68,7 +68,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         if(view.getId() == R.id.sign_in_button){
             ((LogInActivity)getActivity()).googlePlusLogInActions(DrawerActivity.SIGN_IN);
-            ((DrawerActivity)getActivity()).selectItem(0);
         }else if(view.getId() == R.id.sign_out_button){
             ((LogInActivity)getActivity()).googlePlusLogInActions(DrawerActivity.SIGN_OUT);
         }else if(view.getId() == R.id.revoke_access_button){

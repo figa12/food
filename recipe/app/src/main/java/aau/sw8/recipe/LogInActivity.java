@@ -75,6 +75,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
                 // Every time we start we want to try to connect. If it
                 // succeeds we'll get an onConnected() callback. If it
                 // fails we'll get onConnectionFailed(), with a result!
+                this.updateUserUI(false);
                 this.plusClient.connect();
             }
         }
@@ -161,7 +162,6 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
 
     @Override
     public void onDisconnected() {
-
         // Bye!
         Log.v(TAG, "Disconnected. Bye!");
     }
