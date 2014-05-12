@@ -73,9 +73,12 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         super.onResume();
 
-        getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
-
-        favouriteList.clearHighlight();
+        if(LogInActivity.user != null) {
+            getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
+            favouriteList.clearHighlight();
+        }else{
+            ((DrawerActivity)this.getActivity()).selectItem(2); //reselect favourite fragment
+        }
     }
 
     @Override
