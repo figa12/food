@@ -227,6 +227,12 @@
             android:layout_height="1px"
             android:background="#80000000" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/actionbar_shadow"
+            android:scaleType="fitXY"/>
+
     </LinearLayout>
 
 </FrameLayout>

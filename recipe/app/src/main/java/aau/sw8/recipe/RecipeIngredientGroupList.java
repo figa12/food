@@ -1,6 +1,7 @@
 package aau.sw8.recipe;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,9 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
             TextView textView = (TextView) ingredientView.findViewById(R.id.exchangeableIngredientTextView);
             textView.setVisibility(VISIBLE);
             textView.setText(exchangeables.get(0));
+
+            if (!exchangeableIngredient.isMandatory())
+                textView.setTextColor(Color.LTGRAY);
         }
 
         return ingredientView;

@@ -33,7 +33,7 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
     }
 
     /*Variables*/
-    protected static final String SERVER_API_URL = "http://figz.dk/food/";
+    protected static final String SERVER_API_URL = "http://figz.dk/food/lib/";
     private ServerAlertDialog serverAlertDialog;
     private String apiPath;
     private OnResponseListener<T> onResponseListener;

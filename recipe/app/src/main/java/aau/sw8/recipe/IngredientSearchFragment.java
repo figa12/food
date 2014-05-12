@@ -1,25 +1,28 @@
 package aau.sw8.recipe;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +41,8 @@ public class IngredientSearchFragment extends Fragment {
     public  LinearLayout popupLayout;
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private OnFragmentInteractionListener interactionListener;
-    public SearchView searchBar;
+    public EditText searchBar;
+    private ListView search_list;
     private int i = 0;
     private ProgressBar progressCircle;
 
@@ -86,42 +90,20 @@ public class IngredientSearchFragment extends Fragment {
 
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
 
-        this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
+       // this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
 
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
-       /* new IngredientCom((DrawerActivity) super.getActivity(), new ServerComTask.OnResponseListener<ArrayList<Ingredient>>() {
-            @Override
-            public void onResponse(ArrayList<Ingredient> result) {
-                for (Ingredient ingredient : result) {
-                    //TODO sort ingredients with Sam's fancy algorithm
-                   final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
-                    ingredientButton.setIngredient(ingredient);
-
-                    ingredientButton.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
-                        @Override
-                        public void OnSelectedChanged(boolean isSelected) {
-                            IngredientSearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
-                            if (isSelected) {
-                                IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton, 0);
-                            } else {
-                                IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
-                            }
-                        }
-
-                        @Override
-                        public void OnHighlightedChanged(boolean isHighlighted) {
-                            //TODO handle
-                        }
-                    });
-                    IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
-                }
-            }
-            @Override
-            public void onFailed() { }
-        });*/
-
         this.popupLayout = (LinearLayout) rootView.findViewById(R.id.popupLayout);
+        this.search_list = (ListView) rootView.findViewById(R.id.search_suggestion);
+        IngredientSearchFragment.this.search_list.setVisibility(View.INVISIBLE);
+        String[] list = {"Test", "Hej", "Fedt", "Ged"};
+
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, list);
+
+        this.search_list.setAdapter(arrayAdapter);
+        this.search_list.setTextFilterEnabled(true);
 
         KeyboardEventsLayout keyboardEventsLayout = (KeyboardEventsLayout) rootView.findViewById(R.id.keyboardEventsLayout);
         keyboardEventsLayout.setOnKeyboardVisibilityChangedListener(new KeyboardEventsLayout.OnKeyboardVisibilityChangedListener() {
@@ -135,6 +117,14 @@ public class IngredientSearchFragment extends Fragment {
                     // keyboard hidden
 
                 }
+            }
+        });
+
+        ObservableScrollView observableScrollView = (ObservableScrollView) rootView.findViewById(R.id.oberservableScrollView);
+        observableScrollView.setOnBottomReachedListener(new ObservableScrollView.OnBottomReachedListener() {
+            @Override
+            public void onBottomReached() {
+                int htest = 2;
             }
         });
 
@@ -168,101 +158,79 @@ public class IngredientSearchFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        super.getActivity().getMenuInflater().inflate(R.menu.main, menu);
         MainActivity mainActivity = (MainActivity) this.getActivity();
 
-        Button searchButton = (Button) getActivity().findViewById(R.id.searchButton);
-        searchButton.setText("Search");
+        ActionBar actionBar = mainActivity.getActionBar();
+        // add the custom view to the action bar
+        actionBar.setCustomView(R.layout.menu_search_item);
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
-                ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
-                ArrayList<Long> searchResult = new ArrayList<>();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
 
-                for(int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+        searchBar = (EditText) actionBar.getCustomView().findViewById(R.id.menu_search);
+        searchBar.setHint("Enter an ingredient");
 
-                    if(IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
-                        IngredientButton tempButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
-                        searchResult.add(tempButton.getIngredient().getId());
-                    }
+        searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            private boolean isEmpty = true;
+
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            public void afterTextChanged(Editable editable) {
+                if ((searchBar.length() == 0) != isEmpty) {
+                    isEmpty = searchBar.length() == 0;
+
+                    searchBar.setInputType(EditorInfo.TYPE_NULL); // force keyboard update
+
+                    if (isEmpty)
+                        searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+                    else
+                        searchBar.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+
+                    searchBar.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // force keyboard update
                 }
+            }
+        });
 
-                if(searchResult.isEmpty()) {
-                    searchBar.setQuery("", false);
-                    searchBar.clearFocus();
-                    Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int x, KeyEvent keyEvent) {
+                if (searchBar.length() > 0) {
+                    addIngredientToFlowLayout(searchBar.getText().toString());
+                    searchBar.setText("");
                 }
                 else {
-                    searchBar.setQuery("", false);
-                    searchBar.clearFocus();
-                    searchForRecipes(searchResult);
-                }
-            }
-        });
-
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchBar = (SearchView) menu.findItem(R.id.ingredient_search).getActionView();
-        searchBar.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchBar.setQueryHint(getString(R.string.ingredient_search_hint));
-        searchBar.setIconifiedByDefault(false);
-
-        searchBar.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                    if(searchBar.getQuery().toString().isEmpty() && searchBar.getQuery().length() == 0) {
-                        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
-        if (allIngredients.size() != 0) {
-            menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
-        }
-
-      /*  SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-            public boolean onQueryTextChange(String newText) {
-                // this is your adapter that will be filtered
-                return true;
-            }
-
-            public boolean onQueryTextSubmit(String query) {
-                //Here u can get the value "query" which is entered in the search box.
-
-                ArrayList<Long> searchResult = new ArrayList<>();
-
-                if(query.isEmpty()){
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
                     ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
+                    searchBar.clearFocus();
 
-                    for(int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+                    ArrayList<Long> ingredients = new ArrayList<>();
 
-                        if(IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
-                            IngredientButton tempButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
-                            searchResult.add(tempButton.getIngredient().getId());
+                    for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+
+                        if (IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
+                            IngredientButton ingredientButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
+                            ingredients.add(ingredientButton.getIngredient().getId());
                         }
                     }
 
-                    if(searchResult.isEmpty())
+                    if (ingredients.isEmpty()) {
                         Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
+                    } else {
+                        searchForRecipes(ingredients);
+                    }
                 }
-
-                else
-                    updateFlowLayout(query);
-
                 return true;
             }
-        };
+        });
 
-        searchBar.setOnQueryTextListener(queryTextListener);*/
+        if (allIngredients.size() != 0) {
+            searchBar.setEnabled(!mainActivity.isDrawerOpen());
+        }
 
         super.onPrepareOptionsMenu(menu);
     }
@@ -279,7 +247,7 @@ public class IngredientSearchFragment extends Fragment {
                     allIngredients.add(ingredient);
                 }
 
-                menu.findItem(R.id.ingredient_search).setVisible(!mainActivity.isDrawerOpen());
+                searchBar.setEnabled(!mainActivity.isDrawerOpen());
 
             }
 
@@ -296,61 +264,40 @@ public class IngredientSearchFragment extends Fragment {
 
         for (Ingredient ingredient : allIngredients) {
             if (ingredient.getSingular().equals(MainActivity.ingredientResult)) {
-                if (IngredientSearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
-
-                    addButton(ingredientButton, ingredient);
-
-                    break;
-
-                } else {
-                    testIfExists(ingredientButton, ingredient);
-
-                    break;
-                }
+                addButtonIfNotExists(ingredientButton, ingredient);
+                break;
             }
         }
     }
 
-    public void updateFlowLayout(String query){
+    public void addIngredientToFlowLayout(String query){
 
         Pattern p = Pattern.compile("(^|\\s)" + query);
 
-        final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
+        IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
         for (Ingredient ingredient : allIngredients) {
-
             Matcher matcher = p.matcher(ingredient.getSingular().toLowerCase());
 
             if(matcher.find()) {
-
-                if (IngredientSearchFragment.this.ingredientFlowLayout.getChildCount() == 0) {
-
-                    addButton(ingredientButton, ingredient);
-
-                    break;
-
-                } else {
-
-                    testIfExists(ingredientButton, ingredient);
-                    break;
-                }
+                addButtonIfNotExists(ingredientButton, ingredient);
+                break;
             }
         }
     }
 
-    private void testIfExists(IngredientButton ingredientButton, Ingredient ingredient) {
+    private void addButtonIfNotExists(IngredientButton ingredientButton, Ingredient ingredient) {
 
         boolean test = false;
-        boolean f;
 
         for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
 
             IngredientButton testButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
             ingredientButton.setIngredient(ingredient);
-            f = ingredientButton.equals(testButton);
+            boolean found = ingredientButton.equals(testButton);
 
-            if (f) {
-                test = f;
+            if (found) {
+                test = found;
             }
         }
         if (!test) {

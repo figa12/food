@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ScrollView
+        <aau.sw8.recipe.ObservableScrollView
+            android:id="@+id/oberservableScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -30,11 +31,12 @@
                     android:id="@+id/progressCircle"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:layout_gravity="center"
                     android:visibility="gone"/>
 
             </LinearLayout>
-        </ScrollView>
+        </aau.sw8.recipe.ObservableScrollView>
 
         <LinearLayout
             android:id="@+id/popupLayout"
@@ -56,14 +58,19 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"/>
 
-            <Button
-                android:id="@+id/searchButton"
-                android:title="@string/button_search"
-                android:layout_gravity="bottom"
-                android:layout_width="100dp"
-                android:layout_height="40dp" />
-
         </LinearLayout>
 
+        <ListView
+            android:id="@+id/search_suggestion"
+            android:orientation="horizontal"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:color="#FF4FDF"
+            android:layout_alignParentRight="true"
+            />
+
+
     </RelativeLayout>
+
+
 </aau.sw8.recipe.KeyboardEventsLayout>
