@@ -15,8 +15,12 @@ import aau.sw8.model.IntermediateRecipe;
  */
 public class RecipeSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
 
-    public RecipeSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, String query, BasicNameValuePair... basicNameValuePairs) {
-        super("textsearch.php?q=" + Uri.encode(query), serverAlertDialog, onResponseListener, basicNameValuePairs);
+    public RecipeSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, String query, int offset, int limit, BasicNameValuePair... basicNameValuePairs) {
+        super(RecipeSearchCom.getPath(query, offset, limit), serverAlertDialog, onResponseListener, basicNameValuePairs);
+    }
+
+    private static String getPath(String query, int offset, int limit) {
+        return "textsearch.php?q=" + Uri.encode(query) + "&offset=" + offset + "&limit=" + limit;
     }
 
     @Override

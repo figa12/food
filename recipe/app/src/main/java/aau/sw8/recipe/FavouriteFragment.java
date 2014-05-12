@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -21,12 +22,15 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
 
     public static final String ARG_FAVOURITE = "favourite";
 
+    private FrameLayout progressContainer;
     private ProgressBar progressCircle;
+
     private FavouriteList favouriteList;
-    private int limit = 10;
-    private int offset = 0;
 
     private String pageTitle;
+
+    private boolean moreRecipesAvailable = true;
+    private boolean searchActive = false;
 
     /* Contstructors */
     public FavouriteFragment() {
@@ -45,18 +49,26 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         View rootView = inflater.inflate(R.layout.fragment_favourite_list, container, false);
 
         this.favouriteList = (FavouriteList) rootView.findViewById(R.id.favouriteList);
-        this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircleFavouriteFragment);
+
+        this.progressContainer = (FrameLayout) rootView.findViewById(R.id.favProgressContainer);
+        this.progressCircle = (ProgressBar) rootView.findViewById(R.id.favProgressCircle);
 
         /*Gets favourites from the database*/
-        //TODO: Load the favourite list from the database
-        getFavourites(LogInActivity.user.getHash(), this.limit, this.offset, "us");
+        this.getFavourites(LogInActivity.user.getHash());
 
-        //TODO: Load the favourite list from the database
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         //TODO: make it possible to change the pagetitle accordingly to language.
         this.pageTitle = super.getResources().getStringArray(R.array.pages_array)[pageIndex];
         super.getActivity().setTitle(this.pageTitle);
+
+        ObservableScrollView observableScrollView = (ObservableScrollView) rootView.findViewById(R.id.scrollView);
+        observableScrollView.setOnBottomReachedListener(new ObservableScrollView.OnBottomReachedListener() {
+            @Override
+            public void onBottomReached() {
+                FavouriteFragment.this.getMoreFavourites(FavouriteFragment.this.favouriteList.getSize(), LogInActivity.user.getHash());
+            }
+        });
 
         return rootView;
     }
@@ -70,7 +82,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         super.onResume();
 
-        getFavourites(LogInActivity.user.getHash(), limit, offset, "us");
+        getFavourites(LogInActivity.user.getHash());
 
         favouriteList.clearHighlight();
     }
@@ -82,26 +94,47 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         super.onPrepareOptionsMenu(menu);
     }
 
-    private void getFavourites(String hash, int limit, int offset, String lang){
+    private void getFavourites(String hash) {
+        //assume more recipes are available to download
+        this.moreRecipesAvailable = true;
+
+        // this is a new search, clear the search list and search with offset 0
+        this.favouriteList.removeAllViews();
+        this.getMoreFavourites(0, hash);
+    }
+
+    private void getMoreFavourites(int offset, String hash) {
+        if (!this.moreRecipesAvailable || this.searchActive) {
+            return;
+        }
+
+        this.searchActive = true;
+        this.progressContainer.setVisibility(View.VISIBLE);
         this.progressCircle.setVisibility(View.VISIBLE);
+
         new FavouriteListCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
             @Override
             public void onResponse(ArrayList<IntermediateRecipe> result) {
-                FavouriteFragment.this.loadFavourites(result);
-                FavouriteFragment.this.progressCircle.setVisibility(View.GONE);
+                for (IntermediateRecipe intermediateRecipe : result)
+                    FavouriteFragment.this.favouriteList.addView(intermediateRecipe);
+
+                FavouriteFragment.this.onSearchComplete(result.size() > 0);
             }
 
             @Override
             public void onFailed() {
-                FavouriteFragment.this.progressCircle.setVisibility(View.GONE);
+                FavouriteFragment.this.onSearchComplete(false);
             }
-        },FavouriteListCom.GET, hash, limit, offset, lang);
+        }, FavouriteListCom.GET, hash, RecipeList.LIMIT, offset, "us");
     }
 
-    private void loadFavourites(ArrayList<IntermediateRecipe> intermediateRecipes){
-        this.favouriteList.removeAllViews();
-        for (IntermediateRecipe intermediateRecipe : intermediateRecipes){
-            this.favouriteList.addView(intermediateRecipe);
+    private void onSearchComplete(boolean moreRecipesAvailable) {
+        this.moreRecipesAvailable = moreRecipesAvailable;
+        this.searchActive = false;
+
+        this.progressCircle.setVisibility(View.GONE);
+        if (moreRecipesAvailable) {
+            this.progressContainer.setVisibility(View.GONE);
         }
     }
 }

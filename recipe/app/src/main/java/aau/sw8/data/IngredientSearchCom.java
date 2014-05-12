@@ -14,12 +14,12 @@ import aau.sw8.recipe.IngredientSearchFragment;
  */
 public class IngredientSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>> {
 
-    public IngredientSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, ArrayList<Long> chosenIngredients) {
-        super(IngredientSearchCom.getPath(chosenIngredients), serverAlertDialog, onResponseListener);
+    public IngredientSearchCom(ServerAlertDialog serverAlertDialog, OnResponseListener<ArrayList<IntermediateRecipe>> onResponseListener, ArrayList<Long> chosenIngredients, int offset, int limit) {
+        super(IngredientSearchCom.getPath(chosenIngredients, offset, limit), serverAlertDialog, onResponseListener);
     }
 
-    private static String getPath(ArrayList<Long> chosenIngredients) {
-        return "ingredientsearch.php?i=" + chosenIngredients.toString().replace(" ", "");
+    private static String getPath(ArrayList<Long> chosenIngredients, int offset, int limit) {
+        return "ingredientsearch.php?i=" + chosenIngredients.toString().replace(" ", "") + "&offset=" + offset + "&limit=" + limit;
     }
 
     @Override

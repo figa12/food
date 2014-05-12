@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,7 +33,13 @@ public class RecipeSearchFragment extends Fragment {
 
     private OnFragmentInteractionListener interactionListener;
     private SearchList searchList;
+
+    private FrameLayout progressContainer;
     private ProgressBar progressCircle;
+
+    private String query;
+    private boolean moreRecipesAvailable = true;
+    private boolean searchActive = false;
 
     public RecipeSearchFragment() {
         // Required empty public constructor
@@ -50,9 +57,67 @@ public class RecipeSearchFragment extends Fragment {
         this.searchList = (SearchList) rootView.findViewById(R.id.searchList);
         // temporary display.test code
 
+        this.progressContainer = (FrameLayout) rootView.findViewById(R.id.progressContainer);
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
 
+        ObservableScrollView observableScrollView = (ObservableScrollView) rootView.findViewById(R.id.oberservableScrollView);
+        observableScrollView.setOnBottomReachedListener(new ObservableScrollView.OnBottomReachedListener() {
+            @Override
+            public void onBottomReached() {
+                if (RecipeSearchFragment.this.query != null) {
+                    RecipeSearchFragment.this.searchForMoreRecipes(RecipeSearchFragment.this.searchList.getSize());
+                }
+            }
+        });
+
         return rootView;
+    }
+
+    public void search(String query) {
+        // save the ingredient ids so we can use them to search for recipes when we reach the bottom
+        this.query = query;
+
+        //assume more recipes are available to download
+        this.moreRecipesAvailable = true;
+
+        // this is a new search, clear the search list and search with offset 0
+        this.searchList.removeAllViews();
+        this.searchForMoreRecipes(0);
+    }
+
+    private void searchForMoreRecipes(int offset) {
+        if (!this.moreRecipesAvailable || this.searchActive) {
+            return;
+        }
+
+        this.searchActive = true;
+        this.progressContainer.setVisibility(View.VISIBLE);
+        this.progressCircle.setVisibility(View.VISIBLE);
+
+        new RecipeSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
+            @Override
+            public void onResponse(ArrayList<IntermediateRecipe> result) {
+                for (IntermediateRecipe intermediateRecipe : result)
+                    RecipeSearchFragment.this.searchList.addView(intermediateRecipe);
+
+                RecipeSearchFragment.this.onSearchComplete(result.size() > 0);
+            }
+
+            @Override
+            public void onFailed() {
+                RecipeSearchFragment.this.onSearchComplete(false);
+            }
+        }, this.query, offset, RecipeList.LIMIT);
+    }
+
+    private void onSearchComplete(boolean moreRecipesAvailable) {
+        this.moreRecipesAvailable = moreRecipesAvailable;
+        this.searchActive = false;
+
+        this.progressCircle.setVisibility(View.GONE);
+        if (moreRecipesAvailable) {
+            this.progressContainer.setVisibility(View.GONE);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -78,7 +143,7 @@ public class RecipeSearchFragment extends Fragment {
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int x, KeyEvent keyEvent) {
-                searchResults(searchBar.getText().toString());
+                search(searchBar.getText().toString());
                 return true;
             }
         });
@@ -90,29 +155,6 @@ public class RecipeSearchFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
-    }
-
-    public void searchResults(String query) {
-        this.searchList.removeAllViews();
-        this.progressCircle.setVisibility(View.VISIBLE);
-
-        new RecipeSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
-            @Override
-            public void onResponse(ArrayList<IntermediateRecipe> result) {
-                RecipeSearchFragment.this.displayRecipeList(result);
-                RecipeSearchFragment.this.progressCircle.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailed() {
-                RecipeSearchFragment.this.progressCircle.setVisibility(View.GONE);
-            }
-        }, query);
-    }
-
-    private void displayRecipeList(ArrayList<IntermediateRecipe> intermediateRecipes) {
-        for (IntermediateRecipe intermediateRecipe : intermediateRecipes)
-            this.searchList.addView(intermediateRecipe);
     }
 
     @Override

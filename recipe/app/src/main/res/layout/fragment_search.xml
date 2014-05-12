@@ -26,13 +26,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"/>
 
-                <ProgressBar
-                    android:id="@+id/progressCircle"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_gravity="center"
-                    android:visibility="gone"/>
+                <FrameLayout
+                    android:id="@+id/progressContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:id="@+id/progressCircle"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+                </FrameLayout>
 
             </LinearLayout>
         </aau.sw8.recipe.ObservableScrollView>
