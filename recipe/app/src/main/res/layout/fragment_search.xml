@@ -67,14 +67,24 @@
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/search_suggestion"
-            android:orientation="horizontal"
-            android:layout_width="250dp"
+        <FrameLayout
+            android:id="@+id/search_suggestion_wrapper"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:color="#FF4FDF"
             android:layout_alignParentRight="true"
-            />
+            android:background="@android:color/darker_gray">
+
+            <ListView
+                android:id="@+id/search_suggestion"
+                android:orientation="horizontal"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:layout_marginLeft="1dp"
+                android:layout_marginBottom="1dp"
+                />
+
+        </FrameLayout>
 
 
     </RelativeLayout>

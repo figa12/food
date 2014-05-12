@@ -45,6 +45,7 @@ public class IngredientSearchFragment extends Fragment {
     private OnFragmentInteractionListener interactionListener;
     public EditText searchBar;
     private ListView suggestionList;
+    private FrameLayout suggestionWrapper;
     private int i = 0;
 
     private FrameLayout progressContainer;
@@ -104,7 +105,9 @@ public class IngredientSearchFragment extends Fragment {
 
         this.popupLayout = (LinearLayout) rootView.findViewById(R.id.popupLayout);
         this.suggestionList = (ListView) rootView.findViewById(R.id.search_suggestion);
-        IngredientSearchFragment.this.suggestionList.setVisibility(View.INVISIBLE);
+
+        this.suggestionWrapper = (FrameLayout) rootView.findViewById(R.id.search_suggestion_wrapper);
+        this.suggestionWrapper.setVisibility(View.INVISIBLE);
         String[] list = {"Test", "Hej", "Fedt", "Ged"};
 
 
@@ -130,11 +133,11 @@ public class IngredientSearchFragment extends Fragment {
                 if (isVisible) {
                     // keyboard shown
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
-                    suggestionList.setVisibility(View.VISIBLE);
+                    suggestionWrapper.setVisibility(View.VISIBLE);
 
                 } else {
                     // keyboard hidden
-
+                    suggestionWrapper.setVisibility(View.INVISIBLE);
                 }
             }
         });
