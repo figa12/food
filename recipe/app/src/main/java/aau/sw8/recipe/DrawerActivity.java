@@ -25,11 +25,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
+
 
 /**
  * Created by Sam on 14/04/2014.
  */
 public abstract class DrawerActivity extends LogInActivity implements RecipeSearchFragment.OnFragmentInteractionListener {
+
+    public static final String FLURRY_API_KEY = "3JTPC9F8FNFW2GMMTP37";
 
     private Settings settings;
     protected CharSequence drawerTitle;
@@ -350,5 +354,19 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
                 selectItem(2);
                 break;
         }
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        FlurryAgent.onStartSession(this, DrawerActivity.FLURRY_API_KEY);
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
     }
 }

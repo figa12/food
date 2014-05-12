@@ -11,8 +11,12 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import aau.sw8.data.RecipeCom;
 import aau.sw8.data.ServerComTask;
@@ -24,7 +28,7 @@ import aau.sw8.model.Recipe;
  */
 public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
 
-    protected static final int LIMIT = 5;
+    protected static final int LIMIT = 6;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -96,6 +100,8 @@ public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
     protected void openRecipe(long id) {
         this.progressDialog.show();
 
+        this.logRecipeOpened(id);
+
         new RecipeCom((DrawerActivity) super.getContext(), new ServerComTask.OnResponseListener<Recipe>() {
             @Override
             public void onResponse(Recipe result) {
@@ -112,6 +118,13 @@ public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                 RecipeList.this.progressDialog.dismiss();
             }
         }, id);
+    }
+
+    private void logRecipeOpened(long id) {
+        Map<String, String> recipeParams = new HashMap<>();
+        recipeParams.put("Recipe_Id", Long.toString(id));
+
+        FlurryAgent.logEvent("Article_Read", recipeParams);
     }
 
     protected void onLongClick(IntermediateRecipe recipe, View view) { }
