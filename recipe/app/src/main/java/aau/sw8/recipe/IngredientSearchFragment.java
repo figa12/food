@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -42,7 +43,7 @@ public class IngredientSearchFragment extends Fragment {
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private OnFragmentInteractionListener interactionListener;
     public EditText searchBar;
-    private ListView search_list;
+    private ListView suggestionList;
     private int i = 0;
     private ProgressBar progressCircle;
 
@@ -95,15 +96,25 @@ public class IngredientSearchFragment extends Fragment {
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
         this.popupLayout = (LinearLayout) rootView.findViewById(R.id.popupLayout);
-        this.search_list = (ListView) rootView.findViewById(R.id.search_suggestion);
-        IngredientSearchFragment.this.search_list.setVisibility(View.INVISIBLE);
+        this.suggestionList = (ListView) rootView.findViewById(R.id.search_suggestion);
+        IngredientSearchFragment.this.suggestionList.setVisibility(View.INVISIBLE);
         String[] list = {"Test", "Hej", "Fedt", "Ged"};
 
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, list);
 
-        this.search_list.setAdapter(arrayAdapter);
-        this.search_list.setTextFilterEnabled(true);
+        this.suggestionList.setAdapter(arrayAdapter);
+        this.suggestionList.setTextFilterEnabled(true);
+
+
+        this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                String listItem = ((TextView)view).getText().toString();
+                //suggestionList.getItemAtPosition(position);
+                Toast.makeText(getActivity(), listItem, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         KeyboardEventsLayout keyboardEventsLayout = (KeyboardEventsLayout) rootView.findViewById(R.id.keyboardEventsLayout);
         keyboardEventsLayout.setOnKeyboardVisibilityChangedListener(new KeyboardEventsLayout.OnKeyboardVisibilityChangedListener() {
@@ -112,6 +123,7 @@ public class IngredientSearchFragment extends Fragment {
                 if (isVisible) {
                     // keyboard shown
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
+                    suggestionList.setVisibility(View.VISIBLE);
 
                 } else {
                     // keyboard hidden
