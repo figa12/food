@@ -46,7 +46,9 @@ public class IngredientSearchFragment extends Fragment {
     public EditText searchBar;
     private ListView suggestionList;
     private FrameLayout suggestionWrapper;
-    private int i = 0;
+    private int i;
+    private ArrayList<String> suggestionName = new ArrayList<>();
+    private ArrayList<Ingredient> arrayList = new ArrayList<>();
 
     private FrameLayout progressContainer;
     private ProgressBar progressCircle;
@@ -73,10 +75,9 @@ public class IngredientSearchFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        if (i == 0) {
+        if (allIngredients.size() == 0) {
             try {
-                i++;
-                getAllIngredients(menu);
+                getAllIngredients();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,13 +109,6 @@ public class IngredientSearchFragment extends Fragment {
 
         this.suggestionWrapper = (FrameLayout) rootView.findViewById(R.id.search_suggestion_wrapper);
         this.suggestionWrapper.setVisibility(View.INVISIBLE);
-        String[] list = {"Test", "Hej", "Fedt", "Ged"};
-
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, list);
-
-        this.suggestionList.setAdapter(arrayAdapter);
-        this.suggestionList.setTextFilterEnabled(true);
 
 
         this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -135,9 +129,6 @@ public class IngredientSearchFragment extends Fragment {
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
                     suggestionWrapper.setVisibility(View.VISIBLE);
 
-                } else {
-                    // keyboard hidden
-                    suggestionWrapper.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -231,6 +222,7 @@ public class IngredientSearchFragment extends Fragment {
                 if ((searchBar.length() == 0) != isEmpty) {
                     isEmpty = searchBar.length() == 0;
 
+                    suggestionName.clear();
                     searchBar.setInputType(EditorInfo.TYPE_NULL); // force keyboard update
 
                     if (isEmpty)
@@ -240,8 +232,33 @@ public class IngredientSearchFragment extends Fragment {
 
                     searchBar.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // force keyboard update
                 }
+
+
+                if (searchBar.length() != 0) {
+                    suggestionName.clear();
+
+                    Pattern p = Pattern.compile("(^|\\s)" + editable);
+
+                    for (Ingredient ingredient : allIngredients) {
+                        Matcher matcher = p.matcher(ingredient.getSingular().toLowerCase());
+
+                        if (matcher.find()) {
+
+                            arrayList.add(ingredient);
+
+                            suggestionName.add(ingredient.getSingular());
+
+                        }
+                    }
+                }
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, suggestionName);
+
+                suggestionList.setAdapter(arrayAdapter);
+                suggestionList.setTextFilterEnabled(true);
             }
         });
+
 
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -283,7 +300,7 @@ public class IngredientSearchFragment extends Fragment {
     }
 
 
-    private void getAllIngredients(final Menu menu) throws IOException {
+    private void getAllIngredients() throws IOException {
 
         final MainActivity mainActivity = (MainActivity) this.getActivity();
 
