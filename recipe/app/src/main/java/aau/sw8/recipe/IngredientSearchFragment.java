@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -120,15 +121,22 @@ public class IngredientSearchFragment extends Fragment {
             }
         });
 
-        KeyboardEventsLayout keyboardEventsLayout = (KeyboardEventsLayout) rootView.findViewById(R.id.keyboardEventsLayout);
-        keyboardEventsLayout.setOnKeyboardVisibilityChangedListener(new KeyboardEventsLayout.OnKeyboardVisibilityChangedListener() {
-            @Override
-            public void OnVisibilityChanged(boolean isVisible) {
-                if (isVisible) {
-                    // keyboard shown
-                    IngredientSearchFragment.this.popupLayout.setVisibility(View.VISIBLE);
-                    suggestionWrapper.setVisibility(View.VISIBLE);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
+            @Override
+            public void onGlobalLayout() {
+                if (getView() != null) {
+                    int heightDiff = getView().getRootView().getHeight() - getView().getHeight();
+                    if (heightDiff > 200) {
+                        // keyboard shown
+                        suggestionWrapper.setVisibility(View.VISIBLE);
+                        popupLayout.setVisibility(View.VISIBLE);
+
+                    } else {
+                        // keyboard hidden
+                        suggestionWrapper.setVisibility(View.INVISIBLE);
+                        popupLayout.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -264,8 +272,14 @@ public class IngredientSearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int x, KeyEvent keyEvent) {
                 if (searchBar.length() > 0) {
-                    addIngredientToFlowLayout(searchBar.getText().toString());
-                    searchBar.setText("");
+                    boolean ingredientMatched = addIngredientToFlowLayout(searchBar.getText().toString());
+
+                    if (ingredientMatched) {
+                        searchBar.setText("");
+                    }
+                    else {
+                        Toast.makeText(getActivity(), "No matching ingredient was found", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
@@ -334,7 +348,7 @@ public class IngredientSearchFragment extends Fragment {
         }
     }
 
-    public void addIngredientToFlowLayout(String query){
+    public boolean addIngredientToFlowLayout(String query){
 
         Pattern p = Pattern.compile("(^|\\s)" + query);
 
@@ -345,9 +359,11 @@ public class IngredientSearchFragment extends Fragment {
 
             if(matcher.find()) {
                 addButtonIfNotExists(ingredientButton, ingredient);
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 
     private void addButtonIfNotExists(IngredientButton ingredientButton, Ingredient ingredient) {

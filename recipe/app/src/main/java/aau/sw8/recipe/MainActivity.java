@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -81,17 +80,6 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
                 ingredientSearchFragment.addIngredientToFlowLayout(query);
             }
 
-        }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (ingredientSearchFragment != null && ingredientSearchFragment.popupLayout.getVisibility() == View.VISIBLE) {
-            ingredientSearchFragment.popupLayout.setVisibility(View.GONE);
-            ingredientSearchFragment.searchBar.setText("");
-        } else {
-            super.onBackPressed();
         }
     }
 
