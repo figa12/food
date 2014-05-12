@@ -263,12 +263,17 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         /* Alert dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        final long recipeid = this.recipe.getRecipeId();
             /* Build Alert dialog*/
         builder.setMessage(R.string.sign_in_text) /*Set text description*/
                 .setPositiveButton(R.string.common_signin_button_text, new DialogInterface.OnClickListener() {         /*Sign in button*/
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO go to sign in fragment
+                        if(LogInActivity.IS_ONLY_GOOGLE_PLUS){ //if google plus is the only sigin method
+                            googlePlusLogInActions(LogInActivity.SIGN_IN);
+                        }else{
+                            ((DrawerActivity) RecipeActivity.this).selectItem(99); //starts the Sign in fragment
+                        }
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {      /*Cancel button*/
@@ -289,6 +294,33 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         this.menu = menu;
 
         return true;
+    }
+
+    @Override
+    protected void onLoggedIn() {
+        new FavouriteCom(this, new ServerComTask.OnResponseListener<ServerMessage>() {
+            @Override
+            public void onResponse(ServerMessage message) {
+                if (message.getStatus()) {
+                    RecipeActivity.this.isFavourited = true;
+                } else {
+                    RecipeActivity.this.isFavourited = false;
+                }
+
+                RecipeActivity.this.setFavouriteButton(isFavourited);
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+    }
+
+    @Override
+    protected void onLoggedOut() {
+        this.isFavourited = false;
+        setFavouriteButton(this.isFavourited);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -317,7 +349,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
 
                     }
                 }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
-            }else{
+            }else {
                 setFavouriteButton(isFavourited);
             }
         }

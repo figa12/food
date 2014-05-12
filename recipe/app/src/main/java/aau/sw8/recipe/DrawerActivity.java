@@ -85,7 +85,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             @Override
             public void onClick(View view) {
                 if (((TextView) view).getText().equals(getResources().getString(R.string.sign_in))) {
-                    if(LogInActivity.IS_ONLY_GOOGLE_PLUS){
+                    if(LogInActivity.IS_ONLY_GOOGLE_PLUS){ //if google plus is the only sig in method
                         googlePlusLogInActions(LogInActivity.SIGN_IN);
                     }else{
                         DrawerActivity.this.selectItem(99); //starts the Sign in fragment
@@ -275,6 +275,8 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             // Enable fragments to handle the action bar
             fragment.setHasOptionsMenu(false);
 
+            this.CHOSEN_FRAGMENT = position;
+
             // Clear the back stack
             while (super.getFragmentManager().popBackStackImmediate()) ;
 
@@ -328,5 +330,25 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected void dismissKeyboard() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(super.findViewById(R.id.content_frame).getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onLoggedOut() {
+        switch (this.CHOSEN_FRAGMENT){
+            //if favourites is selected.
+            case 2:
+                selectItem(2);
+                break;
+        }
+    }
+
+    @Override
+    protected void onLoggedIn() {
+        switch (this.CHOSEN_FRAGMENT){
+            //if favourites is selected.
+            case 2:
+                selectItem(2);
+                break;
+        }
     }
 }

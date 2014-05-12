@@ -87,7 +87,6 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
 
     @Override
     public void onBackPressed() {
-
         if (ingredientSearchFragment != null && ingredientSearchFragment.popupLayout.getVisibility() == View.VISIBLE) {
             ingredientSearchFragment.popupLayout.setVisibility(View.GONE);
             ingredientSearchFragment.searchBar.setText("");
@@ -123,5 +122,15 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
 
         // Start the activity and allow it to request fragment change
         this.startActivityForResult(myIntent, DrawerActivity.FRAGMENT_CHANGE_REQUEST);
+    }
+
+    @Override
+    protected void onLoggedIn() {
+        super.onLoggedIn();
+    }
+
+    @Override
+    protected void onLoggedOut() {
+        super.onLoggedOut();
     }
 }

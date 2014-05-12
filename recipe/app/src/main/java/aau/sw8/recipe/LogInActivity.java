@@ -49,7 +49,7 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     private static final String TAG = "LogInActivity";
 
     //TODO: should be remove or changed to false when other sign in methods are implemented.
-    public static final boolean IS_ONLY_GOOGLE_PLUS = true;
+    public static final boolean IS_ONLY_GOOGLE_PLUS = true; //if google plus is the only sign in method
 
 
     @Override
@@ -161,9 +161,12 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
 
     @Override
     public void onDisconnected() {
+
         // Bye!
         Log.v(TAG, "Disconnected. Bye!");
     }
+
+
 
     /***
      * If the sign in to Google plus failed this method is called.
@@ -296,6 +299,9 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
 
                     // Hide the sign out buttons, show the sign in button.
                     this.updateUserUI(false);
+
+                    //report to the system that the user has signed out
+                    this.onLoggedOut();
                 }
                 break;
             case LogInActivity.REWOKE_ACCESS:
@@ -325,9 +331,12 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
         /*Set the user, the user will be created in the database
         * when adding a recipe to favourites or any action that requires a user.
         * */
+
         String hash = User.doHash(email);
         LogInActivity.user = new User(personName, hash, token);
         Log.w(LogInActivity.TAG, "Current user is {personName: " + LogInActivity.user.getPersonName() + " hash: " + LogInActivity.user.getHash() + " token: " + LogInActivity.user.getToken() + "}");
+        this.onLoggedIn(); //reports to the app that a user as signed in.
+
     }
 
     /**
@@ -381,4 +390,6 @@ public abstract class LogInActivity extends Activity implements GooglePlayServic
     }
 
     protected abstract void updateUserUI(boolean isLoggedIn);
+    protected abstract void onLoggedIn();
+    protected abstract void onLoggedOut();
 }
