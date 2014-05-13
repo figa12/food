@@ -124,7 +124,7 @@ public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
         Map<String, String> recipeParams = new HashMap<>();
         recipeParams.put("Recipe_Id", Long.toString(id));
 
-        FlurryAgent.logEvent("Article_Read", recipeParams);
+        FlurryAgent.logEvent("RecipeOpened", recipeParams);
     }
 
     protected void onLongClick(IntermediateRecipe recipe, View view) { }
