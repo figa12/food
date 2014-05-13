@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +57,7 @@ public class IngredientSearchFragment extends Fragment {
     private ProgressBar progressCircle;
 
     private SearchList searchList;
-    private ArrayList<Long> ingredientIds;
+    private ArrayList<Ingredient> ingredients;
     private boolean moreRecipesAvailable = true;
     private boolean searchActive = false;
 
@@ -129,7 +130,7 @@ public class IngredientSearchFragment extends Fragment {
         observableScrollView.setOnBottomReachedListener(new ObservableScrollView.OnBottomReachedListener() {
             @Override
             public void onBottomReached() {
-                if (IngredientSearchFragment.this.ingredientIds != null) {
+                if (IngredientSearchFragment.this.ingredients != null) {
                     IngredientSearchFragment.this.searchForMoreRecipes(IngredientSearchFragment.this.searchList.getSize());
                 }
             }
@@ -138,9 +139,9 @@ public class IngredientSearchFragment extends Fragment {
         return rootView;
     }
 
-    private void searchForRecipes(ArrayList<Long> ingredientIds) {
+    private void searchForRecipes(ArrayList<Ingredient> ingredients) {
         // save the ingredient ids so we can use them to search for recipes when we reach the bottom
-        this.ingredientIds = ingredientIds;
+        this.ingredients = ingredients;
 
         //assume more recipes are available to download
         this.moreRecipesAvailable = true;
@@ -159,6 +160,11 @@ public class IngredientSearchFragment extends Fragment {
         this.progressContainer.setVisibility(View.VISIBLE);
         this.progressCircle.setVisibility(View.VISIBLE);
 
+        ArrayList<Long> ingredientIds = new ArrayList<>();
+        for (Ingredient ingredient : this.ingredients) {
+            ingredientIds.add(ingredient.getId());
+        }
+
         new IngredientSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
             @Override
             public void onResponse(ArrayList<IntermediateRecipe> result) {
@@ -172,7 +178,7 @@ public class IngredientSearchFragment extends Fragment {
             public void onFailed() {
                 IngredientSearchFragment.this.onSearchComplete(false);
             }
-        }, this.ingredientIds, offset, RecipeList.LIMIT);
+        }, ingredientIds, offset, RecipeList.LIMIT);
     }
 
     private void onSearchComplete(boolean moreRecipesAvailable) {
@@ -197,7 +203,7 @@ public class IngredientSearchFragment extends Fragment {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
 
         searchBar = (EditText) actionBar.getCustomView().findViewById(R.id.menu_search);
-        searchBar.setHint("Enter an ingredient");
+        searchBar.setHint(R.string.search_hint);
 
         searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
@@ -264,21 +270,23 @@ public class IngredientSearchFragment extends Fragment {
                 }
                 else {
                     ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
-
-                    ArrayList<Long> ingredients = new ArrayList<>();
+                    ArrayList<Ingredient> ingredients = new ArrayList<>();
 
                     for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
 
                         if (IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
                             IngredientButton ingredientButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
-                            ingredients.add(ingredientButton.getIngredient().getId());
+                            ingredients.add(ingredientButton.getIngredient());
                         }
                     }
 
                     if (ingredients.isEmpty()) {
                         Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
+                        searchBar.setHint(R.string.search_hint);
                     } else {
                         searchForRecipes(ingredients);
+
+                        searchBar.setHint(getIngredientString(ingredients));
                     }
                 }
                 return true;
@@ -304,11 +312,19 @@ public class IngredientSearchFragment extends Fragment {
                 if (fragmentHeight != oldHeight) {
                     if (fragmentHeight < noKeyboardHeight) {
                         // keyboard shown
+                        searchBar.setHint(R.string.search_hint);
                         suggestionWrapper.setVisibility(View.VISIBLE);
                         popupLayout.setVisibility(View.VISIBLE);
 
                     } else {
                         // keyboard hidden
+                        if (ingredients != null) {
+                            searchBar.setHint(getIngredientString(ingredients));
+                        }
+                        else {
+                            searchBar.setHint(R.string.search_hint);
+                        }
+
                         searchBar.clearFocus();
                         suggestionWrapper.setVisibility(View.GONE);
                         popupLayout.setVisibility(View.GONE);
@@ -322,6 +338,20 @@ public class IngredientSearchFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
     }
 
+
+    private String getIngredientString(ArrayList<Ingredient> ingredients) {
+        String ingredientsString = "";
+
+        Iterator<Ingredient> it = ingredients.iterator();
+        if (it.hasNext()) {
+            ingredientsString += it.next().getSingular();
+        }
+        while (it.hasNext()) {
+            ingredientsString += ", " + it.next().getSingular();
+        }
+
+        return ingredientsString;
+    }
 
     private void getAllIngredients() throws IOException {
 

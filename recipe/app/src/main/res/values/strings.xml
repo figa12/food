@@ -42,7 +42,7 @@
     <string name="search_label">Recipe</string>
 
     <!-- The hint text that appears in the search box. -->
-    <string name="search_hint">Search the database</string>
+    <string name="search_hint">Enter an ingredient</string>
 
     <!-- The menu entry that invokes search. -->
     <string name="menu_search">Search</string>
