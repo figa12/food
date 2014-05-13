@@ -60,6 +60,9 @@ public class IngredientSearchFragment extends Fragment {
     private boolean moreRecipesAvailable = true;
     private boolean searchActive = false;
 
+    private int noKeyboardHeight;
+    private int oldHeight;
+
     public IngredientSearchFragment() {
         // Required empty public constructor
     }
@@ -289,18 +292,17 @@ public class IngredientSearchFragment extends Fragment {
 
 
         // keyboard visibility
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        noKeyboardHeight = rootView.getHeight();
+        oldHeight = rootView.getHeight();
 
-            private int screenHeight = rootView.getHeight();
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
             public void onGlobalLayout() {
-                if (getView() != null) {
-                    int screen = rootView.getRootView().getHeight();
-                    int viewHeight = rootView.getHeight();
-                    int heightDiff = screen - viewHeight;
-                    int actionBar = ((MainActivity) getActivity()).getActionBarHeight();
-                    if (heightDiff > 200) {
+                int fragmentHeight = rootView.getHeight();
+
+                if (fragmentHeight != oldHeight) {
+                    if (fragmentHeight < noKeyboardHeight) {
                         // keyboard shown
                         suggestionWrapper.setVisibility(View.VISIBLE);
                         popupLayout.setVisibility(View.VISIBLE);
@@ -311,6 +313,8 @@ public class IngredientSearchFragment extends Fragment {
                         suggestionWrapper.setVisibility(View.GONE);
                         popupLayout.setVisibility(View.GONE);
                     }
+
+                    oldHeight = fragmentHeight;
                 }
             }
         });
