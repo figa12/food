@@ -287,13 +287,19 @@ public class IngredientSearchFragment extends Fragment {
         }
 
 
+
         // keyboard visibility
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private int screenHeight = rootView.getHeight();
 
             @Override
             public void onGlobalLayout() {
                 if (getView() != null) {
-                    int heightDiff = getView().getRootView().getHeight() - getView().getHeight();
+                    int screen = rootView.getRootView().getHeight();
+                    int viewHeight = rootView.getHeight();
+                    int heightDiff = screen - viewHeight;
+                    int actionBar = ((MainActivity) getActivity()).getActionBarHeight();
                     if (heightDiff > 200) {
                         // keyboard shown
                         suggestionWrapper.setVisibility(View.VISIBLE);
