@@ -87,7 +87,6 @@ public class IngredientSearchFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -116,16 +115,15 @@ public class IngredientSearchFragment extends Fragment {
         this.suggestionWrapper = (FrameLayout) rootView.findViewById(R.id.search_suggestion_wrapper);
         this.suggestionWrapper.setVisibility(View.INVISIBLE);
 
-
         this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 String listItem = ((TextView) view).getText().toString();
-                //suggestionList.getItemAtPosition(position);
-                        addIngredientToFlowLayout(listItem);
+
+               //       addIngredientToFlowLayout(listItem);
+                        selectButton(true, listItem);
                         searchBar.setText("");
 
             }
@@ -218,7 +216,7 @@ public class IngredientSearchFragment extends Fragment {
 
         searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
-        // update suggestions when searchbar text changes
+        // update suggestions when search bar text changes
         searchBar.addTextChangedListener(new TextWatcher() {
             private boolean isEmpty = true;
 
@@ -352,6 +350,25 @@ public class IngredientSearchFragment extends Fragment {
     }
 
 
+    public void selectButton(boolean select, String query){
+
+        for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+
+            IngredientButton testButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
+           if(testButton.getIngredient().getSingular().equals(query)){
+               if(testButton.isSelected()) {
+                   Toast.makeText(getActivity(), "This ingredient has already been selected", Toast.LENGTH_SHORT).show();
+                   break;
+               }
+
+               else {
+                   testButton.setSelected(select);
+                   break;
+               }
+           }
+        }
+    }
+
     private String getIngredientString(ArrayList<Ingredient> ingredients) {
         String ingredientsString = "";
 
@@ -377,6 +394,13 @@ public class IngredientSearchFragment extends Fragment {
                     allIngredients.add(ingredient);
                 }
 
+
+                for (Ingredient ingredient : allIngredients) {
+                    IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
+
+                    addButton(ingredientButton, ingredient);
+                }
+
                 searchBar.setEnabled(!mainActivity.isDrawerOpen());
 
             }
@@ -388,29 +412,18 @@ public class IngredientSearchFragment extends Fragment {
 
     }
 
-    public void updateFlowLayout() {
-
-        final IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
-
-        for (Ingredient ingredient : allIngredients) {
-            if (ingredient.getSingular().equals(MainActivity.ingredientResult)) {
-                addButtonIfNotExists(ingredientButton, ingredient);
-                break;
-            }
-        }
-    }
-
     public boolean addIngredientToFlowLayout(String query){
 
         Pattern p = Pattern.compile("(^|\\s)" + query);
 
-        IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
+      //  IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
         for (Ingredient ingredient : allIngredients) {
             Matcher matcher = p.matcher(ingredient.getSingular().toLowerCase());
 
             if(matcher.find()) {
-                addButtonIfNotExists(ingredientButton, ingredient);
+             //  addButtonIfNotExists(ingredientButton, ingredient);
+                selectButton(true, ingredient.getSingular());
                 return true;
             }
         }
@@ -418,7 +431,7 @@ public class IngredientSearchFragment extends Fragment {
         return false;
     }
 
-    private void addButtonIfNotExists(IngredientButton ingredientButton, Ingredient ingredient) {
+   /* private void addButtonIfNotExists(IngredientButton ingredientButton, Ingredient ingredient) {
 
         boolean test = false;
 
@@ -438,7 +451,7 @@ public class IngredientSearchFragment extends Fragment {
         else  {
             Toast.makeText(getActivity(), "This ingredient has already been added", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     public void addButton(final IngredientButton ingredientButton, Ingredient ingredient) {
         ingredientButton.setIngredient(ingredient);
@@ -463,7 +476,9 @@ public class IngredientSearchFragment extends Fragment {
         });
 
         IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
-        ingredientButton.setSelected(true);
+
+        //Set all buttons to not enblaed on creation
+        ingredientButton.setSelected(false);
     }
 
     @Override

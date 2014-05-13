@@ -1,9 +1,6 @@
 package aau.sw8.recipe;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -35,51 +32,6 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
             this.selectItem(0);
         } else {
             this.setActionBarArrowDependingOnFragmentsBackStack();
-        }
-
-        handleIntent(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        // Because this activity has set launchMode="singleTop", the system calls this method
-        // to deliver the intent if this activity is currently the foreground activity when
-        // invoked again (when the user executes a search from this activity, we don't create
-        // a new instance of this activity, so the system delivers the search intent here)
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        //TODO Implement what happens when the user clicks a suggestion
-
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            // handles a click on a search suggestion;
-
-            ingredientSearchFragment.searchBar.setText("");
-            ingredientSearchFragment.searchBar.clearFocus();
-
-            Uri uri = intent.getData();
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-
-            int wIndex = cursor.getColumnIndexOrThrow(DictionaryDatabase.KEY_WORD);
-
-            ingredientResult = cursor.getString(wIndex);
-
-            if (ingredientSearchFragment != null) {
-                ingredientSearchFragment.updateFlowLayout();
-            }
-        }
-        if(Intent.ACTION_SEARCH.equals(intent.getAction()))
-        {
-
-            ingredientSearchFragment.searchBar.setText("");
-            ingredientSearchFragment.searchBar.clearFocus();
-
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            if (ingredientSearchFragment != null) {
-                ingredientSearchFragment.addIngredientToFlowLayout(query);
-            }
-
         }
     }
 
