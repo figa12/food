@@ -15,6 +15,5 @@
     </declare-styleable>
     <declare-styleable name="ingredient_button">
         <attr name="selected" format="boolean" />
-        <attr name="highlighted" format="boolean" />
     </declare-styleable>
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,17 +16,14 @@ public class IngredientButton extends LinearLayout {
 
     public interface IngredientButtonClickListener {
         void OnSelectedChanged(boolean isSelected);
-        void OnHighlightedChanged(boolean isHighlighted);
     }
 
     private IngredientButtonClickListener ingredientButtonClickListener;
     private Ingredient ingredient;
 
     private TextView nameTextView;
-    //private LinearLayout layoutRoot;
-    private LinearLayout removeLinearLayout;
 
-    private boolean isHighlighted = false;
+    private boolean isSelected = false;
 
     public IngredientButton(Context context) {
         super(context);
@@ -65,18 +61,6 @@ public class IngredientButton extends LinearLayout {
         View ingredientView = layoutInflater.inflate(R.layout.ingredient_flow_item, null);
         super.addView(ingredientView);
 
-        this.removeLinearLayout = (LinearLayout) ingredientView.findViewById(R.id.ingredientRemoveLayout);
-
-        ImageButton unselectImageButton = (ImageButton) ingredientView.findViewById(R.id.ingredientRemoveButton);
-        unselectImageButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (IngredientButton.super.isSelected()) {
-                    IngredientButton.this.setSelected(false);
-                }
-            }
-        });
-
         super.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,66 +72,35 @@ public class IngredientButton extends LinearLayout {
     }
 
     private void onClick() {
-        if (!IngredientButton.super.isSelected()) {
-            IngredientButton.this.setSelected(true);
-        } else {
-            IngredientButton.this.setHighlighted(!IngredientButton.this.isHighlighted());
-        }
+        IngredientButton.this.setSelected(!IngredientButton.this.isSelected());
     }
 
     @Override
-    public void setSelected(boolean selected) {
-        boolean oldValue = this.isSelected();
-        super.setSelected(selected);
-
-        if (selected) {
-            this.removeLinearLayout.setVisibility(VISIBLE);
-            super.refreshDrawableState();
-        } else {
-            this.setHighlighted(false); // calls refreshDrawableState()
-            this.removeLinearLayout.setVisibility(GONE);
-        }
-
-        if (oldValue != selected && this.ingredientButtonClickListener != null) {
-            this.ingredientButtonClickListener.OnSelectedChanged(this.isSelected());
-        }
+    public boolean isSelected() {
+        return this.isSelected;
     }
 
-    public boolean isHighlighted() {
-        return this.isHighlighted;
-    }
+    @Override
+    public void setSelected(boolean isSelected) {
+        boolean oldValue = this.isSelected;
 
-    public void setHighlighted(boolean isHighlighted) {
-        boolean oldValue = this.isHighlighted;
+        this.isSelected = isSelected;
 
-        if (isHighlighted) {
-            if (this.isSelected()) {
-                // only allow highlight if selected
-                this.isHighlighted = isHighlighted;
-            }
-        } else {
-            this.isHighlighted = isHighlighted;
-        }
-
-        if (oldValue != isHighlighted && this.ingredientButtonClickListener != null) {
-            this.ingredientButtonClickListener.OnHighlightedChanged(this.isHighlighted);
+        if (oldValue != isSelected && this.ingredientButtonClickListener != null) {
+            this.ingredientButtonClickListener.OnSelectedChanged(this.isSelected);
         }
 
         super.refreshDrawableState();
     }
 
-    private static final int[] STATE_HIGHLIGHTED = { R.attr.highlighted };
     private static final int[] STATE_SELECTED = { R.attr.selected };
 
     @Override
     protected int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 2);
 
-        if (this.isSelected()) {
+        if (this.isSelected) {
             mergeDrawableStates(drawableState, IngredientButton.STATE_SELECTED);
-        }
-        if (this.isHighlighted) {
-            mergeDrawableStates(drawableState, IngredientButton.STATE_HIGHLIGHTED);
         }
 
         return drawableState;

@@ -463,7 +463,6 @@ public class IngredientSearchFragment extends Fragment {
         ingredientButton.setIngredient(ingredient);
 
         ingredientButton.setIngredientButtonClickListener(new IngredientButton.IngredientButtonClickListener() {
-
             @Override
             public void OnSelectedChanged(boolean isSelected) {
                 IngredientSearchFragment.this.ingredientFlowLayout.removeView(ingredientButton);
@@ -474,16 +473,11 @@ public class IngredientSearchFragment extends Fragment {
                     IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
                 }
             }
-
-            @Override
-            public void OnHighlightedChanged(boolean isHighlighted) {
-                //TODO handle
-            }
         });
 
         IngredientSearchFragment.this.ingredientFlowLayout.addView(ingredientButton);
 
-        //Set all buttons to not enblaed on creation
+        //Set all buttons to not enabled on creation
         ingredientButton.setSelected(false);
     }
 
