@@ -287,15 +287,9 @@ public class IngredientSearchFragment extends Fragment {
                 }
                 else {
                     ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
-                    ArrayList<Ingredient> ingredients = new ArrayList<>();
 
-                    for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
 
-                        if (IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
-                            IngredientButton ingredientButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
-                            ingredients.add(ingredientButton.getIngredient());
-                        }
-                    }
+                    ArrayList<Ingredient> ingredients = getSelectedIngredient();
 
                     if (ingredients.isEmpty()) {
                         Toast.makeText(getActivity(), "Please enter some ingredients", Toast.LENGTH_SHORT).show();
@@ -345,6 +339,13 @@ public class IngredientSearchFragment extends Fragment {
                         searchBar.clearFocus();
                         suggestionWrapper.setVisibility(View.GONE);
                         popupLayout.setVisibility(View.GONE);
+
+                        // search on back
+                        ArrayList<Ingredient> ingredients = getSelectedIngredient();
+                        if (!ingredients.isEmpty()) {
+                            searchForRecipes(ingredients);
+                            searchBar.setHint(getIngredientString(ingredients));
+                        }
                     }
 
                     oldHeight = fragmentHeight;
@@ -356,7 +357,22 @@ public class IngredientSearchFragment extends Fragment {
     }
 
 
-    public void selectButton(boolean select, String query){
+    private ArrayList<Ingredient> getSelectedIngredient() {
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+
+        for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
+
+            if (IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i).isSelected()) {
+                IngredientButton ingredientButton = (IngredientButton) IngredientSearchFragment.this.ingredientFlowLayout.getChildAt(i);
+                ingredients.add(ingredientButton.getIngredient());
+            }
+        }
+
+        return ingredients;
+    }
+
+
+    private void selectButton(boolean select, String query){
 
         for (int i = 0; i < IngredientSearchFragment.this.ingredientFlowLayout.getChildCount(); i++) {
 
