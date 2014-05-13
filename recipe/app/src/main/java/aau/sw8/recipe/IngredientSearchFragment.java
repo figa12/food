@@ -51,7 +51,7 @@ public class IngredientSearchFragment extends Fragment {
     private FrameLayout suggestionWrapper;
     private int i;
     private ArrayList<String> suggestionName = new ArrayList<>();
-    private ArrayList<Ingredient> arrayList = new ArrayList<>();
+    private ArrayList<Ingredient> suggestionIngredientList = new ArrayList<>();
 
     private FrameLayout progressContainer;
     private ProgressBar progressCircle;
@@ -118,11 +118,16 @@ public class IngredientSearchFragment extends Fragment {
 
 
         this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
+
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                String listItem = ((TextView)view).getText().toString();
+                String listItem = ((TextView) view).getText().toString();
                 //suggestionList.getItemAtPosition(position);
-                Toast.makeText(getActivity(), listItem, Toast.LENGTH_SHORT).show();
+                        addIngredientToFlowLayout(listItem);
+                        searchBar.setText("");
+
             }
         });
 
@@ -216,8 +221,13 @@ public class IngredientSearchFragment extends Fragment {
         // update suggestions when searchbar text changes
         searchBar.addTextChangedListener(new TextWatcher() {
             private boolean isEmpty = true;
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
             public void afterTextChanged(Editable editable) {
                 if ((searchBar.length() == 0) != isEmpty) {
                     isEmpty = searchBar.length() == 0;
@@ -233,7 +243,6 @@ public class IngredientSearchFragment extends Fragment {
                     searchBar.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // force keyboard update
                 }
 
-
                 if (searchBar.length() != 0) {
                     suggestionName.clear();
 
@@ -244,16 +253,14 @@ public class IngredientSearchFragment extends Fragment {
 
                         if (matcher.find()) {
 
-                            arrayList.add(ingredient);
+                            suggestionIngredientList.add(ingredient);
 
                             suggestionName.add(ingredient.getSingular());
-
                         }
                     }
                 }
 
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, suggestionName);
-
                 suggestionList.setAdapter(arrayAdapter);
                 suggestionList.setTextFilterEnabled(true);
             }
