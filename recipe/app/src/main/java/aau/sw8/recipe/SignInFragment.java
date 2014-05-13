@@ -60,7 +60,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         // remove search bar
         MainActivity mainActivity = (MainActivity) this.getActivity();
         ActionBar actionBar = mainActivity.getActionBar();
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
 
         return rootView;
     }
