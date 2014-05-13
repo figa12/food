@@ -115,6 +115,12 @@ public class IngredientSearchFragment extends Fragment {
         this.suggestionWrapper = (FrameLayout) rootView.findViewById(R.id.search_suggestion_wrapper);
         this.suggestionWrapper.setVisibility(View.INVISIBLE);
 
+        for (Ingredient ingredient : allIngredients) {
+            IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
+
+            addButton(ingredientButton, ingredient);
+        }
+
         this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
