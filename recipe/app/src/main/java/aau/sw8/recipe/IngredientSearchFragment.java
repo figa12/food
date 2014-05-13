@@ -203,7 +203,13 @@ public class IngredientSearchFragment extends Fragment {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
 
         searchBar = (EditText) actionBar.getCustomView().findViewById(R.id.menu_search);
-        searchBar.setHint(R.string.search_hint);
+
+        if (ingredients != null) {
+            searchBar.setHint(getIngredientString(ingredients));
+        }
+        else {
+            searchBar.setHint(R.string.search_hint);
+        }
 
         searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
