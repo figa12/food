@@ -69,7 +69,7 @@ public class RecipeIngredientGroupList extends ListLinearLayout<ExchangeableIngr
             textView.setText(exchangeables.get(0));
 
             if (!exchangeableIngredient.isMandatory())
-                textView.setTextColor(Color.LTGRAY);
+                textView.setTextColor(Color.parseColor("#aaaaaa"));
         }
 
         return ingredientView;
