@@ -67,7 +67,9 @@
             android:shadowColor="#222222"
             android:shadowDx="3.0"
             android:shadowDy="3.0"
-            android:shadowRadius="10"/>
+            android:shadowRadius="10"
+            android:paddingRight="3dp"
+            android:paddingBottom="3dp"/>
 
         <View
             android:layout_alignParentBottom="true"
