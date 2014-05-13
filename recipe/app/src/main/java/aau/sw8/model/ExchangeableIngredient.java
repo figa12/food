@@ -36,7 +36,7 @@ public class ExchangeableIngredient implements Parcelable {
         ArrayList<String> strings = new ArrayList<>();
 
         for (IngredientQuantity ingredientQuantity : this.ingredientQuantities) {
-            strings.add(ingredientQuantity.getString());
+            strings.add(ingredientQuantity.getDescription());
         }
 
         return strings;

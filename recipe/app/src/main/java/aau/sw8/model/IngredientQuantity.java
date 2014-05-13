@@ -35,7 +35,7 @@ public class IngredientQuantity implements Parcelable {
         return amount;
     }
 
-    public String getString() {
+    public String getDescription() {
         String string;
 
         // if the amount is an integer, convert it
