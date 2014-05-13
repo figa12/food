@@ -40,6 +40,7 @@ public class IngredientSearchFragment extends Fragment {
 
     private String pageTitle; // Not really needed, but saved just in case
 
+    private View rootView;
     private FlowLayout ingredientFlowLayout;
     public  LinearLayout popupLayout;
     public static ArrayList<Ingredient> allIngredients = new ArrayList<>();
@@ -89,7 +90,7 @@ public class IngredientSearchFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        rootView = inflater.inflate(R.layout.fragment_search, container, false);
         int pageIndex = super.getArguments().getInt(MainActivity.ARG_POSITION);
 
         // TODO: make it possible to change the pagetitle according to language.
@@ -118,26 +119,6 @@ public class IngredientSearchFragment extends Fragment {
                 String listItem = ((TextView)view).getText().toString();
                 //suggestionList.getItemAtPosition(position);
                 Toast.makeText(getActivity(), listItem, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                if (getView() != null) {
-                    int heightDiff = getView().getRootView().getHeight() - getView().getHeight();
-                    if (heightDiff > 200) {
-                        // keyboard shown
-                        suggestionWrapper.setVisibility(View.VISIBLE);
-                        popupLayout.setVisibility(View.VISIBLE);
-
-                    } else {
-                        // keyboard hidden
-                        suggestionWrapper.setVisibility(View.INVISIBLE);
-                        popupLayout.setVisibility(View.GONE);
-                    }
-                }
             }
         });
 
@@ -217,15 +198,11 @@ public class IngredientSearchFragment extends Fragment {
 
         searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
+        // update suggestions when searchbar text changes
         searchBar.addTextChangedListener(new TextWatcher() {
             private boolean isEmpty = true;
-
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            }
-
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
             public void afterTextChanged(Editable editable) {
                 if ((searchBar.length() == 0) != isEmpty) {
                     isEmpty = searchBar.length() == 0;
@@ -268,6 +245,7 @@ public class IngredientSearchFragment extends Fragment {
         });
 
 
+        // search/add ingredient on enter
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int x, KeyEvent keyEvent) {
@@ -282,9 +260,7 @@ public class IngredientSearchFragment extends Fragment {
                     }
                 }
                 else {
-                    IngredientSearchFragment.this.popupLayout.setVisibility(View.GONE);
                     ((MainActivity) IngredientSearchFragment.this.getActivity()).dismissKeyboard();
-                    searchBar.clearFocus();
 
                     ArrayList<Long> ingredients = new ArrayList<>();
 
@@ -309,6 +285,29 @@ public class IngredientSearchFragment extends Fragment {
         if (allIngredients.size() != 0) {
             searchBar.setEnabled(!mainActivity.isDrawerOpen());
         }
+
+
+        // keyboard visibility
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                if (getView() != null) {
+                    int heightDiff = getView().getRootView().getHeight() - getView().getHeight();
+                    if (heightDiff > 200) {
+                        // keyboard shown
+                        suggestionWrapper.setVisibility(View.VISIBLE);
+                        popupLayout.setVisibility(View.VISIBLE);
+
+                    } else {
+                        // keyboard hidden
+                        searchBar.clearFocus();
+                        suggestionWrapper.setVisibility(View.GONE);
+                        popupLayout.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
 
         super.onPrepareOptionsMenu(menu);
     }

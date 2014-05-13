@@ -1,93 +1,83 @@
-<!-- KeyboardEventsLayout must be placed around the main layout -->
-<aau.sw8.recipe.KeyboardEventsLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/keyboardEventsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/color_gradient">
 
-    <RelativeLayout
+    <aau.sw8.recipe.ObservableScrollView
+        android:id="@+id/oberservableScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <aau.sw8.recipe.ObservableScrollView
-            android:id="@+id/oberservableScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <aau.sw8.recipe.SearchList
-                    android:id="@+id/searchList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-
-                <FrameLayout
-                    android:id="@+id/progressContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:visibility="gone">
-
-                    <ProgressBar
-                        android:id="@+id/progressCircle"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="gone"/>
-
-                </FrameLayout>
-
-            </LinearLayout>
-        </aau.sw8.recipe.ObservableScrollView>
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/popupLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:visibility="gone"
-            android:background="#EEFFFFFF">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <!-- Source: https://github.com/ApmeM/android-flowlayout -->
-            <aau.sw8.recipe.FlowLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:f="http://schemas.android.com/apk/res/aau.sw8.recipe"
-                f:horizontalSpacing="3dp"
-                f:verticalSpacing="3dp"
-                android:id="@+id/ingredientsFlowLayout"
+            <aau.sw8.recipe.SearchList
+                android:id="@+id/searchList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"/>
+                android:orientation="vertical"/>
+
+            <FrameLayout
+                android:id="@+id/progressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/progressCircle"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
 
         </LinearLayout>
+    </aau.sw8.recipe.ObservableScrollView>
 
-        <FrameLayout
-            android:id="@+id/search_suggestion_wrapper"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/popupLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="#EEFFFFFF">
+
+        <!-- Source: https://github.com/ApmeM/android-flowlayout -->
+        <aau.sw8.recipe.FlowLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:f="http://schemas.android.com/apk/res/aau.sw8.recipe"
+            f:horizontalSpacing="3dp"
+            f:verticalSpacing="3dp"
+            android:id="@+id/ingredientsFlowLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@android:color/darker_gray">
+            android:layout_margin="3dp"/>
 
-            <ListView
-                android:id="@+id/search_suggestion"
-                android:orientation="horizontal"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:layout_marginLeft="1dp"
-                android:layout_marginBottom="1dp"
-                />
+    </LinearLayout>
 
-        </FrameLayout>
+    <FrameLayout
+        android:id="@+id/search_suggestion_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/darker_gray">
 
+        <ListView
+            android:id="@+id/search_suggestion"
+            android:orientation="horizontal"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="1dp"
+            />
 
-    </RelativeLayout>
+    </FrameLayout>
 
-
-</aau.sw8.recipe.KeyboardEventsLayout>
+</RelativeLayout>
