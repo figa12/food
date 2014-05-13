@@ -4,11 +4,11 @@ package aau.sw8.model;
  * Created by Jesper on 0028 28. apr.
  */
 public class IntermediateRecipe {
-    private long id;
-    private String name;
-    private String description;
-    private String image;
-    private String missingIngredients;
+    protected long id;
+    protected String name;
+    protected String description;
+    protected String image;
+    protected String missingIngredients;
 
     public IntermediateRecipe(long id, String name, String description, String image, String missingIngredients) {
         this.id = id;
@@ -20,6 +20,10 @@ public class IntermediateRecipe {
 
     public IntermediateRecipe(long id, String name, String description, String image) {
         this(id, name, description, image, "");
+    }
+
+    protected IntermediateRecipe() {
+        // used for Recipe parcelable
     }
 
     public long getId() {

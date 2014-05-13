@@ -130,13 +130,13 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
     @SuppressWarnings("ConstantConditions")
     private void insertRecipeData() {
         ImageView recipeImage = (ImageView) findViewById(R.id.recipe_picture);
-        this.imageLoader.displayImage(this.recipe.getImagePath(), recipeImage, this.imageLoaderOptions);
+        this.imageLoader.displayImage(this.recipe.getImage(), recipeImage, this.imageLoaderOptions);
 
         TextView recipeName = (TextView) findViewById(R.id.recipe_name);
-        recipeName.setText(this.recipe.getRecipeTitle());
+        recipeName.setText(this.recipe.getName());
 
         TextView description = (TextView) findViewById(R.id.recipeDescription);
-        description.setText(this.recipe.getRecipeDescription());
+        description.setText(this.recipe.getDescription());
 
         // create and add the ingredient groups
         LinearLayout ingredientGroupsLayout = (LinearLayout) findViewById(R.id.ingredientGroupsLinearLayout);
@@ -215,7 +215,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                 return true;
             case R.id.favourite_button:
                 if (LogInActivity.user != null){
-                     addOrRemoveFromFavourite(!isFavourited, this.recipe.getRecipeId(), LogInActivity.user);
+                     addOrRemoveFromFavourite(!isFavourited, this.recipe.getId(), LogInActivity.user);
                 }else{
                     showLoginDialog();
                 }
@@ -263,7 +263,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         /* Alert dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        final long recipeid = this.recipe.getRecipeId();
+        final long recipeid = this.recipe.getId();
             /* Build Alert dialog*/
         builder.setMessage(R.string.sign_in_text) /*Set text description*/
                 .setPositiveButton(R.string.common_signin_button_text, new DialogInterface.OnClickListener() {         /*Sign in button*/
@@ -314,7 +314,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
             public void onFailed() {
 
             }
-        }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+        }, FavouriteCom.STATUS, this.recipe.getId(), LogInActivity.user.getHash());
     }
 
     @Override
@@ -348,7 +348,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
                     public void onFailed() {
 
                     }
-                }, FavouriteCom.STATUS, this.recipe.getRecipeId(), LogInActivity.user.getHash());
+                }, FavouriteCom.STATUS, this.recipe.getId(), LogInActivity.user.getHash());
             }else {
                 setFavouriteButton(isFavourited);
             }
