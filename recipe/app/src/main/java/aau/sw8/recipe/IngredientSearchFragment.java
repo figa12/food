@@ -148,58 +148,6 @@ public class IngredientSearchFragment extends Fragment {
         return rootView;
     }
 
-    private void searchForRecipes(ArrayList<Ingredient> ingredients) {
-        // save the ingredient ids so we can use them to search for recipes when we reach the bottom
-        this.ingredients = ingredients;
-
-        //assume more recipes are available to download
-        this.moreRecipesAvailable = true;
-
-        // this is a new search, clear the search list and search with offset 0
-        this.searchList.removeAllViews();
-        this.searchForMoreRecipes(0);
-    }
-
-    private void searchForMoreRecipes(int offset) {
-        if (!this.moreRecipesAvailable || this.searchActive) {
-            return;
-        }
-
-        this.searchActive = true;
-        this.progressContainer.setVisibility(View.VISIBLE);
-        this.progressCircle.setVisibility(View.VISIBLE);
-
-        ArrayList<Long> ingredientIds = new ArrayList<>();
-        for (Ingredient ingredient : this.ingredients) {
-            ingredientIds.add(ingredient.getId());
-        }
-
-        new IngredientSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
-            @Override
-            public void onResponse(ArrayList<IntermediateRecipe> result) {
-                for (IntermediateRecipe intermediateRecipe : result)
-                    IngredientSearchFragment.this.searchList.addView(intermediateRecipe);
-
-                IngredientSearchFragment.this.onSearchComplete(result.size() > 0);
-            }
-
-            @Override
-            public void onFailed() {
-                IngredientSearchFragment.this.onSearchComplete(false);
-            }
-        }, ingredientIds, offset, RecipeList.LIMIT);
-    }
-
-    private void onSearchComplete(boolean moreRecipesAvailable) {
-        this.moreRecipesAvailable = moreRecipesAvailable;
-        this.searchActive = false;
-
-        this.progressCircle.setVisibility(View.GONE);
-        if (moreRecipesAvailable) {
-            this.progressContainer.setVisibility(View.GONE);
-        }
-    }
-
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -357,6 +305,60 @@ public class IngredientSearchFragment extends Fragment {
     }
 
 
+    private void searchForRecipes(ArrayList<Ingredient> ingredients) {
+        // save the ingredient ids so we can use them to search for recipes when we reach the bottom
+        this.ingredients = ingredients;
+
+        //assume more recipes are available to download
+        this.moreRecipesAvailable = true;
+
+        // this is a new search, clear the search list and search with offset 0
+        this.searchList.removeAllViews();
+        this.searchForMoreRecipes(0);
+    }
+
+    private void searchForMoreRecipes(int offset) {
+        if (!this.moreRecipesAvailable || this.searchActive) {
+            return;
+        }
+
+        this.searchActive = true;
+        this.progressContainer.setVisibility(View.VISIBLE);
+        this.progressCircle.setVisibility(View.VISIBLE);
+
+        ArrayList<Long> ingredientIds = new ArrayList<>();
+        for (Ingredient ingredient : this.ingredients) {
+            ingredientIds.add(ingredient.getId());
+        }
+
+        new IngredientSearchCom((DrawerActivity) this.getActivity(), new ServerComTask.OnResponseListener<ArrayList<IntermediateRecipe>>() {
+            @Override
+            public void onResponse(ArrayList<IntermediateRecipe> result) {
+                for (IntermediateRecipe intermediateRecipe : result)
+                    IngredientSearchFragment.this.searchList.addView(intermediateRecipe);
+
+                IngredientSearchFragment.this.onSearchComplete(result.size() > 0);
+            }
+
+            @Override
+            public void onFailed() {
+                IngredientSearchFragment.this.onSearchComplete(false);
+            }
+        }, ingredientIds, offset, RecipeList.LIMIT);
+    }
+
+    private void onSearchComplete(boolean moreRecipesAvailable) {
+        this.moreRecipesAvailable = moreRecipesAvailable;
+        this.searchActive = false;
+
+        this.progressCircle.setVisibility(View.GONE);
+        if (moreRecipesAvailable) {
+            this.progressContainer.setVisibility(View.GONE);
+        }
+    }
+
+
+    // Get the ingredient that has been pressed by the user in the list of search suggestions
     private ArrayList<Ingredient> getSelectedIngredient() {
         ArrayList<Ingredient> ingredients = new ArrayList<>();
 
