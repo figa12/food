@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
- * Created by jeria_000 on 07-03-14.
+ * Created by Jesper on 07-03-14.
  */
 public class Recipe extends IntermediateRecipe implements Parcelable {
 
