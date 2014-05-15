@@ -279,7 +279,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             // Enable fragments to handle the action bar
             fragment.setHasOptionsMenu(false);
 
-            this.CHOSEN_FRAGMENT = position;
+            DrawerActivity.CHOSEN_FRAGMENT = position;
 
             // Clear the back stack
             while (super.getFragmentManager().popBackStackImmediate()) ;

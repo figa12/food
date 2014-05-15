@@ -95,7 +95,7 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
             getFavourites(LogInActivity.user.getHash());
             favouriteList.clearHighlight();
         }else{
-            ((DrawerActivity)this.getActivity()).selectItem(2);
+            ((DrawerActivity)this.getActivity()).selectItem(2); //reselect favourites fragment if user is signed out.
         }
     }
 
@@ -140,13 +140,6 @@ public class FavouriteFragment extends Fragment implements View.OnClickListener 
         this.progressCircle.setVisibility(View.GONE);
         if (moreRecipesAvailable) {
             this.progressContainer.setVisibility(View.GONE);
-        }
-    }
-
-    private void loadFavourites(ArrayList<IntermediateRecipe> intermediateRecipes){
-        this.favouriteList.removeAllViews();
-        for (IntermediateRecipe intermediateRecipe : intermediateRecipes){
-            this.favouriteList.addView(intermediateRecipe);
         }
     }
 }
