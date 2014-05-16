@@ -8,7 +8,7 @@
         <item>Ingredient search</item>
         <item>Recipe search</item>
         <item>Favourites</item>
-        <item>Settings</item>
+        <!--<item>Settings</item>-->
     </string-array>
 
     <string name="drawer_open">Open navigation drawer</string>
