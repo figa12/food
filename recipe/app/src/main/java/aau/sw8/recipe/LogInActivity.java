@@ -305,6 +305,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         }
     }
 
+    //TODO: makes this work
     public static void setUserPersonName(){
         try {
             if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
