@@ -14,6 +14,11 @@ public class User implements Parcelable{
     private String token;
     private String personName;
 
+    public User(String personName, String hash){
+        this.personName = personName;
+        this.hash = hash;
+    }
+
     public User(String personName, String hash, String token){
         this.personName = personName;
         this.hash = hash;
