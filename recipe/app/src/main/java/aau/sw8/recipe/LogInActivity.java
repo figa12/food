@@ -35,7 +35,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     protected ProgressDialog connectionProgressDialog;          //Process dialog for sign in.
     protected ConnectionResult connectionResult;
     private static final int RC_SIGN_IN = 0;
-    private ConnectivityReceiver connectivityReceiver;
+    protected ConnectivityReceiver connectivityReceiver;
 
     protected static GoogleApiClient googleApiClient;                  //The core Google+ client.
 
@@ -72,14 +72,14 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     protected void onStart() {
         super.onStart();
         Log.v(TAG, "Activity Started");
-        if(this.googleApiClient != null) {
-            if(!this.googleApiClient.isConnected()) {
+        if(googleApiClient != null) {
+            if(!googleApiClient.isConnected()) {
                 Log.v(TAG, "Connection Started");
                 // Every time we start we want to try to connect. If it
                 // succeeds we'll get an onConnected() callback. If it
                 // fails we'll get onConnectionFailed(), with a result!
                 this.updateUserUI(false);
-                this.googleApiClient.connect();
+                googleApiClient.connect();
             }
         }
     }
@@ -92,13 +92,13 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     protected void onStop() {
         super.onStop();
         Log.v(TAG, "Activity stopped");
-        if(this.googleApiClient != null) {
-            if(this.googleApiClient.isConnected()) {
+        if(googleApiClient != null) {
+            if(googleApiClient.isConnected()) {
                 Log.v(TAG, "Connection Closed");
                 // It can be a little costly to keep the connection open
                 // to Google Play Services, so each time our activity is
                 // stopped we should disconnect.
-                this.googleApiClient.disconnect();
+                googleApiClient.disconnect();
             }
         }
     }
@@ -208,7 +208,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
      */
     private void setupGooglePlus(){
         /*Google plus sign in*/
-        this.googleApiClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API, null)
@@ -231,7 +231,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         switch (action) {
             case LogInActivity.SIGN_IN:
                 Log.v(TAG, "Tapped sign in");
-                if (!this.googleApiClient.isConnecting()) {
+                if (!googleApiClient.isConnecting()) {
                     this.connectionProgressDialog.show();
                     this.signInClicked = true;
                     this.resolveSignInError();
@@ -241,10 +241,10 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
             case LogInActivity.SIGN_OUT:
                 Log.v(TAG, "Tapped sign out");
                 // We only want to sign out if we're connected.
-                if (this.googleApiClient.isConnected()) {
+                if (googleApiClient.isConnected()) {
                     Plus.AccountApi.clearDefaultAccount(googleApiClient);
-                    this.googleApiClient.disconnect();
-                    this.googleApiClient.connect();
+                    googleApiClient.disconnect();
+                    googleApiClient.connect();
                     this.updateUserUI(false);
                     LogInActivity.user = null;
                     this.onLoggedOut();
