@@ -51,7 +51,6 @@ public class IngredientSearchFragment extends Fragment {
     private FrameLayout suggestionWrapper;
     private int i;
     private ArrayList<String> suggestionName = new ArrayList<>();
-    private ArrayList<Ingredient> suggestionIngredientList = new ArrayList<>();
 
     private FrameLayout progressContainer;
     private ProgressBar progressCircle;
@@ -184,6 +183,7 @@ public class IngredientSearchFragment extends Fragment {
                 if ((searchBar.length() == 0) != isEmpty) {
                     isEmpty = searchBar.length() == 0;
 
+                    suggestionWrapper.setVisibility(View.INVISIBLE);
                     suggestionName.clear();
                     searchBar.setInputType(EditorInfo.TYPE_NULL); // force keyboard update
 
@@ -204,12 +204,14 @@ public class IngredientSearchFragment extends Fragment {
                         Matcher matcher = p.matcher(ingredient.getSingular().toLowerCase());
 
                         if (matcher.find()) {
-
-                            suggestionIngredientList.add(ingredient);
-
                             suggestionName.add(ingredient.getSingular());
                         }
                     }
+
+                    if (suggestionName.size() > 0)
+                        suggestionWrapper.setVisibility(View.VISIBLE);
+                    else
+                        suggestionWrapper.setVisibility(View.GONE);
                 }
 
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, suggestionName);
@@ -272,9 +274,11 @@ public class IngredientSearchFragment extends Fragment {
                     if (fragmentHeight < noKeyboardHeight) {
                         // keyboard shown
                         searchBar.setHint(R.string.search_hint);
-                        suggestionWrapper.setVisibility(View.VISIBLE);
                         popupLayout.setVisibility(View.VISIBLE);
 
+                        if(suggestionList.getChildCount() == 0) {
+                            suggestionWrapper.setVisibility(View.INVISIBLE);
+                        }
                     } else {
                         // keyboard hidden
                         if (ingredients != null) {
