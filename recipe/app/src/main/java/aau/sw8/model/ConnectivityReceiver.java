@@ -12,39 +12,34 @@ import aau.sw8.recipe.LogInActivity;
 /**
  * Created by jacob on 5/16/14.
  */
-public class ConnectivityReceiver extends BroadcastReceiver {
+public class ConnectivityReceiver {
+    private static ConnectivityReceiver instance = new ConnectivityReceiver();
+    ConnectivityManager connectivityManager;
     private final String TAG = "ConnectivityReceiver";
     public static boolean NEED_USER_INFO = false;
+    static Context context;
+    boolean connected = false;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "action: "+ intent.getAction());
-
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
-
-        LogInActivity.IS_NETWORK_AVAILABLE = this.haveNetworkConnection(context);
-
-        if (LogInActivity.IS_NETWORK_AVAILABLE && ConnectivityReceiver.NEED_USER_INFO)
-        {
-            LogInActivity.setUserPersonName();
-        }
+    public static ConnectivityReceiver getInstance(Context ctx) {
+        context = ctx;
+        return instance;
     }
 
-    private boolean haveNetworkConnection(Context context) {
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
+    public boolean isNetworkConnected(Context con){
+        try {
+            connectivityManager = (ConnectivityManager) con
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            connected = networkInfo != null && networkInfo.isAvailable() &&
+                    networkInfo.isConnected();
+            return connected;
+
+
+        } catch (Exception e) {
+            System.out.println("CheckConnectivity Exception: " + e.getMessage());
+            Log.v("connectivity", e.toString());
         }
-        return haveConnectedWifi || haveConnectedMobile;
+        return connected;
     }
 }

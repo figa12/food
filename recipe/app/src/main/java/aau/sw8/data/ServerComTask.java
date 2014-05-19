@@ -1,6 +1,9 @@
 package aau.sw8.data;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -105,6 +108,17 @@ public abstract class ServerComTask<T> extends AsyncTask<BasicNameValuePair, Int
                 Log.e(TAG, "Parsing JSON failed");
                 return null;
             }
+        }
+    }
+
+    private boolean isNetworkConnected(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context. getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else {
+            return true;
         }
     }
 

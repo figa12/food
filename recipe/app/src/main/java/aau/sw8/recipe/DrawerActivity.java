@@ -154,9 +154,9 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     @Override
     public void updateUserUI(boolean IsSignIn){
         if(IsSignIn){
-            this.drawerSignInBtn.setText(R.string.sign_out);
+            this.drawerSignInBtn.setText(R.string.sign_out); //signed in
         }else{
-            this.drawerSignInBtn.setText(R.string.sign_in);
+            this.drawerSignInBtn.setText(R.string.sign_in); //signed out
         }
     }
 
@@ -345,7 +345,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
 
     @Override
     protected void onLoggedOut() {
-        switch (this.CHOSEN_FRAGMENT){
+        switch (DrawerActivity.CHOSEN_FRAGMENT){
             //if favourites is selected.
             case 2:
                 selectItem(2);
@@ -355,7 +355,7 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
 
     @Override
     protected void onLoggedIn() {
-        switch (this.CHOSEN_FRAGMENT){
+        switch (DrawerActivity.CHOSEN_FRAGMENT){
             //if favourites is selected.
             case 2:
                 selectItem(2);

@@ -3,13 +3,9 @@ package aau.sw8.recipe;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -35,9 +31,9 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     protected ProgressDialog connectionProgressDialog;          //Process dialog for sign in.
     protected ConnectionResult connectionResult;
     private static final int RC_SIGN_IN = 0;
-    protected ConnectivityReceiver connectivityReceiver;
+    protected ConnectivityReceiver connectivityReceiver = ConnectivityReceiver.getInstance(this);
 
-    protected static GoogleApiClient googleApiClient;                  //The core Google+ client.
+    protected  GoogleApiClient googleApiClient;                  //The core Google+ client.
 
     private boolean intentInProgress;
     private boolean signInClicked;
@@ -47,7 +43,6 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     public static final int SIGN_IN = 1;
     public static final int SIGN_OUT = 2;
     public static final int REWOKE_ACCESS = 3;
-    public static boolean IS_NETWORK_AVAILABLE;
 
     private static final String TAG = "LogInActivity";
 
@@ -103,12 +98,6 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
     /***
      * When the log in is successful, and an connection as been established this method is called.
      * @param bundle
@@ -136,13 +125,15 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
      * Method to resolve any signin errors
      * */
     private void resolveSignInError() {
-        if (connectionResult.hasResolution()) {
-            try {
-                intentInProgress = true;
-                connectionResult.startResolutionForResult(this, RC_SIGN_IN);
-            } catch (IntentSender.SendIntentException e) {
-                intentInProgress = false;
-                googleApiClient.connect();
+        if(connectionResult != null){
+            if (connectionResult.hasResolution()) {
+                try {
+                    intentInProgress = true;
+                    connectionResult.startResolutionForResult(this, RC_SIGN_IN);
+                } catch (IntentSender.SendIntentException e) {
+                    intentInProgress = false;
+                    googleApiClient.connect();
+                }
             }
         }
     }
@@ -150,9 +141,8 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     @Override
     public void onConnectionSuspended(int arg0) {
         googleApiClient.connect();
-        //this.updateUserUI(false);
+        this.updateUserUI(false);
     }
-
 
     /***
      * If the sign in to Google plus failed this method is called.
@@ -261,6 +251,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
                                     googleApiClient.connect();
                                     updateUserUI(false);
                                     LogInActivity.user = null; // Sets the user to null, meaning not signed in
+                                    LogInActivity.this.onLoggedOut();
                                 }
                             });
                 }
@@ -284,16 +275,12 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
      * Fetching user's information name, email, profile pic
      * */
     private void getProfileInformation() {
-        if(LogInActivity.IS_NETWORK_AVAILABLE){
-            try {
-                if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                    Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                    String personName = currentPerson.getDisplayName();
-                    String email = Plus.AccountApi.getAccountName(googleApiClient);
-                    LogInActivity.this.setUser(personName, email);
-                }
-            } catch (Exception e){
-                e.printStackTrace();
+        if(this.connectivityReceiver.isNetworkConnected(this)){
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                String personName = currentPerson.getDisplayName();
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
+                LogInActivity.this.setUser(personName, email);
             }
         }else{
             String email = Plus.AccountApi.getAccountName(googleApiClient);
@@ -303,7 +290,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     }
 
     //TODO: makes this work
-    public static void setUserPersonName(){
+    /*public static void setUserPersonName(){
         try {
             if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
@@ -315,7 +302,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         } catch (Exception e){
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     private AlertDialog createAlertDialog() {
@@ -329,17 +316,6 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
             }
         });
         return alertDialogBuilder.create();
-    }
-
-    public boolean isNetworkConnected(){
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni == null) {
-            // There are no active networks.
-            return false;
-        } else {
-            return true;
-        }
     }
 
 
