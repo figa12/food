@@ -106,9 +106,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     @Override
     protected void onResume() {
         super.onResume();
-        this.connectivityReceiver = new ConnectivityReceiver();
-        registerReceiver(this.connectivityReceiver,
-                         new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
     }
 
     /***
@@ -152,7 +150,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     @Override
     public void onConnectionSuspended(int arg0) {
         googleApiClient.connect();
-        this.updateUserUI(false);
+        //this.updateUserUI(false);
     }
 
 
@@ -176,7 +174,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
                 // The user has already clicked 'sign-in' so we attempt to
                 // resolve all
                 // errors until the user is signed in, or they cancel.
-                resolveSignInError();
+                this.resolveSignInError();
             }
         }
     }
@@ -246,7 +244,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
                     googleApiClient.disconnect();
                     googleApiClient.connect();
                     this.updateUserUI(false);
-                    LogInActivity.user = null;
+                    LogInActivity.user = null; // Sets the user to null, meaning not signed in
                     this.onLoggedOut();
                 }
                 break;
@@ -262,8 +260,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
                                     Log.e(TAG, "User access revoked!");
                                     googleApiClient.connect();
                                     updateUserUI(false);
-                                    // Sets the user to null, meaning not signed in
-                                    LogInActivity.user = null;
+                                    LogInActivity.user = null; // Sets the user to null, meaning not signed in
                                 }
                             });
                 }
