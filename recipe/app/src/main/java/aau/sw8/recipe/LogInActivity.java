@@ -180,6 +180,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         if (requestCode == RC_SIGN_IN) {
             if (responseCode != RESULT_OK) {
                 signInClicked = false;
+                connectionProgressDialog.dismiss();
             }
 
             intentInProgress = false;
