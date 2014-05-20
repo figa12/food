@@ -39,7 +39,7 @@ public class FavouriteList extends RecipeList {
     }
 
     @Override
-    protected void onLongClick(final IntermediateRecipe recipe, final View view) {
+    protected boolean onLongClick(final IntermediateRecipe recipe, final View view) {
         isLongClick = true; /*Disable OnClick functionality*/
 
         /* Alert dialog */
@@ -68,6 +68,8 @@ public class FavouriteList extends RecipeList {
 
         builder.create();
         builder.show(); /*Show the Alert dialog*/
+
+        return true;
     }
 
     private void removeRecipeFromDatabase(long recipeId, String hash){

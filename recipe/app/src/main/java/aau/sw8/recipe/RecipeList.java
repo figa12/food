@@ -127,7 +127,7 @@ public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
         FlurryAgent.logEvent("RecipeOpened", recipeParams);
     }
 
-    protected void onLongClick(IntermediateRecipe recipe, View view) { }
+    protected boolean onLongClick(IntermediateRecipe recipe, View view) { return false; }
 
     public void clearHighlight() {
         if (focusedView != null) {
@@ -186,9 +186,9 @@ public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
                     @Override
                     public void run() {
                         if (focusedView != null && longTouchHold) {
-                            onLongClick(recipe, focusedView);
+                            if (onLongClick(recipe, focusedView))
+                                focusedView = null;
                             longTouchHold = false;
-                            focusedView = null;
                         }
                     }
                 }, ViewConfiguration.getLongPressTimeout());

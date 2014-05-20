@@ -129,7 +129,10 @@ public class RecipeSearchFragment extends Fragment {
         // add the custom view to the action bar
         actionBar.setCustomView(R.layout.menu_search_item);
 
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE);
+        if (mainActivity.isDrawerOpen())
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+        else
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
 
         final EditText searchBar = (EditText) actionBar.getCustomView().findViewById(R.id.menu_search);
 
