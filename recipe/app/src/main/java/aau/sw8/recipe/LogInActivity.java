@@ -262,9 +262,7 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
     }
 
     public void setUser(String personName, String email){
-        /*Set the user, the user will be created in the database
-        * when adding a recipe to favourites or any action that requires a user.
-        * */
+        /*Set the user, the user will be created in the database */
         String hash = User.doHash(email);
         LogInActivity.user = new User(personName, hash);
         Log.w(LogInActivity.TAG, "Current user is {personName: " + LogInActivity.user.getPersonName() + " hash: " + LogInActivity.user.getHash() +  "}");
@@ -288,22 +286,6 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
             LogInActivity.this.setUser("", email);
         }
     }
-
-    //TODO: makes this work
-    /*public static void setUserPersonName(){
-        try {
-            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                String personName = currentPerson.getDisplayName();
-                LogInActivity.user.setPersonName(personName);
-                ConnectivityReceiver.NEED_USER_INFO = false;
-                Log.d(TAG, "personname: " + LogInActivity.user.getPersonName());
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }*/
-
 
     private AlertDialog createAlertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
