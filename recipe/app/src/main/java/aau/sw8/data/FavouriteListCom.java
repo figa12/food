@@ -1,8 +1,5 @@
 package aau.sw8.data;
 
-import android.util.Log;
-
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -45,11 +42,11 @@ public class FavouriteListCom extends ServerComTask<ArrayList<IntermediateRecipe
 
             long id = favouriteObject.getLong("id");
             String name = favouriteObject.getString("name");
-            String description = favouriteObject.getString("description");
+            //String description = favouriteObject.getString("description");
             String image = ServerComTask.getImagePath(favouriteObject.getString("image"));
             String missingIngredients = "";
 
-            intermediateRecipes.add(new IntermediateRecipe(id, name, description, image, missingIngredients));
+            intermediateRecipes.add(new IntermediateRecipe(id, name, image, missingIngredients));
         }
 
         return intermediateRecipes;

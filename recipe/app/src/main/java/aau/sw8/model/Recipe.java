@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class Recipe extends IntermediateRecipe implements Parcelable {
 
+    private String description;
     private ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
     private ArrayList<InstructionStep> instructionSteps = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
@@ -17,8 +18,9 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
     private long downvotes;
 
     public Recipe(long id, String image, String name, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps) {
-        super(id, name, recipeDescription, image, "");
+        super(id, name, image, "");
 
+        this.description = recipeDescription;
         this.ingredientGroups = ingredientGroups;
         this.instructionSteps = instructionSteps;
     }
@@ -27,6 +29,10 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
         this(id, image, name, recipeDescription, ingredientGroups, instructionSteps);
         this.upvotes = upvotes;
         this.downvotes = downvotes;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public ArrayList<InstructionStep> getInstructionSteps() {

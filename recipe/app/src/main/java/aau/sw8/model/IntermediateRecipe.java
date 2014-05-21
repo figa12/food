@@ -6,20 +6,18 @@ package aau.sw8.model;
 public class IntermediateRecipe {
     protected long id;
     protected String name;
-    protected String description;
     protected String image;
     protected String missingIngredients;
 
-    public IntermediateRecipe(long id, String name, String description, String image, String missingIngredients) {
+    public IntermediateRecipe(long id, String name, String image, String missingIngredients) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.image = image;
         this.missingIngredients = missingIngredients;
     }
 
-    public IntermediateRecipe(long id, String name, String description, String image) {
-        this(id, name, description, image, "");
+    public IntermediateRecipe(long id, String name, String image) {
+        this(id, name, image, "");
     }
 
     protected IntermediateRecipe() {
@@ -32,10 +30,6 @@ public class IntermediateRecipe {
 
     public String getName() {
         return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getImage() {

@@ -34,10 +34,10 @@ public class RecipeSearchCom extends ServerComTask<ArrayList<IntermediateRecipe>
 
             long id = recipeObject.getLong("id");
             String name = recipeObject.getString("name");
-            String description = recipeObject.getString("description");
+            //String description = recipeObject.getString("description");
             String image = ServerComTask.getImagePath(recipeObject.getString("image"));
 
-            intermediateRecipes.add(new IntermediateRecipe(id, name, description, image));
+            intermediateRecipes.add(new IntermediateRecipe(id, name, image));
         }
 
         return intermediateRecipes;

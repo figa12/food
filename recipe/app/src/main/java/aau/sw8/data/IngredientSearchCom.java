@@ -33,11 +33,11 @@ public class IngredientSearchCom extends ServerComTask<ArrayList<IntermediateRec
 
             long id = recipeObject.getLong("id");
             String name = recipeObject.getString("name");
-            String description = recipeObject.getString("description");
+            //String description = recipeObject.getString("description");
             String image = ServerComTask.getImagePath(recipeObject.getString("image"));
             String missing = this.parseMissingIngredients(recipeObject.getJSONArray("missing"));
 
-            intermediateRecipes.add(new IntermediateRecipe(id, name, description, image, missing));
+            intermediateRecipes.add(new IntermediateRecipe(id, name, image, missing));
         }
 
         return intermediateRecipes;
