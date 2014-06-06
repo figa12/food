@@ -59,7 +59,7 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
     }
 
     public String getLicenseHtml() {
-        return this.source + "<br><a href=\"" + this.licenseLink + "\">" + this.licenseName + "</a>" + (!this.licenseLink.equals("") ? "<br>" + this.licenseNote : "");
+        return this.source + "<br><a href=\"" + this.licenseLink + "\">" + this.licenseName + "</a>" + (!this.licenseNote.equals("") ? "<br>" + this.licenseNote : "");
     }
 
     @Override
