@@ -119,6 +119,12 @@ public class RecipeSearchFragment extends Fragment {
         this.moreRecipesAvailable = moreRecipesAvailable;
         this.searchActive = false;
 
+        if (searchList.getChildCount() == 0){
+            startpage.setVisibility(View.VISIBLE);
+        }else{
+            startpage.setVisibility(View.GONE);
+        }
+
         this.progressCircle.setVisibility(View.GONE);
         if (moreRecipesAvailable) {
             this.progressContainer.setVisibility(View.GONE);
