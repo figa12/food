@@ -17,18 +17,25 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
     private long upvotes;
     private long downvotes;
 
-    public Recipe(long id, String image, String name, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps) {
+    private String source;
+    private String licenseName;
+    private String licenseLink;
+    private String licenseNote;
+
+    public Recipe(long id, String image, String name, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps, long upvotes, long downvotes, String source, String licenseName, String licenseLink, String licenseNote) {
         super(id, name, image, "");
 
         this.description = recipeDescription;
         this.ingredientGroups = ingredientGroups;
         this.instructionSteps = instructionSteps;
-    }
 
-    public Recipe(long id, String image, String name, String recipeDescription, ArrayList<IngredientGroup> ingredientGroups, ArrayList<InstructionStep> instructionSteps, long upvotes, long downvotes) {
-        this(id, image, name, recipeDescription, ingredientGroups, instructionSteps);
         this.upvotes = upvotes;
         this.downvotes = downvotes;
+
+        this.source = source;
+        this.licenseName = licenseName;
+        this.licenseLink = licenseLink;
+        this.licenseNote = licenseNote;
     }
 
     public String getDescription() {
@@ -43,20 +50,16 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
         return ingredientGroups;
     }
 
-    public ArrayList<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-
     public long getUpvotes() {
         return this.upvotes;
     }
 
     public long getDownvotes() {
         return this.downvotes;
+    }
+
+    public String getLicenseHtml() {
+        return this.source + "<br><a href=\"" + this.licenseLink + "\">" + this.licenseName + "</a>" + (!this.licenseLink.equals("") ? "<br>" + this.licenseNote : "");
     }
 
     @Override
@@ -75,6 +78,10 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
         out.writeList(this.comments);
         out.writeLong(this.upvotes);
         out.writeLong(this.downvotes);
+        out.writeString(this.source);
+        out.writeString(this.licenseName);
+        out.writeString(this.licenseLink);
+        out.writeString(this.licenseNote);
     }
 
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
@@ -99,5 +106,9 @@ public class Recipe extends IntermediateRecipe implements Parcelable {
         in.readList(this.comments, Comment.class.getClassLoader());
         this.upvotes = in.readLong();
         this.downvotes = in.readLong();
+        this.source = in.readString();
+        this.licenseName = in.readString();
+        this.licenseLink = in.readString();
+        this.licenseNote = in.readString();
     }
 }
