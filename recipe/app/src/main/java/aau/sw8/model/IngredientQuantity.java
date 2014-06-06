@@ -36,13 +36,15 @@ public class IngredientQuantity implements Parcelable {
     }
 
     public String getDescription() {
-        String string;
+        String string = "";
 
-        // if the amount is an integer, convert it
-        if (this.amount == Math.floor(this.amount))
-            string = String.valueOf((int) this.amount);
-        else
-            string = String.valueOf(this.amount);
+        // if the amount is an integer, cast it
+        if (this.amount != 0.0) {
+            if (this.amount == Math.floor(this.amount))
+                string += String.valueOf((int) this.amount);
+            else
+                string += String.valueOf(this.amount);
+        }
 
         // it may be a unit-less ingredient
         if (this.unit != null)

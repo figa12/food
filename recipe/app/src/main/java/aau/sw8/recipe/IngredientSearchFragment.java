@@ -49,7 +49,6 @@ public class IngredientSearchFragment extends Fragment {
     public EditText searchBar;
     private ListView suggestionList;
     private FrameLayout suggestionWrapper;
-    private int i;
     private ArrayList<String> suggestionName = new ArrayList<>();
     private LinearLayout startpage;
 
@@ -126,6 +125,7 @@ public class IngredientSearchFragment extends Fragment {
 
         this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 String listItem = ((TextView) view).getText().toString();
@@ -159,17 +159,17 @@ public class IngredientSearchFragment extends Fragment {
         // add the custom view to the action bar
         actionBar.setCustomView(R.layout.menu_search_item);
 
-        if (mainActivity.isDrawerOpen())
+        if (mainActivity.isDrawerOpen()) {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-        else
+        } else {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
+        }
 
         searchBar = (EditText) actionBar.getCustomView().findViewById(R.id.menu_search);
 
         if (ingredients != null) {
             searchBar.setHint(getIngredientString(ingredients));
-        }
-        else {
+        } else {
             searchBar.setHint(R.string.search_hint);
         }
 
@@ -193,10 +193,7 @@ public class IngredientSearchFragment extends Fragment {
                     suggestionName.clear();
                     searchBar.setInputType(EditorInfo.TYPE_NULL); // force keyboard update
 
-                    if (isEmpty)
-                        searchBar.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-                    else
-                        searchBar.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                    searchBar.setImeOptions(isEmpty ? EditorInfo.IME_ACTION_SEARCH : EditorInfo.IME_ACTION_NEXT);
 
                     searchBar.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // force keyboard update
                 }
@@ -214,10 +211,7 @@ public class IngredientSearchFragment extends Fragment {
                         }
                     }
 
-                    if (suggestionName.size() > 0)
-                        suggestionWrapper.setVisibility(View.VISIBLE);
-                    else
-                        suggestionWrapper.setVisibility(View.GONE);
+                    suggestionWrapper.setVisibility(suggestionName.size() > 0 ? View.VISIBLE : View.GONE);
                 }
 
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.search_list_item, suggestionName);
@@ -264,8 +258,6 @@ public class IngredientSearchFragment extends Fragment {
             searchBar.setEnabled(!mainActivity.isDrawerOpen());
         }
 
-
-
         // keyboard visibility
         noKeyboardHeight = rootView.getHeight();
         oldHeight = rootView.getHeight();
@@ -295,6 +287,13 @@ public class IngredientSearchFragment extends Fragment {
                         searchBar.clearFocus();
                         suggestionWrapper.setVisibility(View.GONE);
                         popupLayout.setVisibility(View.GONE);
+
+                        // search on back
+                        /*ArrayList<Ingredient> ingredients = getSelectedIngredient();
+                        if (!ingredients.isEmpty()) {
+                            searchForRecipes(ingredients);
+                            searchBar.setHint(getIngredientString(ingredients));
+                        }*/
                     }
 
                     oldHeight = fragmentHeight;
@@ -447,13 +446,13 @@ public class IngredientSearchFragment extends Fragment {
 
         Pattern p = Pattern.compile("(^|\\s)" + query);
 
-      //  IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
+        // IngredientButton ingredientButton = new IngredientButton(IngredientSearchFragment.super.getActivity());
 
         for (Ingredient ingredient : allIngredients) {
             Matcher matcher = p.matcher(ingredient.getSingular().toLowerCase());
 
             if(matcher.find()) {
-             //  addButtonIfNotExists(ingredientButton, ingredient);
+                // addButtonIfNotExists(ingredientButton, ingredient);
                 selectButton(true, ingredient.getSingular());
                 return true;
             }

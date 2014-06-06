@@ -58,7 +58,12 @@ public class RecipeCom extends ServerComTask<Recipe> {
             }
         }
 
-        return new Recipe(this.recipeId, imagePath, name, description, ingredientGroups, instructionSteps, upvotes, downvotes);
+        String source = jsonObject.getString("source");
+        String licenseName = jsonObject.getString("licensename");
+        String licenseLink = jsonObject.getString("licenselink");
+        String licenseNote = jsonObject.getString("licensenote");
+
+        return new Recipe(this.recipeId, imagePath, name, description, ingredientGroups, instructionSteps, upvotes, downvotes, source, licenseName, licenseLink, licenseNote);
     }
 
     private IngredientGroup parseIngredientGroup(JSONObject groupObject) throws JSONException{

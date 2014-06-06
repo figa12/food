@@ -188,13 +188,7 @@ public class RecipeActivity extends DrawerActivity implements ObservableScrollVi
         }*/
 
         TextView licenseTextView = (TextView) super.findViewById(R.id.licenseTextView);
-        this.setLicense(licenseTextView, "violetta opensourcefoods.com", "Creative Commons Attribution-Share Alike 3.0 License", "http://creativecommons.org/licenses/by-sa/3.0/");
-    }
-
-    private void setLicense(TextView licenseTextView, String credits, String linkText, String link) {
-        licenseTextView.setText(Html.fromHtml(
-                credits + "<br><a href=\"" + link + "\">" + linkText + "</a> "
-        ));
+        licenseTextView.setText(Html.fromHtml(this.recipe.getLicenseHtml()));
         licenseTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
