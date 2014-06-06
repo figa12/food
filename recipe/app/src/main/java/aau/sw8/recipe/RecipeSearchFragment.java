@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class RecipeSearchFragment extends Fragment {
     private String query;
     private boolean moreRecipesAvailable = true;
     private boolean searchActive = false;
+    private LinearLayout startpage;
 
     public RecipeSearchFragment() {
         // Required empty public constructor
@@ -56,6 +58,9 @@ public class RecipeSearchFragment extends Fragment {
 
         this.searchList = (SearchList) rootView.findViewById(R.id.searchList);
         // temporary display.test code
+
+        this.startpage = (LinearLayout) rootView.findViewById(R.id.startPage);
+        rootView.findViewById(R.id.recipeSearchTextView).setVisibility(View.VISIBLE);
 
         this.progressContainer = (FrameLayout) rootView.findViewById(R.id.progressContainer);
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);

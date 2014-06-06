@@ -51,6 +51,7 @@ public class IngredientSearchFragment extends Fragment {
     private FrameLayout suggestionWrapper;
     private int i;
     private ArrayList<String> suggestionName = new ArrayList<>();
+    private LinearLayout startpage;
 
     private FrameLayout progressContainer;
     private ProgressBar progressCircle;
@@ -104,7 +105,10 @@ public class IngredientSearchFragment extends Fragment {
         this.progressContainer = (FrameLayout) rootView.findViewById(R.id.progressContainer);
         this.progressCircle = (ProgressBar) rootView.findViewById(R.id.progressCircle);
 
-       // this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
+        // this.searchForRecipes(new ArrayList<Long>(Arrays.asList(1L)));
+
+        this.startpage = (LinearLayout) rootView.findViewById(R.id.startPage);
+        rootView.findViewById(R.id.ingredientSearchTextview).setVisibility(View.VISIBLE);
 
         this.ingredientFlowLayout = (FlowLayout) rootView.findViewById(R.id.ingredientsFlowLayout);
 
@@ -122,12 +126,11 @@ public class IngredientSearchFragment extends Fragment {
 
         this.suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 String listItem = ((TextView) view).getText().toString();
 
-               //       addIngredientToFlowLayout(listItem);
+                //      addIngredientToFlowLayout(listItem);
                         selectButton(true, listItem);
                         searchBar.setText("");
 
@@ -268,7 +271,6 @@ public class IngredientSearchFragment extends Fragment {
         oldHeight = rootView.getHeight();
 
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
             @Override
             public void onGlobalLayout() {
                 int fragmentHeight = rootView.getHeight();
@@ -286,21 +288,13 @@ public class IngredientSearchFragment extends Fragment {
                         // keyboard hidden
                         if (ingredients != null) {
                             searchBar.setHint(getIngredientString(ingredients));
-                        }
-                        else {
+                        } else {
                             searchBar.setHint(R.string.search_hint);
                         }
 
                         searchBar.clearFocus();
                         suggestionWrapper.setVisibility(View.GONE);
                         popupLayout.setVisibility(View.GONE);
-
-                        // search on back
-                        ArrayList<Ingredient> ingredients = getSelectedIngredient();
-                        if (!ingredients.isEmpty()) {
-                            searchForRecipes(ingredients);
-                            searchBar.setHint(getIngredientString(ingredients));
-                        }
                     }
 
                     oldHeight = fragmentHeight;
@@ -357,6 +351,12 @@ public class IngredientSearchFragment extends Fragment {
     private void onSearchComplete(boolean moreRecipesAvailable) {
         this.moreRecipesAvailable = moreRecipesAvailable;
         this.searchActive = false;
+
+        if (searchList.getChildCount() == 0){
+            startpage.setVisibility(View.VISIBLE);
+        }else{
+            startpage.setVisibility(View.GONE);
+        }
 
         this.progressCircle.setVisibility(View.GONE);
         if (moreRecipesAvailable) {

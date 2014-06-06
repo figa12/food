@@ -28,17 +28,17 @@ import aau.sw8.model.User;
 public abstract class LogInActivity extends Activity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, ServerComTask.ServerAlertDialog {
     protected static User user;                                  //User of the application
 
-    private ProgressDialog connectionProgressDialog;           //Process dialog for sign in.
-    private ConnectionResult connectionResult;                 //Connection result, status from google
+    private ProgressDialog connectionProgressDialog;             //Process dialog for sign in.
+    private ConnectionResult connectionResult;                   //Connection result, status from google
     private static final int RC_SIGN_IN = 0;                     //Magic number
     private ConnectivityReceiver connectivityReceiver = ConnectivityReceiver.getInstance(this);
 
-    private  GoogleApiClient googleApiClient;                  //The core Google+ client.
+    private  GoogleApiClient googleApiClient;                    //The core Google+ client.
 
     private boolean intentInProgress;                            //Is intent(consent) in progress (flag)
     private boolean signInClicked;                               //Is sign button pressed (flag)
 
-    private AlertDialog serverAlertDialog;                     //Server alertdialog
+    private AlertDialog serverAlertDialog;                       //Server alertdialog
 
     public static final int SIGN_IN = 1;                         //Sign_in static
     public static final int SIGN_OUT = 2;                        //Sign_out static

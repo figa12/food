@@ -24,6 +24,9 @@
     <string name="sign_in_text">Please sign in</string>
     <string name="sign_out">Sign out</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="ingredient_seach_startpage">⬆\nTo start searching,\n please enter\n ingredients in the text-\nfield above.</string>
+
+    <string name="recipe_search_startpage">⬆\nTo start searching,\n please enter a recipe\n name in the text-field\n above.</string>
 
     <string name="ingredients">Ingredients</string>
     <string name="instructions">Instructions</string>
