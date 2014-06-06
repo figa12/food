@@ -28,23 +28,23 @@ import aau.sw8.model.User;
 public abstract class LogInActivity extends Activity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, ServerComTask.ServerAlertDialog {
     protected static User user;                                  //User of the application
 
-    protected ProgressDialog connectionProgressDialog;          //Process dialog for sign in.
-    protected ConnectionResult connectionResult;
-    private static final int RC_SIGN_IN = 0;
-    protected ConnectivityReceiver connectivityReceiver = ConnectivityReceiver.getInstance(this);
+    private ProgressDialog connectionProgressDialog;           //Process dialog for sign in.
+    private ConnectionResult connectionResult;                 //Connection result, status from google
+    private static final int RC_SIGN_IN = 0;                     //Magic number
+    private ConnectivityReceiver connectivityReceiver = ConnectivityReceiver.getInstance(this);
 
-    protected  GoogleApiClient googleApiClient;                  //The core Google+ client.
+    private  GoogleApiClient googleApiClient;                  //The core Google+ client.
 
-    private boolean intentInProgress;
-    private boolean signInClicked;
+    private boolean intentInProgress;                            //Is intent(consent) in progress (flag)
+    private boolean signInClicked;                               //Is sign button pressed (flag)
 
-    protected AlertDialog serverAlertDialog;
+    private AlertDialog serverAlertDialog;                     //Server alertdialog
 
-    public static final int SIGN_IN = 1;
-    public static final int SIGN_OUT = 2;
-    public static final int REWOKE_ACCESS = 3;
+    public static final int SIGN_IN = 1;                         //Sign_in static
+    public static final int SIGN_OUT = 2;                        //Sign_out static
+    public static final int REWOKE_ACCESS = 3;                   //Revoke_access static
 
-    private static final String TAG = "LogInActivity";
+    private static final String TAG = "LogInActivity";           //log string
 
     //TODO: should be remove or changed to false when other sign in methods are implemented.
     public static final boolean IS_ONLY_GOOGLE_PLUS = true; //if google plus is the only sign in method
@@ -262,6 +262,9 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         }
     }
 
+    /**
+     * Set the system user.
+     * */
     public void setUser(String personName, String email){
         /*Set the user, the user will be created in the database */
         String hash = User.doHash(email);
@@ -288,6 +291,9 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         }
     }
 
+    /**
+     * Server connection failed alertdialog
+     * */
     private AlertDialog createAlertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         //myAlertDialog.setTitle("Title");
@@ -306,7 +312,19 @@ public abstract class LogInActivity extends Activity implements GoogleApiClient.
         return this.serverAlertDialog;
     }
 
+    /*Abstract methods.*/
+    /**
+     * Updates the system UI, when signed in and signed out.
+     * */
     protected abstract void updateUserUI(boolean isLoggedIn);
+
+    /**
+     * Event when user signs in
+     */
     protected abstract void onLoggedIn();
+
+    /**
+     * Event when user signs out
+     */
     protected abstract void onLoggedOut();
 }
