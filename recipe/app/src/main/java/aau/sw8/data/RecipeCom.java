@@ -111,7 +111,7 @@ public class RecipeCom extends ServerComTask<Recipe> {
         String image = null;
         if (!instructionObject.isNull("image")) {
             image = instructionObject.getString("image");
-            image = image == "." ? null : image; //TODO temp code till server actually returns null
+            image = image.equals(".") ? null : image; //TODO temp code till server actually returns null
         }
         //int order = instructionObject.getInt("order");
         return new InstructionStep(description, stepNumber, image);

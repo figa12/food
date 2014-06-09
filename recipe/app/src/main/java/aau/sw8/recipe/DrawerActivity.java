@@ -25,8 +25,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
-
 
 /**
  * Created by Sam on 14/04/2014.
@@ -289,11 +287,11 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
             fragment.setArguments(args);
 
             // log the change of fragment, will give events with different names if localized :(
-            if (fragment instanceof SignInFragment) {
+            /*if (fragment instanceof SignInFragment) {
                 FlurryAgent.logEvent(super.getResources().getString(R.string.sign_in));
             } else {
                 FlurryAgent.logEvent(super.getResources().getStringArray(R.array.pages_array)[position]);
-            }
+            }*/
 
             // update selected item and title, then close the drawer
             this.drawerListView.setItemChecked(position, true);
@@ -367,13 +365,13 @@ public abstract class DrawerActivity extends LogInActivity implements RecipeSear
     protected void onStart()
     {
         super.onStart();
-        FlurryAgent.onStartSession(this, DrawerActivity.FLURRY_API_KEY);
+        //FlurryAgent.onStartSession(this, DrawerActivity.FLURRY_API_KEY);
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        FlurryAgent.onEndSession(this);
+        //FlurryAgent.onEndSession(this);
     }
 }

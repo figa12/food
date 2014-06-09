@@ -11,7 +11,6 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -124,7 +123,7 @@ public abstract class RecipeList extends ListLinearLayout<IntermediateRecipe> {
         Map<String, String> recipeParams = new HashMap<>();
         recipeParams.put("Recipe_Id", Long.toString(id));
 
-        FlurryAgent.logEvent("RecipeOpened", recipeParams);
+        //FlurryAgent.logEvent("RecipeOpened", recipeParams);
     }
 
     protected boolean onLongClick(IntermediateRecipe recipe, View view) { return false; }

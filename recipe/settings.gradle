@@ -1,1 +1,1 @@
-include ':app', ':flurryAnalytics_3.4.0'
+include ':app'
