@@ -25,7 +25,7 @@ public class MainActivity extends DrawerActivity implements IngredientSearchFrag
         super.onCreate(savedInstanceState);
 
         /*Image loader*/
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).discCacheSize(50*1024).build(); // 50 MB cache on disc
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).discCacheSize(50*1024*1024).build(); // 50 MB cache on disc
         ImageLoader.getInstance().init(config);
 
         if (savedInstanceState == null) {
