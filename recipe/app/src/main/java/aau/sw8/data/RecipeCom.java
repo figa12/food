@@ -110,8 +110,7 @@ public class RecipeCom extends ServerComTask<Recipe> {
         String description = instructionObject.getString("desc");
         String image = null;
         if (!instructionObject.isNull("image")) {
-            image = instructionObject.getString("image");
-            image = image.equals(".") ? null : image; //TODO temp code till server actually returns null
+            image = ServerComTask.getImagePath(instructionObject.getString("image"));
         }
         //int order = instructionObject.getInt("order");
         return new InstructionStep(description, stepNumber, image);
