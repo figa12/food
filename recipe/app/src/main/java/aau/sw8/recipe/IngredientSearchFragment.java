@@ -60,7 +60,7 @@ public class IngredientSearchFragment extends Fragment {
     private boolean moreRecipesAvailable = true;
     private boolean searchActive = false;
 
-    private int noKeyboardHeight;
+    private static int noKeyboardHeight;
     private int oldHeight;
 
     public IngredientSearchFragment() {
@@ -259,7 +259,9 @@ public class IngredientSearchFragment extends Fragment {
         }
 
         // keyboard visibility
-        noKeyboardHeight = rootView.getHeight();
+        if (noKeyboardHeight == 0)
+            noKeyboardHeight= rootView.getHeight();
+
         oldHeight = rootView.getHeight();
 
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
