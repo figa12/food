@@ -5,8 +5,8 @@
 
     <!-- Array of pages which are present in the navigation drawer -->
     <string-array name="pages_array">
-        <item>Ingredient search</item>
-        <item>Recipe search</item>
+        <item>Search by ingredients</item>
+        <item>Text search</item>
         <item>Favourites</item>
         <!--<item>Settings</item>-->
     </string-array>
